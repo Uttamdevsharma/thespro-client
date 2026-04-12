@@ -1,6 +1,4 @@
 'use client';
-
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useGetStudentProposalsQuery } from '@/store/features/apiSlice';
@@ -36,12 +34,11 @@ const StudentProposalStatusPage = () => {
                   ))}
                 </div>
               </div>
-              <p className={`text-lg font-bold mt-2 ${
-                proposal.status === 'Approved' ? 'text-green-600' :
-                proposal.status === 'Not Approved' ? 'text-red-600' :
-                proposal.status === 'Pending Committee' ? 'text-yellow-600' :
-                'text-gray-600'
-              }`}>
+              <p className={`text-lg font-bold mt-2 ${proposal.status === 'Approved' ? 'text-green-600' :
+                  proposal.status === 'Not Approved' ? 'text-red-600' :
+                    proposal.status === 'Pending Committee' ? 'text-yellow-600' :
+                      'text-gray-600'
+                }`}>
                 Status: {proposal.status}
               </p>
               {proposal.status === 'Not Approved' && proposal.feedback && (
