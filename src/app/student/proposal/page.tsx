@@ -5,8 +5,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
 import MultiSelectDropdown from '@/components/MultiSelectDropdown';
-import axios from 'axios';
-import { useCreateProposalMutation } from '@/store/features/apiSlice';
+import { 
+  useCreateProposalMutation, 
+  useGetResearchCellsQuery, 
+  useGetStudentsQuery, 
+  useGetSubmissionDatesQuery,
+  useGetSupervisorsCapacityQuery
+} from '@/store/features/apiSlice';
 
 const StudentProposalPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -16,67 +21,29 @@ const StudentProposalPage = () => {
   const [researchCell, setResearchCell] = useState('');
   const [supervisor, setSupervisor] = useState('');
   const [members, setMembers] = useState<any[]>([]);
-  const [cells, setCells] = useState<any[]>([]);
-  const [supervisors, setSupervisors] = useState<any[]>([]);
-  const [allStudents, setAllStudents] = useState<any[]>([]);
-  const [submissionDeadlinePassed, setSubmissionDeadlinePassed] = useState(false);
   const [proposalSubmitted, setProposalSubmitted] = useState(false);
+
+  const { data: cells = [] } = useGetResearchCellsQuery(undefined, { skip: !user });
+  const { data: allStudents = [] } = useGetStudentsQuery(undefined, { skip: !user });
+  const { data: deadlineData } = useGetSubmissionDatesQuery(undefined, { skip: !user });
+  const { data: supervisors = [] } = useGetSupervisorsCapacityQuery(researchCell, { 
+    skip: !researchCell || !user 
+  });
 
   const [createProposal, { isLoading: isSubmitting }] = useCreateProposalMutation();
 
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      if (!user?.token) return;
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      try {
-        const { data: cellsData } = await axios.get('http://localhost:5005/api/researchcells', config);
-        setCells(cellsData);
-
-        const { data: studentsData } = await axios.get('http://localhost:5005/api/users/students', config);
-        setAllStudents(studentsData);
-
-        const { data: deadlineData } = await axios.get('http://localhost:5005/api/committee/submission-dates', config);
-        if (deadlineData && new Date() > new Date(deadlineData.endDate)) {
-          setSubmissionDeadlinePassed(true);
-        }
-
-      } catch (error: any) {
-        if (error.response && error.response.status === 404) {
-          setSubmissionDeadlinePassed(true);
-        } else {
-          toast.error('Failed to fetch initial data.');
-          console.error(error);
-        }
-      }
-    };
-    if (user && user.token) fetchInitialData();
-  }, [user]);
-
-  useEffect(() => {
-    const fetchSupervisorsWithCapacity = async () => {
-      if (!researchCell || !user || !user.token) return setSupervisors([]);
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      try {
-        const { data: supervisorsData } = await axios.get(
-          `http://localhost:5005/api/users/supervisors/capacity?researchCellId=${researchCell}`,
-          config
-        );
-        setSupervisors(supervisorsData);
-      } catch (error) {
-        toast.error('Failed to fetch supervisors with capacity.');
-        console.error(error);
-      }
-    };
-    fetchSupervisorsWithCapacity();
-  }, [researchCell, user, proposalSubmitted]);
+  const submissionDeadlinePassed = React.useMemo(() => {
+    if (!deadlineData) return false;
+    return new Date() > new Date(deadlineData.endDate);
+  }, [deadlineData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !user.token) return toast.error('User not logged in.');
+    if (!user) return toast.error('User not logged in.');
     if (!researchCell || !supervisor) return toast.error('Select Research Cell & Supervisor.');
     if (submissionDeadlinePassed) return toast.error('Proposal submission deadline has ended.');
 
-    const selectedSupervisor = supervisors.find(s => s._id === supervisor);
+    const selectedSupervisor = supervisors.find((s: any) => s._id === supervisor);
     if (selectedSupervisor && selectedSupervisor.remainingCapacity <= 0) {
       return toast.error('Supervisor\'s seat capacity is full. Please choose another supervisor.');
     }
@@ -199,7 +166,7 @@ const StudentProposalPage = () => {
         <div className="text-center">
           <button
             type="submit"
-            disabled={isSubmitting || submissionDeadlinePassed || (supervisor && supervisors.find(s => s._id === supervisor)?.remainingCapacity <= 0)}
+            disabled={isSubmitting || submissionDeadlinePassed || (!!supervisor && supervisors.find(s => s._id === supervisor)?.remainingCapacity <= 0)}
             className="w-full py-3 px-6 bg-gradient-to-r from-green-400 to-green-600 text-white font-semibold rounded-lg shadow-md hover:from-green-500 hover:to-green-700 transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Submitting...' : 'Submit Proposal'}

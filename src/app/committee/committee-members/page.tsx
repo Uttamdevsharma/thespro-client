@@ -1,44 +1,26 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import Loader from '@/components/Loader';
 import { ShieldCheck, Mail, User } from 'lucide-react';
+import { useGetCommitteeMembersQuery } from '@/store/features/apiSlice';
 
 const CommitteeMembersPage = () => {
-  const [members, setMembers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const user = useSelector((state: RootState) => state.user.user);
 
-  useEffect(() => {
-    const fetchMembers = async () => {
-      if (!user || !user.token) {
-        setLoading(false);
-        return;
-      }
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      try {
-        const { data } = await axios.get('http://localhost:5005/api/users/committee-members', config);
-        const membersList = data.map((member: any) => ({
-          id: member._id,
-          ...member,
-        }));
-        setMembers(membersList);
-      } catch (error) {
-        console.error('Failed to fetch committee members:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data: rawMembers, isLoading: loading } = useGetCommitteeMembersQuery(undefined, {
+    skip: !user
+  });
 
-    fetchMembers();
-  }, [user]);
+  const members = React.useMemo(() => {
+    if (!rawMembers) return [];
+    return rawMembers.map((member: any) => ({
+      id: member._id,
+      ...member,
+    }));
+  }, [rawMembers]);
 
   if (loading) return <Loader />;
 

@@ -1,64 +1,36 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
 import Loader from '@/components/Loader';
 import { Calendar, Save, AlertCircle, Clock } from 'lucide-react';
+import { useGetSubmissionDatesQuery, useSetSubmissionDatesMutation } from '@/store/features/apiSlice';
 
 const CommitteeSetSubmissionDatesPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [currentDates, setCurrentDates] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
 
-  const fetchSubmissionDates = async () => {
-    if (!user || !user.token) {
-        setLoading(false);
-        return;
-    }
-    const config = {
-      headers: { Authorization: `Bearer ${user.token}` },
-    };
-    try {
-      const { data } = await axios.get('http://localhost:5005/api/committee/submission-dates', config);
-      setCurrentDates(data);
-    } catch (error: any) {
-      if (error.response && error.response.status === 404) {
-        setCurrentDates(null);
-      } else {
-        toast.error('Failed to fetch submission dates.');
-        console.error(error);
-      }
-    } finally {
-        setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchSubmissionDates();
-  }, [user]);
+  const { data: currentDates, isLoading: loading, refetch } = useGetSubmissionDatesQuery(undefined, {
+    skip: !user
+  });
+  const [setSubmissionDates, { isLoading: isSetting }] = useSetSubmissionDatesMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !user.token) return toast.error('User not logged in.');
     if (!startDate || !endDate) return toast.error('Please select both start and end dates.');
 
-    const config = {
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
-    };
-
     try {
-      await axios.post('http://localhost:5005/api/committee/submission-dates', { startDate, endDate }, config);
+      await setSubmissionDates({ startDate, endDate }).unwrap();
       toast.success('Submission dates set successfully!');
-      fetchSubmissionDates();
+      refetch();
       setStartDate('');
       setEndDate('');
     } catch (error: any) {
-      toast.error(`Failed to set submission dates: ${error.response?.data?.message || error.message}`);
+      toast.error(`Failed to set submission dates: ${error.data?.message || error.message}`);
     }
   };
 

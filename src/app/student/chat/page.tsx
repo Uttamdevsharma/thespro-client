@@ -94,7 +94,7 @@ const StudentChatPage = () => {
 
     try {
       const { data } = await axios.post(
-        'http://localhost:5005/api/upload/chat-file',
+        `${process.env.NEXT_PUBLIC_API_URL}/upload/chat-file`,
         formData,
         config
       );

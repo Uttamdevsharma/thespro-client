@@ -1,52 +1,37 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
 import Loader from '@/components/Loader';
 import { RoomManager, ScheduleManager } from '@/app/committee/defense-schedule/page';
 import { ShieldCheck, UserPlus, Settings, Layout, Users, ChevronRight } from 'lucide-react';
+import { useGetAllSupervisorsQuery, useAssignCourseSupervisorMutation } from '@/store/features/apiSlice';
 
 const CommitteeManageCourseSupervisorsPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
-  const [supervisors, setSupervisors] = useState<any[]>([]);
   const [mainSupervisors, setMainSupervisors] = useState<any[]>([]);
-  const [selectedSupervisor, setSelectedSupervisor] = useState('');
+  const [selectedSupervisorId, setSelectedSupervisorId] = useState('');
   const [isCourseSupervisor, setIsCourseSupervisor] = useState(false);
   const [selectedMainSupervisor, setSelectedMainSupervisor] = useState('');
-  const [loading, setLoading] = useState(true);
 
-  const fetchSupervisors = async () => {
-    if (!user || !user.token) {
-        setLoading(false);
-        return;
-    }
-    const config = {
-      headers: { Authorization: `Bearer ${user.token}` },
-    };
-    try {
-      const { data } = await axios.get('http://localhost:5005/api/users/supervisors/all', config);
-      setSupervisors(data);
-      const assignedMainSupervisors = data.filter((s: any) => s.isCourseSupervisor).map((s: any) => s.mainSupervisor).filter(Boolean);
-      setMainSupervisors(data.filter((s: any) => !s.isCourseSupervisor && !assignedMainSupervisors.includes(s._id)));
-    } catch (error) {
-      toast.error('Failed to fetch supervisors.');
-      console.error(error);
-    } finally {
-        setLoading(false);
-    }
-  };
+  const { data: supervisors, isLoading: loading, refetch } = useGetAllSupervisorsQuery(undefined, {
+    skip: !user
+  });
+  const [assignCourseSupervisor, { isLoading: isAssigning }] = useAssignCourseSupervisorMutation();
 
   useEffect(() => {
-    fetchSupervisors();
-  }, [user]);
+    if (supervisors) {
+      const assignedMainSupervisors = supervisors.filter((s: any) => s.isCourseSupervisor).map((s: any) => s.mainSupervisor).filter(Boolean);
+      setMainSupervisors(supervisors.filter((s: any) => !s.isCourseSupervisor && !assignedMainSupervisors.includes(s._id)));
+    }
+  }, [supervisors]);
 
   const handleSupervisorSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const supervisorId = e.target.value;
-    setSelectedSupervisor(supervisorId);
-    const supervisor = supervisors.find(s => s._id === supervisorId);
+    setSelectedSupervisorId(supervisorId);
+    const supervisor = supervisors?.find((s: any) => s._id === supervisorId);
     if (supervisor) {
       setIsCourseSupervisor(supervisor.isCourseSupervisor);
       setSelectedMainSupervisor(supervisor.mainSupervisor || '');
@@ -55,26 +40,23 @@ const CommitteeManageCourseSupervisorsPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !user.token) return toast.error('User not logged in.');
-    if (!selectedSupervisor) return toast.error('Please select a supervisor.');
-
-    const config = {
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
-    };
+    if (!user) return toast.error('User not logged in.');
+    if (!selectedSupervisorId) return toast.error('Please select a supervisor.');
 
     try {
-      await axios.put(
-        `http://localhost:5005/api/users/supervisors/${selectedSupervisor}/assign-course-supervisor`,
-        { isCourseSupervisor, mainSupervisor: selectedMainSupervisor || null },
-        config
-      );
+      await assignCourseSupervisor({ 
+        id: selectedSupervisorId, 
+        isCourseSupervisor, 
+        mainSupervisor: selectedMainSupervisor || null 
+      }).unwrap();
+      
       toast.success('Supervisor role updated successfully!');
-      fetchSupervisors();
-      setSelectedSupervisor('');
+      refetch();
+      setSelectedSupervisorId('');
       setIsCourseSupervisor(false);
       setSelectedMainSupervisor('');
     } catch (error: any) {
-      toast.error(`Failed to update supervisor role: ${error.response?.data?.message || error.message}`);
+      toast.error(`Failed to update supervisor role: ${error.data?.message || error.message}`);
     }
   };
 
@@ -109,7 +91,7 @@ const CommitteeManageCourseSupervisorsPage = () => {
                     </label>
                     <select
                         id="supervisorSelect"
-                        value={selectedSupervisor}
+                        value={selectedSupervisorId}
                         onChange={handleSupervisorSelect}
                         className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white outline-none transition-all font-bold text-gray-700"
                         required
@@ -121,7 +103,7 @@ const CommitteeManageCourseSupervisorsPage = () => {
                     </select>
                 </div>
 
-                {selectedSupervisor && (
+                {selectedSupervisorId && (
                     <div className="animate-in fade-in slide-in-from-top-4 duration-300">
                         <label className="inline-flex items-center cursor-pointer group p-4 bg-gray-50 rounded-2xl border-2 border-transparent hover:border-green-200 transition-all">
                             <input
@@ -138,7 +120,7 @@ const CommitteeManageCourseSupervisorsPage = () => {
                     </div>
                 )}
 
-                {isCourseSupervisor && selectedSupervisor && (
+                {isCourseSupervisor && selectedSupervisorId && (
                     <div className="animate-in fade-in slide-in-from-top-4 duration-500">
                         <label htmlFor="mainSupervisorSelect" className="block text-sm font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">
                             Link to Strategic Oversight (Main Supervisor)

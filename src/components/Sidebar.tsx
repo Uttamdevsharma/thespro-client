@@ -36,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
     { to: '/committee/all-students', label: 'All Students' },
     { to: '/committee/research-cells', label: 'Research Cell' },
     { to: '/committee/committee-members', label: 'Committee Members' },
-    { to: '/committee/notices', label: 'Notice Management' },
+    { to: '/committee/notice-management', label: 'Notice Management' },
     { to: '/committee/defense-schedule', label: 'Defense Schedule' },
     { to: '/committee/set-submission-dates', label: 'Set Submission Dates' },
     { to: '/committee/manage-course-supervisors', label: 'Manage Course Supervisors' },

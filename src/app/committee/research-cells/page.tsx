@@ -1,51 +1,32 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
 import Loader from '@/components/Loader';
 import { PlusCircle, Layers, Users } from 'lucide-react';
+import { useGetResearchCellsQuery, useGetTeachersQuery, useAddResearchCellMutation } from '@/store/features/apiSlice';
 
 const CommitteeResearchCellsPage = () => {
-  const [cells, setCells] = useState<any[]>([]);
-  const [supervisors, setSupervisors] = useState<any[]>([]);
   const [formData, setFormData] = useState({ title: '', description: '' });
-  const [loading, setLoading] = useState(true);
   const user = useSelector((state: RootState) => state.user.user);
 
-  const fetchCellsAndSupervisors = async () => {
-    if (!user || !user.token) return;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    try {
-      const { data: cellsData } = await axios.get('http://localhost:5005/api/researchcells', config);
-      const cellsList = cellsData.map((cell: any) => ({
-        id: cell._id,
-        ...cell,
-      }));
-      setCells(cellsList);
+  const { data: rawCells, isLoading: cellsLoading, refetch: refetchCells } = useGetResearchCellsQuery(undefined, {
+    skip: !user
+  });
+  const { data: supervisors, isLoading: supervisorsLoading } = useGetTeachersQuery(undefined, {
+    skip: !user
+  });
+  const [addResearchCell, { isLoading: addingCell }] = useAddResearchCellMutation();
 
-      const { data: supervisorsData } = await axios.get('http://localhost:5005/api/users/supervisors', config);
-      setSupervisors(supervisorsData);
-
-    } catch (error) {
-      console.error('Failed to fetch data:', error);
-      toast.error('Failed to fetch data.');
-    } finally {
-        setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (user && user.token) {
-      fetchCellsAndSupervisors();
-    }
-  }, [user]);
+  const cells = React.useMemo(() => {
+    if (!rawCells) return [];
+    return rawCells.map((cell: any) => ({
+      id: cell._id,
+      ...cell,
+    }));
+  }, [rawCells]);
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -53,27 +34,22 @@ const CommitteeResearchCellsPage = () => {
 
   const handleAddCell = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !user.token) {
+    if (!user) {
       toast.error('User not authenticated.');
       return;
     }
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
     try {
-      await axios.post('http://localhost:5005/api/researchcells', formData, config);
-      fetchCellsAndSupervisors();
+      await addResearchCell(formData).unwrap();
+      refetchCells();
       setFormData({ title: '', description: '' });
       toast.success('Research Cell Added.');
     } catch (error: any) {
       console.error("Error adding research cell: ", error);
-      toast.error(`Failed to add research cell: ${error.response?.data?.message || error.message}`);
+      toast.error(`Failed to add research cell: ${error.data?.message || error.message}`);
     }
   };
 
-  if (loading) return <Loader />;
+  if (cellsLoading || supervisorsLoading) return <Loader />;
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">

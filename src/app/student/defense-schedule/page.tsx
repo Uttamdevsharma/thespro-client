@@ -15,7 +15,9 @@ const StudentDefenseSchedulePage = () => {
       socket.on('commentUpdated', () => {
         refetch();
       });
-      return () => socket.off('commentUpdated');
+      return () => {
+        socket.off('commentUpdated');
+      };
     }
   }, [socket, refetch]);
 

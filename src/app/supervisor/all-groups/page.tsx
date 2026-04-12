@@ -1,47 +1,21 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import toast from 'react-hot-toast';
 import Loader from '@/components/Loader';
+import { useGetSupervisorAllGroupsQuery } from '@/store/features/apiSlice';
 
 const SupervisorAllGroupsPage = () => {
     const user = useSelector((state: RootState) => state.user.user);
-    const [underMySupervisionOnly, setUnderMySupervisionOnly] = useState<any[]>([]);
-    const [underMySupervisionAndCourseSupervision, setUnderMySupervisionAndCourseSupervision] = useState<any[]>([]);
-    const [underMyCourseSupervision, setUnderMyCourseSupervision] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
   
-    useEffect(() => {
-      const fetchAllGroups = async () => {
-        if (!user || !user.token) {
-          setLoading(false);
-          return;
-        }
+    const { data, isLoading: loading } = useGetSupervisorAllGroupsQuery(undefined, {
+      skip: !user
+    });
 
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-  
-        try {
-          const { data } = await axios.get('http://localhost:5005/api/proposals/supervisor-all-groups', config);
-          setUnderMySupervisionOnly(data.underMySupervisionOnly);
-          setUnderMySupervisionAndCourseSupervision(data.underMySupervisionAndCourseSupervision);
-          setUnderMyCourseSupervision(data.underMyCourseSupervision);
-        } catch (error) {
-          console.error("Error fetching all groups: ", error);
-          toast.error('Failed to fetch all groups.');
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      fetchAllGroups();
-    }, [user]);
+    const underMySupervisionOnly = data?.underMySupervisionOnly || [];
+    const underMySupervisionAndCourseSupervision = data?.underMySupervisionAndCourseSupervision || [];
+    const underMyCourseSupervision = data?.underMyCourseSupervision || [];
   
     const renderTable = (groups: any[]) => (
       <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">

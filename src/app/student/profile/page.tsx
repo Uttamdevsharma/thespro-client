@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
 import Loader from '@/components/Loader';
+import { useGetProfileQuery, useUpdateProfileMutation, useUpdateProfilePictureMutation, useUpdatePasswordMutation } from '@/store/features/apiSlice';
 
 const ProfilePage = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -15,58 +15,41 @@ const ProfilePage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [profilePictureURL, setProfilePictureURL] = useState('');
-  const [loading, setLoading] = useState(true);
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${user?.token}`,
-    },
-  };
+  const { data: profileData, isLoading: fetchLoading, refetch } = useGetProfileQuery(undefined, {
+    skip: !user
+  });
+  const [updateProfile, { isLoading: updateLoading }] = useUpdateProfileMutation();
+  const [updatePassword, { isLoading: passwordLoading }] = useUpdatePasswordMutation();
+  const [updateProfilePicture, { isLoading: pictureLoading }] = useUpdateProfilePictureMutation();
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (!user || !user.token) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const { data } = await axios.get('http://localhost:5005/api/users/profile', config);
-        setName(data.name || '');
-        setEmail(data.email || '');
-        setProfilePictureURL(data.profilePicture || '');
-      } catch (error) {
-        console.error("Error fetching user data: ", error);
-        toast.error('Failed to fetch user data.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUserData();
-  }, [user]);
+    if (profileData) {
+      setName(profileData.name || '');
+      setEmail(profileData.email || '');
+      setProfilePictureURL(profileData.profilePicture || '');
+    }
+  }, [profileData]);
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
 
-    if (!user || !user.token) {
+    if (!user) {
       toast.error('No user logged in.');
-      setLoading(false);
       return;
     }
 
     try {
       // Update name
-      await axios.put('http://localhost:5005/api/users/profile', { name }, config);
+      await updateProfile({ name }).unwrap();
 
       // Update password if newPassword is provided
       if (newPassword) {
         if (!currentPassword) {
           toast.error('Please enter your current password to update the new password.');
-          setLoading(false);
           return;
         }
-        await axios.put('http://localhost:5005/api/users/update-password', { currentPassword, newPassword }, config);
+        await updatePassword({ currentPassword, newPassword }).unwrap();
         toast.success('Password updated successfully!');
         setCurrentPassword('');
         setNewPassword('');
@@ -77,28 +60,22 @@ const ProfilePage = () => {
         const formData = new FormData();
         formData.append('profilePicture', profilePicture);
 
-        await axios.post('http://localhost:5005/api/users/profile-picture', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${user?.token}`,
-          },
-        });
-        // After successful upload, re-fetch user data to get the updated URL
-        const { data: updatedUserData } = await axios.get('http://localhost:5005/api/users/profile', config);
-        setProfilePictureURL(updatedUserData.profilePicture || '');
+        await updateProfilePicture(formData).unwrap();
         toast.success('Profile picture updated successfully!');
+        setProfilePicture(null);
       }
 
       toast.success('Profile updated successfully!');
+      refetch();
     } catch (error: any) {
       console.error("Error updating profile: ", error);
-      toast.error(`Failed to update profile: ${error.response?.data?.message || error.message}`);
-    } finally {
-      setLoading(false);
+      toast.error(`Failed to update profile: ${error.data?.message || error.message}`);
     }
   };
 
-  if (loading && !name) {
+  const loading = fetchLoading || updateLoading || passwordLoading || pictureLoading;
+
+  if (fetchLoading && !name) {
     return <Loader />;
   }
 

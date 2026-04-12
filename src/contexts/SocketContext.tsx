@@ -15,7 +15,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const socketUrl = 'http://localhost:5005';
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5000';
     console.log(`Attempting to connect Socket.io to: ${socketUrl}`);
     const newSocket = io(socketUrl);
 

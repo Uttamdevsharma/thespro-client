@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import { useUpdatePasswordMutation } from '@/store/features/apiSlice';
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -17,6 +17,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [retypePassword, setRetypePassword] = useState('');
+  const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,17 +27,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
     }
 
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      };
-
-      await axios.put(
-        'http://localhost:5005/api/users/update-password',
-        { currentPassword, newPassword },
-        config
-      );
+      await updatePassword({ currentPassword, newPassword }).unwrap();
 
       toast.success('Password changed successfully!');
       setShowChangePassword(false);
@@ -45,7 +36,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
       setRetypePassword('');
       onClose();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to change password.');
+      toast.error(error.data?.message || 'Failed to change password.');
     }
   };
 

@@ -1,46 +1,26 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 import Loader from '@/components/Loader';
 import { Trophy, Filter, ShieldCheck, UserCheck } from 'lucide-react';
+import { useGetSupervisorDefenseResultsQuery } from '@/store/features/apiSlice';
 
 const SupervisorDefenseResultPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
-  const [defenseResults, setDefenseResults] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [supervisionFilter, setSupervisionFilter] = useState('all');
   const [defenseTypeFilter, setDefenseTypeFilter] = useState('Pre-Defense');
 
-  useEffect(() => {
-    const fetchDefenseResults = async () => {
-      if (!user?.token) {
-        setLoading(false);
-        return;
-      }
-      try {
-        setLoading(true);
-        const config = {
-          headers: { Authorization: `Bearer ${user.token}` },
-          params: { filter: supervisionFilter, defenseType: defenseTypeFilter },
-        };
-        const { data } = await axios.get('http://localhost:5005/api/defense-results/supervisor', config);
-        setDefenseResults(data);
-      } catch (err: any) {
-        const msg = err.response?.data?.message || err.message;
-        setError(msg);
-        toast.error(msg);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data: defenseResults = [], isLoading: loading, error: queryError } = useGetSupervisorDefenseResultsQuery({ 
+    filter: supervisionFilter, 
+    defenseType: defenseTypeFilter 
+  }, {
+    skip: !user
+  });
 
-    fetchDefenseResults();
-  }, [user, supervisionFilter, defenseTypeFilter]);
+  const error = queryError ? ((queryError as any).data?.message || (queryError as any).message) : null;
 
   if (loading) return <Loader />;
 

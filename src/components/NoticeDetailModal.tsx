@@ -20,7 +20,7 @@ const NoticeDetailModal: React.FC<NoticeDetailModalProps> = ({ showModal, onClos
           <div className="mb-4">
             <p className="text-sm font-semibold text-gray-800">Attachment:</p>
             <a
-              href={`http://localhost:5005${notice.file}`}
+              href={`${process.env.NEXT_PUBLIC_BASE_URL}${notice.file}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:underline"

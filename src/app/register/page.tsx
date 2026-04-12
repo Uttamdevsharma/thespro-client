@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import { useRegisterUserMutation } from '@/store/features/apiSlice';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
@@ -14,24 +14,25 @@ const RegisterPage = () => {
   const [department, setDepartment] = useState('CSE');
   const [currentCGPA, setCurrentCGPA] = useState('');
   const router = useRouter();
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5005/api/auth/register', {
+      await registerUser({
         name,
         email,
         password,
         studentId,
         department,
         currentCGPA,
-        role: 'student', // Default role
+        role: 'student', 
         profilePicture: '',
-      });
+      }).unwrap();
       toast.success('Registration successful!');
       router.push('/login');
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Registration failed. Please try again.');
+      toast.error(error.data?.message || 'Registration failed. Please try again.');
     }
   };
 

@@ -21,6 +21,10 @@ const SupervisorPendingProposalsPage = () => {
 
   const [updateProposalStatus, { isLoading: isUpdating }] = useUpdateProposalStatusMutation();
 
+  const allProposals = (proposals as any[]) || [];
+  const actionableProposals = allProposals.filter(p => p.status === 'Pending Supervisor');
+  const awaitingProposals = allProposals.filter(p => p.status === 'Pending Committee');
+
   const handleStatusChange = async (proposalId: string, newStatus: string, acceptanceOption?: string) => {
     try {
       await updateProposalStatus({ id: proposalId, status: newStatus, feedback, acceptanceOption }).unwrap();
@@ -49,6 +53,71 @@ const SupervisorPendingProposalsPage = () => {
     }
   };
 
+  const renderProposalDetails = (proposal: any, actionable: boolean) => (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+              <p className="text-sm text-gray-500 uppercase font-semibold">Submitted By</p>
+              <p className="text-gray-800 font-medium">{proposal.createdBy.name || 'N/A'} ({proposal.createdBy.studentId})</p>
+          </div>
+          <div>
+              <p className="text-sm text-gray-500 uppercase font-semibold">Research Cell</p>
+              <p className="text-gray-800 font-medium">{proposal.researchCellId.title || 'N/A'}</p>
+          </div>
+      </div>
+      
+      <div className="mb-6">
+          <p className="text-sm text-gray-500 uppercase font-semibold mb-2">Group Members</p>
+          <div className="flex flex-wrap gap-2">
+              {proposal.members.map((member: any) => (
+                  <span key={member._id} className="inline-block bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm">
+                      {member.name || 'Unknown'} - {member.studentId} (CGPA: {member.currentCGPA})
+                  </span>
+              ))}
+          </div>
+      </div>
+
+      {actionable && (
+        <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+          <button
+            onClick={() => handleApproveClick(proposal._id)}
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg text-sm flex items-center shadow-md transition-colors"
+          >
+            <Check size={18} className="mr-2" /> Approve
+          </button>
+          <button
+            onClick={() => setShowFeedbackInputFor(proposal._id)}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg text-sm flex items-center shadow-md transition-colors"
+          >
+            <X size={18} className="mr-2" /> Deny
+          </button>
+        </div>
+      )}
+
+      {showFeedbackInputFor === proposal._id && actionable && (
+        <div className="mt-6 p-4 bg-white rounded-lg border border-red-100 shadow-inner">
+          <label className="block text-sm text-gray-600 font-medium mb-2 flex items-center">
+              <MessageSquare size={16} className="mr-2" /> Denial Feedback:
+          </label>
+          <textarea
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+            rows={3}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-400 focus:border-red-400 sm:text-sm text-gray-700"
+            placeholder="Provide feedback for denial..."
+          ></textarea>
+          <button
+            onClick={() => handleStatusChange(proposal._id, 'Not Approved')}
+            disabled={!feedback || isUpdating}
+            className="mt-3 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm disabled:bg-gray-400 transition-colors shadow-sm"
+          >
+            {isUpdating ? 'Updating...' : 'Confirm Deny'}
+          </button>
+        </div>
+      )}
+    </>
+  );
+
   if (isLoading) {
     return <Loader />;
   }
@@ -57,90 +126,79 @@ const SupervisorPendingProposalsPage = () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-gray-100 p-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-6 border-b pb-3">Pending Proposals</h1>
-        {!proposals || proposals.length === 0 ? (
+        {!allProposals || allProposals.length === 0 ? (
           <div className="p-10 text-center text-gray-500 bg-gray-50 rounded-lg border border-dashed">
             <p>No pending proposals found.</p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {(proposals as any[]).map((proposal) => (
-              <div key={proposal._id} className="border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <div 
-                  className="cursor-pointer hover:bg-gray-50 transition-colors p-5 flex justify-between items-center" 
-                  onClick={() => setExpandedProposalId(expandedProposalId === proposal._id ? null : proposal._id)}
-                >
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-800">{proposal.title || 'Project title here'}</h2>
-                    <p className="text-green-600 text-sm font-medium">Research Cell: {proposal.researchCellId.title || 'N/A'}</p>
-                    <p className="text-gray-500 text-xs mt-1">Submitted By: {proposal.createdBy.name || 'N/A'}</p>
-                  </div>
-                  {expandedProposalId === proposal._id ? <ChevronUp className="text-gray-400" /> : <ChevronDown className="text-gray-400" />}
-                </div>
-
-                {expandedProposalId === proposal._id && (
-                  <div className="p-5 bg-gray-50 border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <p className="text-sm text-gray-500 uppercase font-semibold">Submitted By</p>
-                            <p className="text-gray-800 font-medium">{proposal.createdBy.name || 'N/A'} ({proposal.createdBy.studentId})</p>
-                        </div>
-                        <div>
-                            <p className="text-sm text-gray-500 uppercase font-semibold">Research Cell</p>
-                            <p className="text-gray-800 font-medium">{proposal.researchCellId.title || 'N/A'}</p>
-                        </div>
-                    </div>
-                    
-                    <div className="mb-6">
-                        <p className="text-sm text-gray-500 uppercase font-semibold mb-2">Group Members</p>
-                        <div className="flex flex-wrap gap-2">
-                            {proposal.members.map((member: any) => (
-                                <span key={member._id} className="inline-block bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm">
-                                    {member.name || 'Unknown'} - {member.studentId} (CGPA: {member.currentCGPA})
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-                      <button
-                        onClick={() => handleApproveClick(proposal._id)}
-                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg text-sm flex items-center shadow-md transition-colors"
+          <div className="space-y-8">
+            {/* Actionable Proposals Section */}
+            {actionableProposals.length > 0 && (
+              <div>
+                <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                  <Check size={20} className="mr-2 text-green-500" /> Action Required
+                </h2>
+                <div className="space-y-4">
+                  {actionableProposals.map((proposal) => (
+                    <div key={proposal._id} className="border border-green-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                      <div 
+                        className="cursor-pointer hover:bg-green-50 transition-colors p-5 flex justify-between items-center" 
+                        onClick={() => setExpandedProposalId(expandedProposalId === proposal._id ? null : proposal._id)}
                       >
-                        <Check size={18} className="mr-2" /> Approve
-                      </button>
-                      <button
-                        onClick={() => setShowFeedbackInputFor(proposal._id)}
-                        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg text-sm flex items-center shadow-md transition-colors"
-                      >
-                        <X size={18} className="mr-2" /> Deny
-                      </button>
-                    </div>
-
-                    {showFeedbackInputFor === proposal._id && (
-                      <div className="mt-6 p-4 bg-white rounded-lg border border-red-100 shadow-inner">
-                        <label className="block text-sm text-gray-600 font-medium mb-2 flex items-center">
-                            <MessageSquare size={16} className="mr-2" /> Denial Feedback:
-                        </label>
-                        <textarea
-                          value={feedback}
-                          onChange={(e) => setFeedback(e.target.value)}
-                          rows={3}
-                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-400 focus:border-red-400 sm:text-sm text-gray-700"
-                          placeholder="Provide feedback for denial..."
-                        ></textarea>
-                        <button
-                          onClick={() => handleStatusChange(proposal._id, 'Not Approved')}
-                          disabled={!feedback || isUpdating}
-                          className="mt-3 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm disabled:bg-gray-400 transition-colors shadow-sm"
-                        >
-                          {isUpdating ? 'Updating...' : 'Confirm Deny'}
-                        </button>
+                        <div>
+                          <h2 className="text-lg font-bold text-gray-800">{proposal.title || 'Project title here'}</h2>
+                          <div className="flex items-center gap-3 mt-1">
+                            <span className="text-xs font-bold uppercase bg-green-100 text-green-700 px-2 py-0.5 rounded">Actionable</span>
+                            <p className="text-green-600 text-sm font-medium">Research Cell: {proposal.researchCellId.title || 'N/A'}</p>
+                          </div>
+                        </div>
+                        {expandedProposalId === proposal._id ? <ChevronUp className="text-gray-400" /> : <ChevronDown className="text-gray-400" />}
                       </div>
-                    )}
-                  </div>
-                )}
+
+                      {expandedProposalId === proposal._id && (
+                        <div className="p-5 bg-white border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                          {renderProposalDetails(proposal, true)}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
+            )}
+
+            {/* Awaiting Committee Section */}
+            {awaitingProposals.length > 0 && (
+              <div>
+                <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                  <Loader size={20} className="mr-2 text-blue-500" /> Awaiting Committee Forwarding
+                </h2>
+                <div className="space-y-4">
+                  {awaitingProposals.map((proposal) => (
+                    <div key={proposal._id} className="border border-gray-200 rounded-xl overflow-hidden opacity-80 shadow-sm">
+                      <div 
+                        className="cursor-pointer hover:bg-gray-50 transition-colors p-5 flex justify-between items-center" 
+                        onClick={() => setExpandedProposalId(expandedProposalId === proposal._id ? null : proposal._id)}
+                      >
+                        <div>
+                          <h2 className="text-lg font-bold text-gray-800">{proposal.title || 'Project title here'}</h2>
+                          <div className="flex items-center gap-3 mt-1">
+                            <span className="text-xs font-bold uppercase bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Pending Committee</span>
+                            <p className="text-gray-500 text-sm font-medium">Research Cell: {proposal.researchCellId.title || 'N/A'}</p>
+                          </div>
+                        </div>
+                        {expandedProposalId === proposal._id ? <ChevronUp className="text-gray-400" /> : <ChevronDown className="text-gray-400" />}
+                      </div>
+
+                      {expandedProposalId === proposal._id && (
+                        <div className="p-5 bg-gray-50 border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                          {renderProposalDetails(proposal, false)}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

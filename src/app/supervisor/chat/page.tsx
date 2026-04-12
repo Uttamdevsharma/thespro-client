@@ -6,18 +6,22 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { useSocket } from "@/contexts/SocketContext";
 import toast from "react-hot-toast";
+import { useGetProposalsBySupervisorQuery } from "@/store/features/apiSlice";
 
 const SupervisorChatPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const socket = useSocket();
-  const [proposals, setProposals] = useState<any[]>([]);
   const [selectedProposalId, setSelectedProposalId] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [loading, setLoading] = useState(true);
   const [file, setFile] = useState<File | null>(null);
   const [currentFilter, setCurrentFilter] = useState('my_supervision'); 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const { data: proposals, isLoading: loading } = useGetProposalsBySupervisorQuery(
+    { supervisorId: (user as any)?._id, filter: currentFilter },
+    { skip: !user }
+  );
 
   const config = {
     headers: {
@@ -30,30 +34,14 @@ const SupervisorChatPage = () => {
   }, [messages]);
 
   useEffect(() => {
-    const fetchSupervisorProposals = async () => {
-      if (!user?.token) {
-        setLoading(false);
-        return;
+    if (proposals && proposals.length > 0) {
+      if (!selectedProposalId || !proposals.find(p => p._id === selectedProposalId)) {
+        setSelectedProposalId(proposals[0]._id);
       }
-
-      try {
-        const { data } = await axios.get(
-          `http://localhost:5005/api/proposals/supervisor-proposals?filter=${currentFilter}`,
-          config
-        );
-        setProposals(data);
-        if (data?.length > 0) setSelectedProposalId(data[0]._id);
-        else setSelectedProposalId(null); 
-      } catch (error) {
-        console.error(error);
-        toast.error("Failed to load proposals for chat.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSupervisorProposals();
-  }, [user, currentFilter]);
+    } else {
+      setSelectedProposalId(null);
+    }
+  }, [proposals]);
 
   useEffect(() => {
     if (socket && selectedProposalId) {
@@ -98,7 +86,7 @@ const SupervisorChatPage = () => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5005/api/upload/chat-file",
+        `${process.env.NEXT_PUBLIC_API_URL}/upload/chat-file`,
         formData,
         config
       );
@@ -111,9 +99,9 @@ const SupervisorChatPage = () => {
       });
       setFile(null);
       toast.success("File sent!");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("Failed to upload file.");
+      toast.error(error.response?.data?.message || "Failed to upload file.");
     }
   };
 

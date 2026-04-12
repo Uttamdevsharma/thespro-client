@@ -1,45 +1,20 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import Loader from '@/components/Loader';
+import { useGetTeachersQuery } from '@/store/features/apiSlice';
 
 const ResearchCellInfoPage = () => {
-  const [teachers, setTeachers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const user = useSelector((state: RootState) => state.user.user);
+  const { data: rawTeachers = [], isLoading: loading } = useGetTeachersQuery(undefined, {
+    skip: !user
+  });
 
-  useEffect(() => {
-    const fetchSupervisors = async () => {
-      if (!user || !user.token) {
-        setLoading(false);
-        return;
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
-      try {
-        const { data: teachersData } = await axios.get('http://localhost:5005/api/users/supervisors', config);
-        
-        // Filter for teachers who are assigned to one or more cells
-        const teachersWithCells = teachersData.filter((teacher: any) => teacher.researchCells && teacher.researchCells.length > 0);
-
-        setTeachers(teachersWithCells);
-      } catch (error) {
-        console.error("Error fetching research cell info: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSupervisors();
-  }, [user]);
+  const teachers = React.useMemo(() => {
+    return rawTeachers.filter((teacher: any) => teacher.researchCells && teacher.researchCells.length > 0);
+  }, [rawTeachers]);
 
   if (loading) {
     return <Loader />;

@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '@/store/features/userSlice';
+import { useLoginUserMutation } from '@/store/features/apiSlice';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
@@ -13,11 +13,12 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const router = useRouter();
+  const [loginUser, { isLoading }] = useLoginUserMutation();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:5005/api/auth/login', { email, password });
+      const data = await loginUser({ email, password }).unwrap();
       if (typeof window !== 'undefined') {
         localStorage.setItem('userInfo', JSON.stringify(data));
       }
@@ -37,7 +38,7 @@ const LoginPage = () => {
           router.push('/');
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Login failed. Please check your credentials.');
+      toast.error(error.data?.message || 'Login failed. Please check your credentials.');
     }
   };
 

@@ -1,39 +1,17 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import toast from 'react-hot-toast';
 import Loader from '@/components/Loader';
 import { Users, BookOpen, UserCheck, Tag } from 'lucide-react';
+import { useGetApprovedProposalsQuery } from '@/store/features/apiSlice';
 
 const CommitteeAllGroupsPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
-  const [groups, setGroups] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchAllGroups = async () => {
-      if (!user || !user.token) {
-        setLoading(false);
-        return;
-      }
-      const config = {
-        headers: { Authorization: `Bearer ${user.token}` },
-      };
-      try {
-        const { data } = await axios.get('http://localhost:5005/api/proposals/approved-proposals', config);
-        setGroups(data);
-      } catch (error) {
-        toast.error('Failed to fetch all groups.');
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAllGroups();
-  }, [user]);
+  const { data: groups = [], isLoading: loading } = useGetApprovedProposalsQuery(undefined, {
+    skip: !user
+  });
 
   if (loading) {
     return <Loader />;

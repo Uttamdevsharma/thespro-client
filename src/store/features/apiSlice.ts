@@ -3,7 +3,7 @@ import { logout } from './userSlice';
 
 // RTK Query API Slice for all API interactions
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:5005/api',
+  baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
   prepareHeaders: (headers) => {
     if (typeof window !== 'undefined') {
       const userInfoString = localStorage.getItem('userInfo');
@@ -35,6 +35,22 @@ export const apiSlice = createApi({
   baseQuery: baseQueryWithAuth,
   tagTypes: ['Students', 'Teachers', 'Cells', 'Notices', 'Proposals', 'DefenseBoards', 'Rooms', 'ScheduleSlots', 'Evaluations', 'User'],
   endpoints: (builder) => ({
+    // Auth
+    loginUser: builder.mutation<any, any>({
+      query: (credentials) => ({
+        url: '/auth/login',
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
+    registerUser: builder.mutation<any, any>({
+      query: (userData) => ({
+        url: '/auth/register',
+        method: 'POST',
+        body: userData,
+      }),
+    }),
+
     getStudents: builder.query<any, void>({
       query: () => '/users/students',
       providesTags: ['Students'],
@@ -78,6 +94,45 @@ export const apiSlice = createApi({
         body: { cellId },
       }),
       invalidatesTags: ['Teachers', 'User'],
+    }),
+    getSupervisorsCapacity: builder.query<any, string>({
+      query: (researchCellId) => `/users/supervisors/capacity?researchCellId=${researchCellId}`,
+      providesTags: ['Teachers'],
+    }),
+    getAllSupervisors: builder.query<any, void>({
+      query: () => '/users/supervisors/all',
+      providesTags: ['Teachers'],
+    }),
+    getCommitteeMembers: builder.query<any, void>({
+      query: () => '/users/committee-members',
+    }),
+    assignCourseSupervisor: builder.mutation<any, { id: string; isCourseSupervisor: boolean; mainSupervisor: string | null }>({
+      query: ({ id, ...data }) => ({
+        url: `/users/supervisors/${id}/assign-course-supervisor`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Teachers'],
+    }),
+    getProfile: builder.query<any, void>({
+      query: () => '/users/profile',
+      providesTags: ['User'],
+    }),
+    updateProfile: builder.mutation<any, any>({
+      query: (profileData) => ({
+        url: '/users/profile',
+        method: 'PUT',
+        body: profileData,
+      }),
+      invalidatesTags: ['User'],
+    }),
+    updateProfilePicture: builder.mutation<any, FormData>({
+      query: (formData) => ({
+        url: '/users/profile-picture',
+        method: 'POST',
+        body: formData,
+      }),
+      invalidatesTags: ['User'],
     }),
     getResearchCells: builder.query<any, void>({
       query: () => '/researchcells',
@@ -217,7 +272,7 @@ export const apiSlice = createApi({
     }),
     getNoticeById: builder.query<any, string>({
       query: (id) => `/notices/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Notice' as const, id }],
+      providesTags: (result, error, id) => [{ type: 'Notices' as const, id }],
     }),
     createNotice: builder.mutation<any, any>({
       query: (newNotice) => ({
@@ -337,6 +392,21 @@ export const apiSlice = createApi({
       query: () => '/proposals',
       providesTags: ['Proposals'],
     }),
+    getApprovedProposals: builder.query<any, void>({
+      query: () => '/proposals/approved-proposals',
+      providesTags: ['Proposals'],
+    }),
+    getSupervisorAllGroups: builder.query<any, void>({
+      query: () => '/proposals/supervisor-all-groups',
+      providesTags: ['Proposals'],
+    }),
+    getSupervisorDefenseResults: builder.query<any, { filter: string, defenseType: string }>({
+      query: (params) => ({
+        url: '/defense-results/supervisor',
+        params,
+      }),
+      providesTags: ['Evaluations'],
+    }),
     getAvailableProposals: builder.query<any, string | undefined>({
       query: (defenseType) => {
         let url = '/proposals/available-proposals';
@@ -392,10 +462,29 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['Proposals', 'Evaluations'],
     }),
+    updatePassword: builder.mutation<any, any>({
+      query: (passwordData) => ({
+        url: '/users/update-password',
+        method: 'PUT',
+        body: passwordData,
+      }),
+    }),
+    getSubmissionDates: builder.query<any, void>({
+      query: () => '/committee/submission-dates',
+    }),
+    setSubmissionDates: builder.mutation<any, { startDate: string; endDate: string }>({
+      query: (dates) => ({
+        url: '/committee/submission-dates',
+        method: 'POST',
+        body: dates,
+      }),
+    }),
   }),
 });
 
 export const {
+  useLoginUserMutation,
+  useRegisterUserMutation,
   useGetStudentsQuery,
   useUpdateStudentMutation,
   useGetTeachersQuery,
@@ -403,6 +492,13 @@ export const {
   useAddTeacherMutation,
   useAssignCellMutation,
   useRemoveCellMutation,
+  useGetSupervisorsCapacityQuery,
+  useGetAllSupervisorsQuery,
+  useGetCommitteeMembersQuery,
+  useAssignCourseSupervisorMutation,
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+  useUpdateProfilePictureMutation,
   useGetResearchCellsQuery,
   useAddResearchCellMutation,
   useCreateProposalMutation,
@@ -431,7 +527,6 @@ export const {
   useMarkNoticeAsReadMutation,
   useDeleteNoticeMutation,
   useGetSupervisorDefenseScheduleQuery,
-  useGetSupervisorDefenseResultsQuery,
   useGetStudentDefenseScheduleQuery,
   useGetRoomsQuery,
   useAddRoomMutation,
@@ -442,6 +537,9 @@ export const {
   useUpdateScheduleSlotMutation,
   useDeleteScheduleSlotMutation,
   useGetProposalsQuery,
+  useGetApprovedProposalsQuery,
+  useGetSupervisorAllGroupsQuery,
+  useGetSupervisorDefenseResultsQuery,
   useGetAvailableProposalsQuery,
   useGetMyResultsQuery,
   useGetEvaluationsByProposalQuery,
@@ -451,4 +549,7 @@ export const {
   useGetBoardResultsQuery,
   useGetPublishStatusQuery,
   usePublishAllResultsMutation,
+  useUpdatePasswordMutation,
+  useGetSubmissionDatesQuery,
+  useSetSubmissionDatesMutation,
 } = apiSlice;

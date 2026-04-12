@@ -1,73 +1,61 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import { useGetNoticesQuery } from '@/store/features/apiSlice';
+import { useGetNoticesQuery, useGetProposalsBySupervisorQuery, useGetProfileQuery } from '@/store/features/apiSlice';
 import NoticeItem from '@/components/NoticeItem';
 import toast from 'react-hot-toast';
 
 const SupervisorDashboard = () => {
   const user = useSelector((state: RootState) => state.user.user);
-  const [proposals, setProposals] = useState<any[]>([]);
-  const [researchCells, setResearchCells] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState<{ title: string; items: any[] }>({ title: '', items: [] });
+
   const { data: notices, isLoading: noticesLoading } = useGetNoticesQuery((user as any)?._id, { skip: !user });
+  const { data: proposals = [], isLoading: proposalsLoading } = useGetProposalsBySupervisorQuery(
+    { supervisorId: (user as any)?._id },
+    { skip: !user }
+  );
+  const { data: profileData, isLoading: profileLoading } = useGetProfileQuery(undefined, {
+    skip: !user
+  });
 
+  const researchCells = profileData?.researchCells || [];
   const committeeNotices = notices ? notices.filter((notice: any) => notice.sender.role === 'committee') : [];
-
-  const fetchProposals = async () => {
-    if (!user || !user.token) return;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    try {
-      const proposalsResponse = await axios.get('http://localhost:5005/api/proposals/supervisor-proposals', config);
-      setProposals(proposalsResponse.data || []);
-    } catch (error) {
-      console.error("Error fetching proposals: ", error);
-      toast.error("Failed to fetch proposals.");
-    }
-  };
-
-  const approvedProposals = proposals.filter(p => p.status === 'Approved');
-  const thesisGroups = approvedProposals.filter(p => p.type === 'Thesis').length;
-  const projectGroups = approvedProposals.filter(p => p.type === 'Project').length;
+  const approvedProposals = proposals.filter((p: any) => p.status === 'Approved');
+  const thesisGroups = approvedProposals.filter((p: any) => p.type === 'Thesis').length;
+  const projectGroups = approvedProposals.filter((p: any) => p.type === 'Project').length;
   const totalGroups = approvedProposals.length;
 
   const handleCardClick = (type: string) => {
     let items: any[] = [];
     let title = '';
 
-    const approved = proposals.filter(p => p.status === 'Approved');
+    const approved = proposals.filter((p: any) => p.status === 'Approved');
 
     if (type === 'thesis') {
       title = 'Thesis Groups';
-      items = approved.filter(p => p.type === 'Thesis').map(p => ({
+      items = approved.filter((p: any) => p.type === 'Thesis').map((p: any) => ({
         title: p.title,
         members: p.createdBy.name
       }));
     } else if (type === 'project') {
       title = 'Project Groups';
-      items = approved.filter(p => p.type === 'Project').map(p => ({
+      items = approved.filter((p: any) => p.type === 'Project').map((p: any) => ({
         title: p.title,
         members: p.createdBy.name
       }));
     } else if (type === 'total') {
       title = 'All Approved Groups';
-      items = approved.map(p => ({
+      items = approved.map((p: any) => ({
         title: p.title,
         type: p.type,
         members: p.createdBy.name
       }));
     } else if (type === 'researchCells') {
       title = 'Assigned Research Cells';
-      items = researchCells.map(cell => ({
+      items = researchCells.map((cell: any) => ({
         title: cell.title,
         description: cell.description || 'No description',
       }));
@@ -77,34 +65,9 @@ const SupervisorDashboard = () => {
     setShowModal(true);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user || !user.token) {
-        setLoading(false);
-        return;
-      }
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
+  const loading = noticesLoading || proposalsLoading || profileLoading;
 
-      try {
-        const profileResponse = await axios.get('http://localhost:5005/api/users/profile', config);
-        setResearchCells(profileResponse.data.researchCells || []);
-        await fetchProposals();
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching dashboard data: ", error);
-        toast.error("Failed to fetch dashboard data.");
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [user]);
-
-  if (loading) {
+  if (loading && proposals.length === 0) {
     return <div className="p-6 bg-white rounded-lg shadow-md">Loading dashboard...</div>;
   }
 
