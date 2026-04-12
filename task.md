@@ -1,0 +1,44 @@
+- [x] Setup Base Project Dependencies
+- [x] Migrate Redux Store and Slices
+- [x] Migrate Contexts (Auth, Socket)
+- [x] Setup Layouts (Root, Committee, Supervisor, Student)
+- [x] Migrate Assets (Public & Src)
+- [x] Map and Migrate Pages
+    - [x] Landing Page
+    - [x] Login/Register
+    - [x] Student Pages
+        - [x] Proposal (with MultiSelectDropdown)
+        - [x] Proposal Status
+        - [x] Chat
+        - [x] Research Cell Info
+        - [x] Profile
+        - [x] Defense Schedule
+        - [x] My Results
+    - [x] Supervisor Pages
+        - [x] My Supervisions
+        - [x] Evaluate Group
+        - [x] Committee Evaluations
+        - [x] Notice Management
+        - [x] Pending Proposals
+        - [x] All Groups
+        - [x] Defense Schedule
+        - [x] Defense Result
+    - [x] Committee Pages
+        - [x] Research Cells
+        - [x] Cell Members Oversight
+        - [x] Cell Detail & Member Management
+        - [x] Add Member to Cell
+        - [x] Committee Members
+        - [x] Notice Management
+        - [x] Pending Proposals by Cell
+        - [x] All Approved Groups
+        - [x] Set Submission Dates
+        - [x] Manage Course Supervisors
+        - [x] Defense Schedule & Logistics
+        - [x] Create Defense Board flow
+        - [x] All Defense Boards review
+        - [x] Board Result Aggregation
+- [x] Migrate Components (Sidebar, ProfileIcon, NotificationBell, etc.)
+- [x] Configure Tailwind and Styles
+- [/] Verification and Fixes
+- [/] Build and Test

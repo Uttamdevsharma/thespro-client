@@ -1,5 +1,3 @@
-import { createSlice, PayloadAction } from '@redux-toolkit/state-selector';
-// Wait, I should use standard @reduxjs/toolkit
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface BoardDraftState {
