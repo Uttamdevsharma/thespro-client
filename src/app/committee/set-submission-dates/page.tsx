@@ -1,0 +1,173 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import toast from 'react-hot-toast';
+import Loader from '@/components/Loader';
+import { Calendar, Save, AlertCircle, Clock } from 'lucide-react';
+
+const CommitteeSetSubmissionDatesPage = () => {
+  const user = useSelector((state: RootState) => state.user.user);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [currentDates, setCurrentDates] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchSubmissionDates = async () => {
+    if (!user || !user.token) {
+        setLoading(false);
+        return;
+    }
+    const config = {
+      headers: { Authorization: `Bearer ${user.token}` },
+    };
+    try {
+      const { data } = await axios.get('http://localhost:5005/api/committee/submission-dates', config);
+      setCurrentDates(data);
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        setCurrentDates(null);
+      } else {
+        toast.error('Failed to fetch submission dates.');
+        console.error(error);
+      }
+    } finally {
+        setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSubmissionDates();
+  }, [user]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user || !user.token) return toast.error('User not logged in.');
+    if (!startDate || !endDate) return toast.error('Please select both start and end dates.');
+
+    const config = {
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
+    };
+
+    try {
+      await axios.post('http://localhost:5005/api/committee/submission-dates', { startDate, endDate }, config);
+      toast.success('Submission dates set successfully!');
+      fetchSubmissionDates();
+      setStartDate('');
+      setEndDate('');
+    } catch (error: any) {
+      toast.error(`Failed to set submission dates: ${error.response?.data?.message || error.message}`);
+    }
+  };
+
+  if (loading) return <Loader />;
+
+  return (
+    <div className="p-8 bg-gray-50 min-h-screen">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-8 flex items-center">
+            <Calendar className="mr-3 text-green-600" size={32} />
+            Proposal Submission Dates
+        </h1>
+
+        {currentDates && (
+          <div className="bg-white border-l-8 border-green-500 rounded-2xl shadow-xl p-8 mb-10 overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                <Clock size={120} />
+            </div>
+            <div className="flex items-start gap-4">
+                <div className="bg-green-100 text-green-600 p-2 rounded-lg">
+                    <AlertCircle size={24} />
+                </div>
+                <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">Current Active Submission Period</h3>
+                    <p className="text-gray-500 text-sm mb-6">Students can submit proposals during this time frame.</p>
+                    
+                    <div className="flex flex-col sm:flex-row gap-8">
+                        <div>
+                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Start Date</span>
+                            <span className="text-lg font-extrabold text-gray-800">{new Date(currentDates.startDate).toLocaleDateString(undefined, { dateStyle: 'full' })}</span>
+                        </div>
+                        <div className="hidden sm:block w-px bg-gray-100"></div>
+                        <div>
+                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">End Date</span>
+                            <span className="text-lg font-extrabold text-gray-800">{new Date(currentDates.endDate).toLocaleDateString(undefined, { dateStyle: 'full' })}</span>
+                        </div>
+                    </div>
+                    
+                    <div className="mt-8 pt-4 border-t border-gray-50 text-xs font-medium text-orange-600 flex items-center">
+                        <Info className="mr-1" size={12} /> Setting new dates will automatically deactivate this period.
+                    </div>
+                </div>
+            </div>
+          </div>
+        )}
+
+        <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+            <h2 className="text-xl font-bold text-gray-800 mb-8 flex items-center">
+                <Save className="mr-2 text-green-500" size={20} />
+                Configure New Submission Window
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <label htmlFor="startDate" className="block text-sm font-bold text-gray-700 mb-3 ml-1">
+                            Start Date
+                        </label>
+                        <input
+                            type="date"
+                            id="startDate"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 font-bold"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="endDate" className="block text-sm font-bold text-gray-700 mb-3 ml-1">
+                            End Date
+                        </label>
+                        <input
+                            type="date"
+                            id="endDate"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 font-bold"
+                            required
+                        />
+                    </div>
+                </div>
+                
+                <button
+                    type="submit"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-extrabold py-4 px-8 rounded-2xl shadow-lg shadow-green-200 transition-all transform hover:scale-[1.01] active:scale-100 flex justify-center items-center"
+                >
+                    <Save size={20} className="mr-2" /> Activate Submission Dates
+                </button>
+            </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Info = ({ className, size }: { className?: string, size?: number }) => (
+    <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width={size} 
+        height={size} 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round" 
+        className={className}
+    >
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+    </svg>
+);
+
+export default CommitteeSetSubmissionDatesPage;
