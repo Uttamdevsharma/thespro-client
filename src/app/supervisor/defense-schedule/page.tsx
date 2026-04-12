@@ -101,31 +101,31 @@ const SupervisorDefenseSchedulePage = () => {
                   {/* Table */}
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
+                      <thead className="bg-gray-100">
                         <tr>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Sl.</th>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Group Details</th>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Supervisors</th>
-                          <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-1/3">Comments</th>
+                          <th className="px-6 py-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Sl.</th>
+                          <th className="px-6 py-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Group Details</th>
+                          <th className="px-6 py-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Supervisors</th>
+                          <th className="px-6 py-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider w-1/3">Comments</th>
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {board.groups.map((group: any, index: number) => (
                           <tr key={group._id} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-6 py-4 text-sm font-bold text-gray-900">{index + 1}</td>
+                            <td className="px-6 py-4 text-sm font-black text-gray-900">{index + 1}</td>
 
                             <td className="px-6 py-4">
-                                <div className="text-sm font-bold text-gray-900 mb-2">{group.title}</div>
+                                <div className="text-sm font-black text-gray-900 mb-2">{group.title}</div>
                                 <div className="flex flex-col gap-1">
                                     {group.members.map((m: any) => (
-                                        <div key={m.studentId} className="flex items-center text-xs text-gray-600">
-                                            <span className="bg-gray-100 px-1.5 py-0.5 rounded mr-2 font-mono">{m.studentId}</span>
-                                            <span>{m.name}</span>
+                                        <div key={m.studentId} className="flex items-center text-xs text-gray-900">
+                                            <span className="bg-gray-100 px-1.5 py-0.5 rounded mr-2 font-mono font-bold">{m.studentId}</span>
+                                            <span className="font-semibold">{m.name}</span>
                                         </div>
                                     ))}
                                 </div>
                                 <div className="mt-2">
-                                    <span className="inline-block bg-blue-100 text-blue-800 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase">
+                                    <span className="inline-block bg-blue-100 text-blue-900 rounded-full px-2 py-0.5 text-[10px] font-black uppercase">
                                         {group.type}
                                     </span>
                                 </div>
@@ -133,19 +133,19 @@ const SupervisorDefenseSchedulePage = () => {
 
                             <td className="px-6 py-4 text-sm">
                                 <div className="mb-2">
-                                    <p className="text-[10px] text-gray-400 uppercase font-bold">Supervisor</p>
-                                    <p className="font-semibold text-gray-700">{group.supervisorId?.name || '-'}</p>
+                                    <p className="text-[10px] text-gray-600 uppercase font-black">Supervisor</p>
+                                    <p className="font-bold text-gray-900">{group.supervisorId?.name || '-'}</p>
                                 </div>
                                 <div>
-                                    <p className="text-[10px] text-gray-400 uppercase font-bold">Course Supervisor</p>
-                                    <p className="font-semibold text-gray-700">{group.courseSupervisorId?.name || '-'}</p>
+                                    <p className="text-[10px] text-gray-600 uppercase font-black">Course Supervisor</p>
+                                    <p className="font-bold text-gray-900">{group.courseSupervisorId?.name || '-'}</p>
                                 </div>
                             </td>
 
                             <td className="px-6 py-4">
                                 <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
                                     <textarea
-                                      className="w-full p-3 border border-gray-200 rounded-lg text-sm resize-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all bg-white text-gray-700"
+                                      className="w-full p-3 border border-gray-300 rounded-lg text-sm font-medium resize-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all bg-white text-gray-900"
                                       rows={2}
                                       value={comments[group._id] || ''}
                                       onChange={(e) => handleChangeComment(group._id, e.target.value)}
@@ -153,7 +153,7 @@ const SupervisorDefenseSchedulePage = () => {
                                     />
                                     <button
                                       onClick={() => handleSaveComment(board._id, group._id)}
-                                      className="mt-2 w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center justify-center shadow-sm transition-all active:scale-95"
+                                      className="mt-2 w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-xs font-black flex items-center justify-center shadow-md transition-all active:scale-95"
                                     >
                                       <Save size={14} className="mr-2" /> Save Comment
                                     </button>

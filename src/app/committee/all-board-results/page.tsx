@@ -85,12 +85,12 @@ const CommitteeAllBoardResultsPage = () => {
             <div className="overflow-x-auto">
                 <table className="min-w-full text-left border-collapse">
                     <thead>
-                        <tr className="bg-gray-50/50 border-b border-gray-100">
-                            <th className="py-5 px-8 text-[10px] font-black text-gray-400 uppercase tracking-widest">Board Designation</th>
-                            <th className="py-5 px-8 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Examination Type</th>
-                            <th className="py-5 px-8 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Venue</th>
-                            <th className="py-5 px-8 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Schedule</th>
-                            <th className="py-5 px-8 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Review</th>
+                        <tr className="bg-gray-100 border-b border-gray-200">
+                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 uppercase tracking-widest">Board Designation</th>
+                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 uppercase tracking-widest text-center">Examination Type</th>
+                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 uppercase tracking-widest text-center">Venue</th>
+                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 uppercase tracking-widest text-center">Schedule</th>
+                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 uppercase tracking-widest text-right">Review</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
@@ -102,27 +102,27 @@ const CommitteeAllBoardResultsPage = () => {
                                             <div className="w-10 h-10 bg-green-100 text-green-700 flex items-center justify-center rounded-xl font-black mr-4 shadow-sm group-hover:bg-green-600 group-hover:text-white transition-all">
                                                 {boardResult.board.boardNumber}
                                             </div>
-                                            <span className="font-extrabold text-gray-800 tracking-tight">Board ID #{boardResult.board.boardNumber}</span>
+                                            <span className="font-extrabold text-gray-900 tracking-tight">Board ID #{boardResult.board.boardNumber}</span>
                                         </div>
                                     </td>
-                                    <td className="py-6 px-8 text-center text-gray-600">
-                                        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${boardResult.board.defenseType === 'Pre-Defense' ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-emerald-50 text-emerald-600 border-emerald-100'}`}>
+                                    <td className="py-6 px-8 text-center text-gray-700">
+                                        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${boardResult.board.defenseType === 'Pre-Defense' ? 'bg-amber-50 text-amber-800 border-amber-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200'}`}>
                                             {boardResult.board.defenseType}
                                         </span>
                                     </td>
                                     <td className="py-6 px-8 text-center">
-                                        <div className="inline-block bg-gray-50 px-3 py-1 rounded-lg text-sm font-bold text-gray-600 border border-gray-100 uppercase tracking-tight">
+                                        <div className="inline-block bg-gray-50 px-3 py-1 rounded-lg text-sm font-bold text-gray-900 border border-gray-200 uppercase tracking-tight">
                                             {boardResult.board.room.name}
                                         </div>
                                     </td>
                                     <td className="py-6 px-8 text-center">
-                                        <div className="text-sm font-bold text-gray-700">{new Date(boardResult.board.date).toLocaleDateString()}</div>
-                                        <div className="text-[10px] font-bold text-gray-400 mt-0.5">{boardResult.board.schedule.startTime} - {boardResult.board.schedule.endTime}</div>
+                                        <div className="text-sm font-bold text-gray-900">{new Date(boardResult.board.date).toLocaleDateString()}</div>
+                                        <div className="text-[10px] font-black text-gray-700 mt-0.5">{boardResult.board.schedule.startTime} - {boardResult.board.schedule.endTime}</div>
                                     </td>
                                     <td className="py-6 px-8 text-right">
                                         <button 
                                             onClick={() => setSelectedBoard(boardResult)} 
-                                            className="inline-flex items-center px-5 py-2 text-xs font-black text-green-600 bg-white border-2 border-green-500 rounded-xl hover:bg-green-600 hover:text-white transition-all transform active:scale-95 shadow-sm"
+                                            className="inline-flex items-center px-5 py-2 text-xs font-black text-green-700 bg-white border-2 border-green-600 rounded-xl hover:bg-green-600 hover:text-white transition-all transform active:scale-95 shadow-sm"
                                         >
                                             <BarChart3 className="mr-2" size={14} />
                                             Audit Results
@@ -132,7 +132,7 @@ const CommitteeAllBoardResultsPage = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={5} className="p-20 text-center text-gray-400 font-bold italic">No results detected for {defenseType} phase.</td>
+                                <td colSpan={5} className="p-20 text-center text-gray-500 font-bold italic">No results detected for {defenseType} phase.</td>
                             </tr>
                         )}
                     </tbody>

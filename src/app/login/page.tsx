@@ -25,6 +25,9 @@ const LoginPage = () => {
       dispatch(login(data));
       const userRole = data.role ? data.role.toLowerCase() : '';
       switch (userRole) {
+        case 'admin':
+          router.push('/admin/dashboard');
+          break;
         case 'committee':
           router.push('/committee/dashboard');
           break;
@@ -83,7 +86,7 @@ const LoginPage = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white"
                 required
               />
             </div>
@@ -101,7 +104,7 @@ const LoginPage = () => {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white"
                 required
               />
             </div>

@@ -33,7 +33,7 @@ const baseQueryWithAuth: typeof baseQuery = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithAuth,
-  tagTypes: ['Students', 'Teachers', 'Cells', 'Notices', 'Proposals', 'DefenseBoards', 'Rooms', 'ScheduleSlots', 'Evaluations', 'User'],
+  tagTypes: ['Students', 'Teachers', 'Cells', 'Notices', 'Proposals', 'DefenseBoards', 'Rooms', 'ScheduleSlots', 'Evaluations', 'User', 'Departments', 'Committee'],
   endpoints: (builder) => ({
     // Auth
     loginUser: builder.mutation<any, any>({
@@ -49,6 +49,93 @@ export const apiSlice = createApi({
         method: 'POST',
         body: userData,
       }),
+    }),
+
+    // Admin APIs
+    getAdminStats: builder.query<any, void>({
+      query: () => '/admin/stats',
+      providesTags: ['Students', 'Teachers', 'Departments', 'Committee'],
+    }),
+    getAdminDepartments: builder.query<any, void>({
+      query: () => '/admin/departments',
+      providesTags: ['Departments'],
+    }),
+    getPublicDepartments: builder.query<any, void>({
+      query: () => '/admin/departments/public',
+      providesTags: ['Departments'],
+    }),
+    createDepartment: builder.mutation<any, { name: string }>({
+      query: (data) => ({
+        url: '/admin/departments',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Departments'],
+    }),
+    updateDepartment: builder.mutation<any, { id: string; name: string }>({
+      query: ({ id, ...data }) => ({
+        url: `/admin/departments/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Departments'],
+    }),
+    deleteDepartment: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `/admin/departments/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Departments'],
+    }),
+    getAdminTeachers: builder.query<any, string | void>({
+      query: (deptId) => `/admin/teachers${deptId ? `?departmentId=${deptId}` : ''}`,
+      providesTags: ['Teachers'],
+    }),
+    createAdminTeacher: builder.mutation<any, any>({
+      query: (data) => ({
+        url: '/admin/teachers',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Teachers'],
+    }),
+    updateAdminTeacher: builder.mutation<any, { id: string; [key: string]: any }>({
+      query: ({ id, ...data }) => ({
+        url: `/admin/teachers/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Teachers'],
+    }),
+    deleteAdminTeacher: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `/admin/teachers/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Teachers'],
+    }),
+    getAdminStudents: builder.query<any, string | void>({
+      query: (deptId) => `/admin/students${deptId ? `?departmentId=${deptId}` : ''}`,
+      providesTags: ['Students'],
+    }),
+    getAdminCommittee: builder.query<any, string | void>({
+      query: (deptId) => `/admin/committee${deptId ? `?departmentId=${deptId}` : ''}`,
+      providesTags: ['Committee'],
+    }),
+    assignAdminCommittee: builder.mutation<any, { userId: string; departmentId: string }>({
+      query: (data) => ({
+        url: '/admin/committee',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Committee'],
+    }),
+    removeAdminCommittee: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `/admin/committee/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Committee'],
     }),
 
     getStudents: builder.query<any, void>({
@@ -208,6 +295,13 @@ export const apiSlice = createApi({
         url: '/defenseboards',
         method: 'POST',
         body: newDefenseBoard,
+      }),
+      invalidatesTags: ['DefenseBoards'],
+    }),
+    setDefenseBoardActive: builder.mutation<any, string>({
+      query: (boardId) => ({
+        url: `/defenseboards/${boardId}/active`,
+        method: 'PATCH',
       }),
       invalidatesTags: ['DefenseBoards'],
     }),
@@ -479,6 +573,14 @@ export const apiSlice = createApi({
         body: dates,
       }),
     }),
+    updateSupervisorProfile: builder.mutation<any, FormData>({
+      query: (formData) => ({
+        url: '/supervisor/profile',
+        method: 'PUT',
+        body: formData,
+      }),
+      invalidatesTags: ['User'],
+    }),
   }),
 });
 
@@ -552,4 +654,19 @@ export const {
   useUpdatePasswordMutation,
   useGetSubmissionDatesQuery,
   useSetSubmissionDatesMutation,
+  useGetAdminStatsQuery,
+  useGetAdminDepartmentsQuery,
+  useGetPublicDepartmentsQuery,
+  useCreateDepartmentMutation,
+  useUpdateDepartmentMutation,
+  useDeleteDepartmentMutation,
+  useGetAdminTeachersQuery,
+  useCreateAdminTeacherMutation,
+  useUpdateAdminTeacherMutation,
+  useDeleteAdminTeacherMutation,
+  useGetAdminStudentsQuery,
+  useGetAdminCommitteeQuery,
+  useAssignAdminCommitteeMutation,
+  useRemoveAdminCommitteeMutation,
+  useUpdateSupervisorProfileMutation,
 } = apiSlice;

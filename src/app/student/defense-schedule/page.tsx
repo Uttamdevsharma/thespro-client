@@ -63,49 +63,54 @@ const StudentDefenseSchedulePage = () => {
               {/* Table */}
               <div className="overflow-x-auto rounded-lg border border-gray-200">
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-gray-100">
                     <tr>
-                      <th className="py-2 px-3 text-left text-sm font-medium text-gray-700">Sl.</th>
-                      <th className="py-2 px-3 text-left text-sm font-medium text-gray-700">Student IDs</th>
-                      <th className="py-2 px-3 text-left text-sm font-medium text-gray-700">Student Names</th>
-                      <th className="py-2 px-3 text-left text-sm font-medium text-gray-700">Thesis/Project Title</th>
-                      <th className="py-2 px-3 text-left text-sm font-medium text-gray-700">Type</th>
-                      <th className="py-2 px-3 text-left text-sm font-medium text-gray-700">Supervisor</th>
-                      <th className="py-2 px-3 text-left text-sm font-medium text-gray-700">Course Supervisor</th>
-                      <th className="py-2 px-3 text-left text-sm font-medium text-gray-700">Comments</th>
+                      <th className="py-3 px-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Sl.</th>
+                      <th className="py-3 px-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Student IDs</th>
+                      <th className="py-3 px-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Student Names</th>
+                      <th className="py-3 px-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Thesis/Project Title</th>
+                      <th className="py-3 px-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Type</th>
+                      <th className="py-3 px-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Supervisor</th>
+                      <th className="py-3 px-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Course Supervisor</th>
+                      <th className="py-3 px-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Comments</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {board.groups.map((group: any, index: number) => (
                       <tr key={group._id} className="hover:bg-gray-50 transition-colors">
-                        <td className="py-2 px-3 text-sm">{index + 1}</td>
+                        <td className="py-3 px-4 text-sm font-bold text-gray-900">{index + 1}</td>
 
                         {/* Student IDs and Names aligned */}
-                        <td className="py-2 px-3 text-sm">
+                        <td className="py-3 px-4 text-sm">
                           <div className="flex flex-col gap-1">
                             {group.members.map((m: any, i: number) => (
-                              <span key={i}>{m.studentId}</span>
+                              <span key={i} className="font-mono font-bold text-gray-900 whitespace-nowrap bg-gray-50 px-1 rounded">{m.studentId}</span>
                             ))}
                           </div>
                         </td>
-                        <td className="py-2 px-3 text-sm">
+                        <td className="py-3 px-4 text-sm">
                           <div className="flex flex-col gap-1">
                             {group.members.map((m: any, i: number) => (
-                              <span key={i}>{m.name || 'N/A'}</span>
+                              <span key={i} className="font-semibold text-gray-900 whitespace-nowrap">{m.name || 'N/A'}</span>
                             ))}
                           </div>
                         </td>
 
-                        <td className="py-2 px-3 text-sm">{group.title}</td>
-                        <td className="py-2 px-3 text-sm">{group.type}</td>
-                        <td className="py-2 px-3 text-sm">{group.supervisorId?.name || '-'}</td>
-                        <td className="py-2 px-3 text-sm">{group.courseSupervisorId?.name || '-'}</td>
+                        <td className="py-3 px-4 text-sm font-bold text-gray-900">{group.title}</td>
+                        <td className="py-3 px-4 text-sm">
+                            <span className="bg-blue-100 text-blue-900 px-2 py-0.5 rounded text-[10px] font-black uppercase">
+                                {group.type}
+                            </span>
+                        </td>
+                        <td className="py-3 px-4 text-sm font-semibold text-gray-900">{group.supervisorId?.name || '-'}</td>
+                        <td className="py-3 px-4 text-sm font-semibold text-gray-900">{group.courseSupervisorId?.name || '-'}</td>
 
                         {/* Comments */}
-                        <td className="py-2 px-3 text-sm" style={{ whiteSpace: 'pre-wrap' }}>
+                        <td className="py-3 px-4 text-sm" style={{ whiteSpace: 'pre-wrap' }}>
                           {board.comments.filter((c: any) => c.group === group._id).map((comment: any, i: number) => (
-                            <div key={i} className="mb-1">
-                              <strong className="text-blue-600">{comment.commentedBy?.name || 'Unknown'}:</strong> {comment.text}
+                            <div key={i} className="mb-2 p-2 bg-gray-50 rounded border border-gray-100">
+                              <strong className="text-blue-900 block text-[10px] uppercase font-black">{comment.commentedBy?.name || 'Unknown'}:</strong> 
+                              <span className="text-gray-900 font-medium">{comment.text}</span>
                             </div>
                           ))}
                         </td>

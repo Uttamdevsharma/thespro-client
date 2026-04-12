@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useRegisterUserMutation } from '@/store/features/apiSlice';
+import { useRegisterUserMutation, useGetPublicDepartmentsQuery } from '@/store/features/apiSlice';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
@@ -11,20 +11,25 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [studentId, setStudentId] = useState('');
-  const [department, setDepartment] = useState('CSE');
+  const [departmentId, setDepartmentId] = useState('');
   const [currentCGPA, setCurrentCGPA] = useState('');
   const router = useRouter();
   const [registerUser, { isLoading }] = useRegisterUserMutation();
+  const { data: departments, isLoading: deptsLoading } = useGetPublicDepartmentsQuery();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!departmentId) {
+      toast.error('Please select a department');
+      return;
+    }
     try {
       await registerUser({
         name,
         email,
         password,
         studentId,
-        department,
+        departmentId,
         currentCGPA,
         role: 'student', 
         profilePicture: '',
@@ -75,7 +80,7 @@ const RegisterPage = () => {
                 placeholder="Enter your full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 shadow-sm"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
                 required
               />
             </div>
@@ -91,7 +96,7 @@ const RegisterPage = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 shadow-sm"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
                 required
               />
             </div>
@@ -107,7 +112,7 @@ const RegisterPage = () => {
                 placeholder="Create a strong password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 shadow-sm"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
                 required
               />
             </div>
@@ -123,7 +128,7 @@ const RegisterPage = () => {
                 placeholder="Enter your student ID"
                 value={studentId}
                 onChange={(e) => setStudentId(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 shadow-sm"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
                 required
               />
             </div>
@@ -135,15 +140,19 @@ const RegisterPage = () => {
               </label>
               <select
                 id="department"
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 shadow-sm"
+                value={departmentId}
+                onChange={(e) => setDepartmentId(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
+                disabled={deptsLoading}
               >
-                <option value="CSE">CSE</option>
-                <option value="EEE">EEE</option>
-                <option value="BBA">BBA</option>
-                <option value="Textile">Textile</option>
+                <option value="">Select Department</option>
+                {departments?.map((dept: any) => (
+                  <option key={dept._id} value={dept._id}>
+                    {dept.name}
+                  </option>
+                ))}
               </select>
+              {deptsLoading && <p className="text-xs text-gray-500 mt-1">Loading departments...</p>}
             </div>
 
             {/* Current CGPA */}
@@ -158,7 +167,7 @@ const RegisterPage = () => {
                 placeholder="Enter your current CGPA"
                 value={currentCGPA}
                 onChange={(e) => setCurrentCGPA(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 shadow-sm"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
                 required
               />
             </div>

@@ -4,6 +4,8 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { FaUserGraduate, FaChalkboardTeacher, FaFileAlt, FaCheckCircle, FaHourglassHalf, FaFlask, FaUsers } from 'react-icons/fa';
 import { useGetResearchCellsQuery, useGetProposalsQuery, useGetStudentsQuery, useGetTeachersQuery } from '@/store/features/apiSlice';
+import Skeleton from '@/components/Skeleton';
+import TableSkeleton from '@/components/TableSkeleton';
 
 const CommitteeDashboard = () => {
   const router = useRouter();
@@ -20,12 +22,25 @@ const CommitteeDashboard = () => {
   const totalResearchCells = researchCells?.length || 0;
   const totalCommitteeMembers = 5;
 
-  if (loadingCells || loadingProposals || loadingStudents || loadingTeachers) {
-    return <div className="p-6 bg-white rounded-lg shadow-md">Loading dashboard...</div>;
-  }
+  const isAnyLoading = loadingCells || loadingProposals || loadingStudents || loadingTeachers;
+  const isAnyError = cellsError || proposalsError || studentsError || teachersError;
 
-  if (cellsError || proposalsError || studentsError || teachersError) {
-    return <div className="p-6 bg-white rounded-lg shadow-md text-red-600">Error loading data.</div>;
+  if (isAnyError) {
+    return (
+        <div className="p-6 bg-gray-50 min-h-screen">
+            <div className="bg-white p-12 rounded-lg shadow-md text-center">
+                <div className="bg-red-50 text-red-600 p-4 rounded-lg inline-block mb-4 text-4xl">!</div>
+                <h2 className="text-xl font-bold text-gray-800 mb-2">Error loading dashboard</h2>
+                <p className="text-gray-500 mb-6 font-semibold italic text-sm">Failed to fetch data from server.</p>
+                <button 
+                onClick={() => window.location.reload()}
+                className="bg-gray-800 hover:bg-gray-900 text-white px-6 py-2 rounded-lg transition-colors"
+                >
+                Retry
+                </button>
+            </div>
+        </div>
+    );
   }
 
   const cardData = [
@@ -52,62 +67,81 @@ const CommitteeDashboard = () => {
             </div>
             <div className="text-right">
               <p className="text-sm font-medium">{card.label}</p>
-              <p className="text-3xl font-bold">{card.value}</p>
+              {isAnyLoading ? (
+                <Skeleton className="h-9 w-12 mt-1 ml-auto" />
+              ) : (
+                <p className="text-3xl font-bold">{card.value}</p>
+              )}
             </div>
           </div>
         ))}
       </div>
 
-      {researchCells && researchCells.length > 0 ? (
+      {loadingCells ? (
+        <div className="space-y-8">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+                <Skeleton className="h-8 w-64 mb-4" />
+                <TableSkeleton rows={3} cols={4} />
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+                <Skeleton className="h-8 w-48 mb-4" />
+                <TableSkeleton rows={3} cols={4} />
+            </div>
+        </div>
+      ) : researchCells && researchCells.length > 0 ? (
         <div className="space-y-8">
           {researchCells.map((cell: any) => (
             <div key={cell._id} className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-semibold text-gray-700 mb-4">{cell.title}</h2>
               <div className="overflow-x-auto max-h-96 overflow-y-auto relative">
-                <table className="min-w-full bg-white">
-                  <thead className="sticky top-0 bg-gray-100">
-                    <tr>
-                      <th className="py-3 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Proposal Title</th>
-                      <th className="py-3 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Supervisor</th>
-                      <th className="py-3 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                      <th className="py-3 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Last Updated</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {proposals && proposals.filter((p: any) => p.researchCellId?._id === cell._id).length > 0 ? (
-                      proposals.filter((p: any) => p.researchCellId?._id === cell._id).map((proposal: any) => (
-                        <tr key={proposal._id}>
-                          <td className="py-3 px-4 border-b border-gray-200 text-sm">{proposal.title}</td>
-                          <td className="py-3 px-4 border-b border-gray-200 text-sm">{proposal.supervisorId?.name || 'N/A'}</td>
-                          <td className="py-3 px-4 border-b border-gray-200 text-sm">
-                            <span
-                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                proposal.status === 'Pending'
-                                  ? 'bg-orange-100 text-orange-800'
-                                  : proposal.status === 'Approved'
-                                  ? 'bg-green-100 text-green-800'
-                                  : 'bg-red-100 text-red-800'
-                              }`}
-                            >
-                              {proposal.status}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 border-b border-gray-200 text-sm">{new Date(proposal.updatedAt || proposal.createdAt).toLocaleDateString()}</td>
+                {loadingProposals ? (
+                    <TableSkeleton rows={3} cols={4} />
+                ) : (
+                    <table className="min-w-full bg-white">
+                    <thead className="sticky top-0 bg-gray-100">
+                        <tr>
+                        <th className="py-3 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Proposal Title</th>
+                        <th className="py-3 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Supervisor</th>
+                        <th className="py-3 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                        <th className="py-3 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Last Updated</th>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan={4} className="py-3 px-4 text-sm text-gray-500 text-center">No proposals for this research cell.</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                        {proposals && proposals.filter((p: any) => p.researchCellId?._id === cell._id).length > 0 ? (
+                        proposals.filter((p: any) => p.researchCellId?._id === cell._id).map((proposal: any) => (
+                            <tr key={proposal._id}>
+                            <td className="py-3 px-4 border-b border-gray-200 text-sm">{proposal.title}</td>
+                            <td className="py-3 px-4 border-b border-gray-200 text-sm">{proposal.supervisorId?.name || 'N/A'}</td>
+                            <td className="py-3 px-4 border-b border-gray-200 text-sm">
+                                <span
+                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                    proposal.status === 'Pending'
+                                    ? 'bg-orange-100 text-orange-800'
+                                    : proposal.status === 'Approved'
+                                    ? 'bg-green-100 text-green-800'
+                                    : 'bg-red-100 text-red-800'
+                                }`}
+                                >
+                                {proposal.status}
+                                </span>
+                            </td>
+                            <td className="py-3 px-4 border-b border-gray-200 text-sm">{new Date(proposal.updatedAt || proposal.createdAt).toLocaleDateString()}</td>
+                            </tr>
+                        ))
+                        ) : (
+                        <tr>
+                            <td colSpan={4} className="py-3 px-4 text-sm text-gray-500 text-center italic">No proposals for this research cell.</td>
+                        </tr>
+                        )}
+                    </tbody>
+                    </table>
+                )}
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <p className="text-lg text-gray-500">No research cells found.</p>
+        <p className="text-lg text-gray-500 text-center py-10 italic">No research cells found.</p>
       )}
     </div>
   );

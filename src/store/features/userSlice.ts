@@ -14,8 +14,11 @@ export const userSlice = createSlice({
       state.user = action.payload;
     },
     logout: (state) => {
-      console.log('Redux logout action dispatched. Clearing user state.');
+      console.log('Redux logout action dispatched. Clearing user state and localStorage.');
       state.user = null;
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('userInfo');
+      }
     },
   },
 });

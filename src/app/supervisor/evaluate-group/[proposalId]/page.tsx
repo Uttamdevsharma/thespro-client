@@ -37,6 +37,15 @@ const EvaluateGroupPage = () => {
 
     const [submitEvaluation, { isLoading: isSubmitting }] = useSubmitOrUpdateEvaluationMutation();
 
+    // Determine role dynamically
+    const isSupervisor = proposal?.supervisorId?._id === supervisorId || 
+                         proposal?.coSupervisors?.some((s: any) => s._id === supervisorId);
+    
+    const evaluationType = isSupervisor ? 'supervisor' : 'committee';
+    const maxMark = evaluationType === 'supervisor' 
+        ? (defenseType === 'Pre-Defense' ? 20 : 40)
+        : (defenseType === 'Pre-Defense' ? 10 : 30);
+
     useEffect(() => {
         if (!proposalId) {
             toast.error('No group selected for evaluation.');
@@ -54,7 +63,10 @@ const EvaluateGroupPage = () => {
         if (existingEvaluations) {
             existingEvaluations.forEach((evalGroup: any) => {
                 evalGroup.evaluations.forEach((evaluation: any) => {
-                    if (evaluation.evaluator._id === supervisorId && evaluation.defenseType === defenseType) {
+                    // Match by evaluator ID AND correct evaluation type (supervisor vs committee)
+                    if (evaluation.evaluator._id === supervisorId && 
+                        evaluation.defenseType === defenseType &&
+                        evaluation.evaluationType === evaluationType) {
                         initialMarks[evalGroup.student._id] = evaluation.marks;
                         initialComments[evalGroup.student._id] = evaluation.comments || '';
                     }
@@ -68,7 +80,7 @@ const EvaluateGroupPage = () => {
 
         setMarks(marksString);
         setComments(initialComments);
-    }, [existingEvaluations, defenseType, supervisorId, proposalId, router, proposalError]);
+    }, [existingEvaluations, defenseType, supervisorId, proposalId, router, proposalError, evaluationType]);
 
 
     const handleMarkChange = (studentId: string, value: string) => {
@@ -79,8 +91,6 @@ const EvaluateGroupPage = () => {
     const handleCommentChange = (studentId: string, value: string) => {
         setComments(prev => ({ ...prev, [studentId]: value }));
     };
-
-    const maxMark = defenseType === 'Pre-Defense' ? 20 : 40;
 
     const handleSaveAll = async () => {
         if (!proposal) {
@@ -103,20 +113,21 @@ const EvaluateGroupPage = () => {
                     studentId: student._id,
                     proposalId: proposal._id,
                     defenseType,
-                    evaluationType: 'supervisor',
+                    evaluationType, // Dynamically set to 'supervisor' or 'committee'
                     marks: Number(mark),
                     comments: comment,
                 }).unwrap();
             } catch (err: any) {
-                console.error(`Submission failed for ${student.name}:`, err);
-                toast.error(`Failed to save evaluation for ${student.name}: ${err.data?.message || 'Server error'}`);
+                console.error(`Submission failed for ${student.name}:`, JSON.stringify(err, null, 2));
+                const backendMsg = err.data?.message || err.message || 'Server error';
+                toast.error(`Failed to save for ${student.name}: ${backendMsg}`);
                 throw err;
             }
         });
 
         try {
             await Promise.all(submissionPromises);
-            toast.success('All evaluations submitted successfully!');
+            toast.success(`Evaluations saved successfully as ${evaluationType.toUpperCase()}!`);
             refetch();
         } catch (err) {
             // Errors managed in map
@@ -146,8 +157,8 @@ const EvaluateGroupPage = () => {
                         onChange={(e) => setDefenseType(e.target.value)} 
                         className="p-2 border border-green-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 transition duration-150 text-gray-700"
                     >
-                        <option value="Pre-Defense">Pre-Defense (Max: 20)</option>
-                        <option value="Final Defense">Final Defense (Max: 40)</option>
+                        <option value="Pre-Defense">Pre-Defense (Max: {evaluationType === 'supervisor' ? 20 : 10})</option>
+                        <option value="Final Defense">Final Defense (Max: {evaluationType === 'supervisor' ? 40 : 30})</option>
                     </select>
                     <span className="text-sm text-gray-600 ml-auto font-medium">Current Max Mark: <span className="font-bold text-green-700">{maxMark}</span></span>
                 </div>

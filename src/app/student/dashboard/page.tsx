@@ -6,6 +6,8 @@ import { RootState } from '@/store';
 import { useGetStudentProposalsQuery, useGetNoticesQuery } from '@/store/features/apiSlice';
 import ProgressBar from '@/components/ProgressBar';
 import NoticeItem from '@/components/NoticeItem';
+import Skeleton from '@/components/Skeleton';
+import { NoticeListSkeleton } from '@/components/NoticeSkeleton';
 
 const StudentDashboard = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -30,26 +32,31 @@ const StudentDashboard = () => {
         </p>
       </div>
 
-      {proposalsLoading ? (
-        <p>Loading proposal status...</p>
-      ) : latestProposal ? (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h2 className="text-xl font-semibold mb-4">Proposal Status</h2>
+      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h2 className="text-xl font-semibold mb-4">Proposal Status</h2>
+        {proposalsLoading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-4 w-full" />
+            <div className="flex justify-between">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-3 w-20" />
+            </div>
+          </div>
+        ) : latestProposal ? (
           <ProgressBar status={latestProposal.status} />
-        </div>
-      ) : (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        ) : (
           <p className="text-lg text-gray-500">
             You have not submitted any proposals yet. Let’s start your academic journey!
           </p>
-        </div>
-      )}
+        )}
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">Committee Notices</h2>
           {noticesLoading ? (
-            <p>Loading notices...</p>
+            <NoticeListSkeleton count={3} />
           ) : committeeNotices && committeeNotices.length > 0 ? (
             <div>
               {committeeNotices.map((notice: any) => (
@@ -57,14 +64,14 @@ const StudentDashboard = () => {
               ))}
             </div>
           ) : (
-            <p>No new notices from the committee.</p>
+            <p className="text-gray-500 italic">No new notices from the committee.</p>
           )}
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">Supervisor Notices</h2>
           {noticesLoading ? (
-            <p>Loading notices...</p>
+            <NoticeListSkeleton count={3} />
           ) : supervisorNotices && supervisorNotices.length > 0 ? (
             <div>
               {supervisorNotices.map((notice: any) => (
@@ -72,7 +79,7 @@ const StudentDashboard = () => {
               ))}
             </div>
           ) : (
-            <p>No new notices from your supervisor.</p>
+            <p className="text-gray-500 italic">No new notices from your supervisor.</p>
           )}
         </div>
       </div>

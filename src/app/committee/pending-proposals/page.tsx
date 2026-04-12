@@ -1,13 +1,13 @@
 'use client';
-
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useGetPendingProposalsByCellQuery, useForwardProposalMutation, useRejectProposalMutation } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
-import { ChevronRight, ArrowLeft, Send, XCircle, Info, Users, Layers } from 'lucide-react';
+import Skeleton from '@/components/Skeleton';
+import { ProposalListSkeleton } from '@/components/ProposalSkeleton';
+import { ChevronRight, ArrowLeft, Send, XCircle, Info, Users, Layers, AlertCircle } from 'lucide-react';
 
 const CommitteePendingProposalsPage = () => {
-  const { data: proposalsByCell, isLoading } = useGetPendingProposalsByCellQuery();
+  const { data: proposalsByCell, isLoading, isError, error } = useGetPendingProposalsByCellQuery();
   const [forwardProposal, { isLoading: isForwarding }] = useForwardProposalMutation();
   const [rejectProposal, { isLoading: isRejecting }] = useRejectProposalMutation();
   const [selectedCell, setSelectedCell] = useState<any>(null);
@@ -40,7 +40,44 @@ const CommitteePendingProposalsPage = () => {
   };
 
   if (isLoading) {
-    return <Loader />;
+    return (
+        <div className="p-8 bg-gray-50 min-h-screen">
+          <div className="max-w-6xl mx-auto">
+            <Skeleton className="h-10 w-80 mb-10" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+                        <Skeleton className="h-6 w-3/4 mb-4" />
+                        <div className="flex justify-between items-center mt-6">
+                            <Skeleton className="h-10 w-24 rounded-xl" />
+                            <Skeleton className="h-6 w-6 rounded-full" />
+                        </div>
+                    </div>
+                ))}
+            </div>
+          </div>
+        </div>
+    );
+  }
+
+  if (isError) {
+    return (
+        <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center">
+            <div className="bg-white p-12 rounded-2xl shadow-xl max-w-lg w-full text-center border border-red-500/20">
+                <AlertCircle size={64} className="mx-auto text-red-500 mb-6" />
+                <h1 className="text-2xl font-extrabold text-gray-900 mb-3">Fetch Error</h1>
+                <p className="text-gray-500 mb-8 italic font-medium">
+                    {(error as any)?.data?.message || "Something went wrong while fetching pending proposals."}
+                </p>
+                <button 
+                onClick={() => window.location.reload()}
+                className="w-full bg-gray-900 hover:bg-black text-white font-bold py-3.5 rounded-xl transition-all"
+                >
+                Try Again
+                </button>
+            </div>
+        </div>
+    );
   }
 
   if (selectedCell) {

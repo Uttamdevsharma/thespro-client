@@ -6,6 +6,9 @@ import { RootState } from '@/store';
 import { useGetNoticesQuery, useGetProposalsBySupervisorQuery, useGetProfileQuery } from '@/store/features/apiSlice';
 import NoticeItem from '@/components/NoticeItem';
 import toast from 'react-hot-toast';
+import Skeleton from '@/components/Skeleton';
+import TableSkeleton from '@/components/TableSkeleton';
+import { NoticeListSkeleton } from '@/components/NoticeSkeleton';
 
 const SupervisorDashboard = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -27,6 +30,8 @@ const SupervisorDashboard = () => {
   const thesisGroups = approvedProposals.filter((p: any) => p.type === 'Thesis').length;
   const projectGroups = approvedProposals.filter((p: any) => p.type === 'Project').length;
   const totalGroups = approvedProposals.length;
+
+  const loading = noticesLoading || proposalsLoading || profileLoading;
 
   const handleCardClick = (type: string) => {
     let items: any[] = [];
@@ -65,12 +70,6 @@ const SupervisorDashboard = () => {
     setShowModal(true);
   };
 
-  const loading = noticesLoading || proposalsLoading || profileLoading;
-
-  if (loading && proposals.length === 0) {
-    return <div className="p-6 bg-white rounded-lg shadow-md">Loading dashboard...</div>;
-  }
-
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
@@ -85,27 +84,29 @@ const SupervisorDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-8">
-            <div className="bg-blue-100 p-4 rounded-lg shadow cursor-pointer hover:bg-blue-200 transition-colors" onClick={() => handleCardClick('thesis')}>
-              <p className="text-lg font-semibold text-blue-800">Thesis Groups</p>
-              <p className="text-3xl font-bold text-blue-900">{thesisGroups}</p>
+            <div className={`p-4 rounded-lg shadow cursor-pointer transition-colors ${loading ? 'bg-gray-100' : 'bg-blue-100 hover:bg-blue-200'}`} onClick={() => !loading && handleCardClick('thesis')}>
+              <p className={`text-lg font-semibold ${loading ? 'text-gray-400' : 'text-blue-800'}`}>Thesis Groups</p>
+              {loading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold text-blue-900">{thesisGroups}</p>}
             </div>
-            <div className="bg-green-100 p-4 rounded-lg shadow cursor-pointer hover:bg-green-200 transition-colors" onClick={() => handleCardClick('project')}>
-              <p className="text-lg font-semibold text-green-800">Project Groups</p>
-              <p className="text-3xl font-bold text-green-900">{projectGroups}</p>
+            <div className={`p-4 rounded-lg shadow cursor-pointer transition-colors ${loading ? 'bg-gray-100' : 'bg-green-100 hover:bg-green-200'}`} onClick={() => !loading && handleCardClick('project')}>
+              <p className={`text-lg font-semibold ${loading ? 'text-gray-400' : 'text-green-800'}`}>Project Groups</p>
+              {loading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold text-green-900">{projectGroups}</p>}
             </div>
-            <div className="bg-purple-100 p-4 rounded-lg shadow cursor-pointer hover:bg-purple-200 transition-colors" onClick={() => handleCardClick('total')}>
-              <p className="text-lg font-semibold text-purple-800">Total Groups</p>
-              <p className="text-3xl font-bold text-purple-900">{totalGroups}</p>
+            <div className={`p-4 rounded-lg shadow cursor-pointer transition-colors ${loading ? 'bg-gray-100' : 'bg-purple-100 hover:bg-purple-200'}`} onClick={() => !loading && handleCardClick('total')}>
+              <p className={`text-lg font-semibold ${loading ? 'text-gray-400' : 'text-purple-800'}`}>Total Groups</p>
+              {loading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold text-purple-900">{totalGroups}</p>}
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg shadow cursor-pointer hover:bg-yellow-200 transition-colors" onClick={() => handleCardClick('researchCells')}>
-              <p className="text-lg font-semibold text-yellow-800">Research Cells</p>
-              <p className="text-3xl font-bold text-yellow-900">{researchCells.length}</p>
+            <div className={`p-4 rounded-lg shadow cursor-pointer transition-colors ${loading ? 'bg-gray-100' : 'bg-yellow-100 hover:bg-yellow-200'}`} onClick={() => !loading && handleCardClick('researchCells')}>
+              <p className={`text-lg font-semibold ${loading ? 'text-gray-400' : 'text-yellow-800'}`}>Research Cells</p>
+              {loading ? <Skeleton className="h-9 w-12 mt-1" /> : <p className="text-3xl font-bold text-yellow-900">{researchCells.length}</p>}
             </div>
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md mb-6">
             <h2 className="text-xl font-semibold mb-4">All Proposals</h2>
-            {proposals && proposals.length > 0 ? (
+            {proposalsLoading ? (
+              <TableSkeleton rows={5} cols={5} />
+            ) : proposals && proposals.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="min-w-full bg-white">
                   <thead>
@@ -131,7 +132,7 @@ const SupervisorDashboard = () => {
                 </table>
               </div>
             ) : (
-              <p>No proposals submitted by your students yet.</p>
+              <p className="text-gray-500 text-center py-4 italic">No proposals submitted by your students yet.</p>
             )}
           </div>
         </div>
@@ -140,7 +141,7 @@ const SupervisorDashboard = () => {
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Committee Notices</h2>
             {noticesLoading ? (
-              <p>Loading notices...</p>
+              <NoticeListSkeleton count={3} />
             ) : committeeNotices && committeeNotices.length > 0 ? (
               <div>
                 {committeeNotices.map((notice: any) => (
@@ -148,7 +149,7 @@ const SupervisorDashboard = () => {
                 ))}
               </div>
             ) : (
-              <p>No new notices from the committee.</p>
+              <p className="text-gray-500 italic">No new notices from the committee.</p>
             )}
           </div>
         </div>

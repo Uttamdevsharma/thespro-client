@@ -93,25 +93,25 @@ const CommitteeDefenseBoardDetailPage = () => {
           <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-100">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-100">
                   <tr>
-                    <th className="px-8 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Serial</th>
-                    <th className="px-8 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Research Group & Members</th>
-                    <th className="px-8 py-4 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Supervision Panel</th>
-                    <th className="px-8 py-4 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest">Actions</th>
+                    <th className="px-8 py-4 text-left text-[10px] font-black text-gray-800 uppercase tracking-widest">Serial</th>
+                    <th className="px-8 py-4 text-left text-[10px] font-black text-gray-800 uppercase tracking-widest">Research Group & Members</th>
+                    <th className="px-8 py-4 text-left text-[10px] font-black text-gray-800 uppercase tracking-widest">Supervision Panel</th>
+                    <th className="px-8 py-4 text-right text-[10px] font-black text-gray-800 uppercase tracking-widest">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-50">
                   {boardDetails.groups.map((group: any, index: number) => (
                     <tr key={group._id} className="hover:bg-green-50/20 transition-all group">
-                      <td className="px-8 py-6 text-sm font-black text-gray-400">{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
+                      <td className="px-8 py-6 text-sm font-black text-gray-500">{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
                       <td className="px-8 py-6">
                         <div className="mb-2">
-                           <span className="text-sm font-extrabold text-gray-900 group-hover:text-green-700 transition-colors">{group.title}</span>
+                           <span className="text-sm font-black text-gray-900 group-hover:text-green-700 transition-colors uppercase tracking-tight">{group.title}</span>
                         </div>
                         <div className="flex flex-wrap gap-2">
                             {group.members.map((member: any) => (
-                                <span key={member.studentId} className="bg-gray-50 text-gray-500 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-100">
+                                <span key={member.studentId} className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-black border border-gray-200 shadow-sm">
                                     {member.name} ({member.studentId})
                                 </span>
                             ))}
@@ -119,14 +119,14 @@ const CommitteeDefenseBoardDetailPage = () => {
                       </td>
                       <td className="px-8 py-6">
                         <div className="space-y-1.5">
-                            <div className="flex items-center text-xs font-bold text-gray-700">
-                                <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                                <span className="text-gray-400 mr-2 uppercase text-[9px]">Supervisor:</span>
+                            <div className="flex items-center text-xs font-black text-gray-900">
+                                <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
+                                <span className="text-gray-500 mr-2 uppercase text-[9px] font-black">Supervisor:</span>
                                 {group.supervisorId?.name || 'N/A'}
                             </div>
-                            <div className="flex items-center text-xs font-bold text-gray-700">
-                                <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-                                <span className="text-gray-400 mr-2 uppercase text-[9px]">Course:</span>
+                            <div className="flex items-center text-xs font-black text-gray-900">
+                                <span className="w-2 h-2 bg-blue-600 rounded-full mr-2"></span>
+                                <span className="text-gray-500 mr-2 uppercase text-[9px] font-black">Course:</span>
                                 {group.courseSupervisorId?.name || 'N/A'}
                             </div>
                         </div>
@@ -134,7 +134,7 @@ const CommitteeDefenseBoardDetailPage = () => {
                       <td className="px-8 py-6 text-right">
                         <Link
                           href={`/committee/defense-boards/${boardId}/group-result/${group._id}?defenseType=${boardDetails.defenseType}`}
-                          className="inline-flex items-center px-4 py-2.5 bg-green-50 text-green-700 rounded-xl text-xs font-black shadow-sm hover:bg-green-600 hover:text-white transition-all transform active:scale-95 border border-green-100"
+                          className="inline-flex items-center px-4 py-2.5 bg-white text-green-700 rounded-xl text-xs font-black border-2 border-green-600 shadow-md hover:bg-green-600 hover:text-white transition-all transform active:scale-95"
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Evaluation History

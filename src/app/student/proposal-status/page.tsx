@@ -2,13 +2,36 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useGetStudentProposalsQuery } from '@/store/features/apiSlice';
+import Skeleton from '@/components/Skeleton';
+import { ProposalListSkeleton } from '@/components/ProposalSkeleton';
 
 const StudentProposalStatusPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
-  const { data: proposals, isLoading: proposalsLoading } = useGetStudentProposalsQuery((user as any)?._id, { skip: !user });
+  const { data: proposals, isLoading: proposalsLoading, isError: proposalsError } = useGetStudentProposalsQuery((user as any)?._id, { skip: !user });
 
   if (proposalsLoading) {
-    return <div className="p-6 bg-white rounded-lg shadow-md">Loading proposals...</div>;
+    return (
+      <div className="p-6 bg-white rounded-lg shadow-md">
+        <Skeleton className="h-8 w-48 mb-6" />
+        <ProposalListSkeleton count={3} />
+      </div>
+    );
+  }
+
+  if (proposalsError) {
+    return (
+      <div className="p-6 bg-white rounded-lg shadow-md text-center">
+        <div className="bg-red-50 text-red-600 p-4 rounded-lg inline-block mb-4">!</div>
+        <h2 className="text-xl font-bold text-gray-800 mb-2">Error loading proposal status</h2>
+        <p className="text-gray-500 mb-6 italic">Failed to fetch data from server.</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="bg-gray-800 hover:bg-gray-900 text-white px-6 py-2 rounded-lg transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    );
   }
 
   return (

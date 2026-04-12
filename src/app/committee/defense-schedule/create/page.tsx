@@ -101,15 +101,18 @@ const CommitteeCreateDefenseBoardPage = () => {
                   <MapPin size={14} className="mr-1" /> Campus Venue
               </label>
               <select
+                id="room-select"
                 name="room"
                 value={boardDraft.room}
                 onChange={handleChange}
-                className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white outline-none transition-all font-bold text-gray-700"
+                className="w-full px-4 py-4 bg-white border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 outline-none transition-all font-bold text-gray-900 shadow-sm"
                 required
               >
-                <option value="">-- Choose Venue --</option>
+                <option value="" className="text-gray-400 text-sm">-- Choose Venue --</option>
                 {rooms?.map((room: any) => (
-                  <option key={room._id} value={room._id}>{room.name} (Cap: {room.capacity})</option>
+                  <option key={room._id} value={room._id} className="text-gray-900 font-medium">
+                    {room.name} (Cap: {room.capacity})
+                  </option>
                 ))}
               </select>
             </div>
@@ -120,16 +123,17 @@ const CommitteeCreateDefenseBoardPage = () => {
                   <Clock size={14} className="mr-1" /> Time Assignment
               </label>
               <select
+                id="schedule-select"
                 name="schedule"
                 value={boardDraft.schedule}
                 onChange={handleChange}
-                className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white outline-none transition-all font-bold text-gray-700"
+                className="w-full px-4 py-4 bg-white border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 outline-none transition-all font-bold text-gray-900 shadow-sm"
                 required
               >
-                <option value="">-- Choose Slot --</option>
+                <option value="" className="text-gray-400 text-sm">-- Choose Slot --</option>
                 {scheduleSlots?.map((slot: any) => (
-                  <option key={slot._id} value={slot._id}>
-                    {new Date(slot.date).toLocaleDateString()} | {slot.startTime} - {slot.endTime}
+                  <option key={slot._id} value={slot._id} className="text-gray-900 font-medium">
+                    {new Date(slot.date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })} | {slot.startTime} - {slot.endTime}
                   </option>
                 ))}
               </select>
@@ -142,16 +146,17 @@ const CommitteeCreateDefenseBoardPage = () => {
                 <button
                     type="button"
                     onClick={() => router.push('/committee/defense-schedule/create/select-groups')}
-                    className="w-full flex items-center justify-between p-6 bg-blue-50 border border-blue-100 rounded-2xl hover:bg-blue-600 hover:text-white transition-all transform active:scale-95 group shadow-sm"
+                    className="w-full flex items-center justify-between p-6 bg-blue-50 border-2 border-blue-200 rounded-2xl hover:bg-blue-600 hover:text-white transition-all transform active:scale-95 group shadow-md"
                 >
                     <div className="flex items-center text-left">
-                        <Users size={24} className="mr-4 text-blue-500 group-hover:text-white" />
+                        <Users size={32} className="mr-4 text-blue-600 group-hover:text-white transition-colors" />
                         <div>
-                            <p className="text-sm font-black uppercase tracking-widest group-hover:text-blue-100">Attach Groups</p>
-                            <p className="text-xl font-black">{boardDraft.groups.length} Groups Selected</p>
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] group-hover:text-blue-100 mb-1 opacity-70">Step 1: Assign Candidates</p>
+                            <p className="text-lg font-black text-blue-900 group-hover:text-white transition-colors">Attach Student Groups</p>
+                            <span className="text-xs font-bold text-blue-500 group-hover:text-blue-200">{boardDraft.groups.length} Groups Selected</span>
                         </div>
                     </div>
-                    <ChevronRight size={24} />
+                    <ChevronRight size={24} className="text-blue-400 group-hover:text-white" />
                 </button>
             </div>
 
@@ -160,16 +165,17 @@ const CommitteeCreateDefenseBoardPage = () => {
                 <button
                     type="button"
                     onClick={() => router.push('/committee/defense-schedule/create/select-members')}
-                    className="w-full flex items-center justify-between p-6 bg-purple-50 border border-purple-100 rounded-2xl hover:bg-purple-600 hover:text-white transition-all transform active:scale-95 group shadow-sm"
+                    className="w-full flex items-center justify-between p-6 bg-purple-50 border-2 border-purple-200 rounded-2xl hover:bg-purple-600 hover:text-white transition-all transform active:scale-95 group shadow-md"
                 >
                     <div className="flex items-center text-left">
-                        <Users size={24} className="mr-4 text-purple-500 group-hover:text-white" />
+                        <Users size={32} className="mr-4 text-purple-600 group-hover:text-white transition-colors" />
                         <div>
-                            <p className="text-sm font-black uppercase tracking-widest group-hover:text-purple-100">Jury Members</p>
-                            <p className="text-xl font-black">{boardDraft.boardMembers.length} Members Selected</p>
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] group-hover:text-purple-100 mb-1 opacity-70">Step 2: Assign Evaluators</p>
+                            <p className="text-lg font-black text-purple-900 group-hover:text-white transition-colors">Board Members</p>
+                            <span className="text-xs font-bold text-purple-500 group-hover:text-purple-200">{boardDraft.boardMembers.length} Members Selected</span>
                         </div>
                     </div>
-                    <ChevronRight size={24} />
+                    <ChevronRight size={24} className="text-purple-400 group-hover:text-white" />
                 </button>
             </div>
           </div>
