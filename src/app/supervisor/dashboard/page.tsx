@@ -71,12 +71,12 @@ const SupervisorDashboard = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">
+    <div className="p-6 bg-gray-50 dark:bg-gray-950 min-h-screen">
+      <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md mb-6">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
           Supervisor Dashboard
         </h1>
-        <p className="text-lg text-gray-500">
+        <p className="text-lg text-gray-500 dark:text-gray-400">
           Here is an overview of your assigned proposals and recent notices.
         </p>
       </div>
@@ -102,43 +102,43 @@ const SupervisorDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+          <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md mb-6">
             <h2 className="text-xl font-semibold mb-4">All Proposals</h2>
             {proposalsLoading ? (
               <TableSkeleton rows={5} cols={5} />
             ) : proposals && proposals.length > 0 ? (
               <div className="overflow-x-auto">
-                <table className="min-w-full bg-white">
+                <table className="min-w-full bg-white dark:bg-gray-900">
                   <thead>
                     <tr>
-                      <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Title</th>
-                      <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Submitted By</th>
-                      <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Research Cell</th>
-                      <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                      <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Last Updated</th>
+                      <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Title</th>
+                      <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Submitted By</th>
+                      <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Research Cell</th>
+                      <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                      <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Last Updated</th>
                     </tr>
                   </thead>
                   <tbody>
                     {proposals.map(proposal => (
                       <tr key={proposal._id}>
-                        <td className="py-2 px-4 border-b border-gray-200 text-sm">{proposal.title}</td>
-                        <td className="py-2 px-4 border-b border-gray-200 text-sm">{proposal.createdBy?.name || 'N/A'}</td>
-                        <td className="py-2 px-4 border-b border-gray-200 text-sm">{proposal.researchCellId?.title || 'N/A'}</td>
-                        <td className="py-2 px-4 border-b border-gray-200 text-sm">{proposal.status}</td>
-                        <td className="py-2 px-4 border-b border-gray-200 text-sm">{new Date(proposal.updatedAt || proposal.createdAt).toLocaleDateString()}</td>
+                        <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-sm">{proposal.title}</td>
+                        <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-sm">{proposal.createdBy?.name || 'N/A'}</td>
+                        <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-sm">{proposal.researchCellId?.title || 'N/A'}</td>
+                        <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-sm">{proposal.status}</td>
+                        <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-sm">{new Date(proposal.updatedAt || proposal.createdAt).toLocaleDateString()}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
             ) : (
-              <p className="text-gray-500 text-center py-4 italic">No proposals submitted by your students yet.</p>
+              <p className="text-gray-500 dark:text-gray-400 text-center py-4 italic">No proposals submitted by your students yet.</p>
             )}
           </div>
         </div>
 
         <div className="lg:col-span-1 space-y-6">
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Committee Notices</h2>
             {noticesLoading ? (
               <NoticeListSkeleton count={3} />
@@ -149,7 +149,7 @@ const SupervisorDashboard = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 italic">No new notices from the committee.</p>
+              <p className="text-gray-500 dark:text-gray-400 italic">No new notices from the committee.</p>
             )}
           </div>
         </div>
@@ -157,18 +157,18 @@ const SupervisorDashboard = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-xl max-w-2xl w-full">
+          <div className="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-xl max-w-2xl w-full">
             <h2 className="text-2xl font-bold mb-4">{modalContent.title}</h2>
             {modalContent.items.length === 0 ? (
               <p>No items to display.</p>
             ) : (
               <div className="space-y-3 max-h-96 overflow-y-auto">
                 {modalContent.items.map((item, index) => (
-                  <div key={index} className="border border-gray-200 p-3 rounded-md">
+                  <div key={index} className="border border-gray-200 dark:border-gray-700 p-3 rounded-md">
                     <p className="font-semibold">{item.title}</p>
-                    {item.type && <p className="text-sm text-gray-600">Type: {item.type}</p>}
-                    {item.members && <p className="text-sm text-gray-600">Members: {item.members}</p>}
-                    {item.description && <p className="text-sm text-gray-600">Description: {item.description}</p>}
+                    {item.type && <p className="text-sm text-gray-600 dark:text-gray-300">Type: {item.type}</p>}
+                    {item.members && <p className="text-sm text-gray-600 dark:text-gray-300">Members: {item.members}</p>}
+                    {item.description && <p className="text-sm text-gray-600 dark:text-gray-300">Description: {item.description}</p>}
                   </div>
                 ))}
               </div>
@@ -176,7 +176,7 @@ const SupervisorDashboard = () => {
             <div className="mt-6 flex justify-end">
               <button
                 onClick={() => setShowModal(false)}
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded text-sm"
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 dark:text-gray-100 font-bold py-2 px-4 rounded text-sm"
               >
                 Close
               </button>

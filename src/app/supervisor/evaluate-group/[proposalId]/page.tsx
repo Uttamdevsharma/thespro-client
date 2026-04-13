@@ -139,48 +139,48 @@ const EvaluateGroupPage = () => {
     }
 
     return (
-        <div className="p-8 bg-gray-50 min-h-screen">
-            <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+        <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">
+            <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 p-6">
                 <button 
                     onClick={() => router.push('/supervisor/my-supervisions')} 
-                    className="flex items-center gap-2 mb-6 text-gray-500 hover:text-green-600 font-medium transition-colors"
+                    className="flex items-center gap-2 mb-6 text-gray-500 dark:text-gray-400 hover:text-green-600 font-medium transition-colors"
                 >
                     <ArrowLeft size={20} /> Back to My Supervisions
                 </button>
 
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 border-b pb-3">Evaluation Management</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-4 border-b pb-3">Evaluation Management</h2>
                 
                 <div className="mb-6 flex items-center space-x-4 bg-green-50 p-3 rounded-lg border border-green-200">
-                    <label className="font-semibold text-gray-700">Evaluation Phase:</label>
+                    <label className="font-semibold text-gray-700 dark:text-gray-200">Evaluation Phase:</label>
                     <select 
                         value={defenseType} 
                         onChange={(e) => setDefenseType(e.target.value)} 
-                        className="p-2 border border-green-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 transition duration-150 text-gray-700"
+                        className="p-2 border border-green-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 transition duration-150 text-gray-700 dark:text-gray-200"
                     >
                         <option value="Pre-Defense">Pre-Defense (Max: {evaluationType === 'supervisor' ? 20 : 10})</option>
                         <option value="Final Defense">Final Defense (Max: {evaluationType === 'supervisor' ? 40 : 30})</option>
                     </select>
-                    <span className="text-sm text-gray-600 ml-auto font-medium">Current Max Mark: <span className="font-bold text-green-700">{maxMark}</span></span>
+                    <span className="text-sm text-gray-600 dark:text-gray-300 ml-auto font-medium">Current Max Mark: <span className="font-bold text-green-700">{maxMark}</span></span>
                 </div>
                 
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Students in "{proposal.title}"</h3>
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Students in "{proposal.title}"</h3>
 
                 <div className="space-y-6">
                     {proposal.members.map((student: any) => (
-                        <div key={student._id} className="p-5 border border-gray-200 rounded-xl shadow-md bg-white">
+                        <div key={student._id} className="p-5 border border-gray-200 dark:border-gray-700 rounded-xl shadow-md bg-white dark:bg-gray-900">
                             <div className="flex justify-between items-center mb-3 border-b pb-2">
-                                <p className="font-bold text-lg text-gray-900">{student.name}</p>
-                                <p className="text-sm text-gray-600">{student.email}</p>
+                                <p className="font-bold text-lg text-gray-900 dark:text-gray-50">{student.name}</p>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">{student.email}</p>
                             </div>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="flex flex-col">
-                                    <label className="font-medium text-gray-700 mb-1">Marks (out of {maxMark}):</label>
+                                    <label className="font-medium text-gray-700 dark:text-gray-200 mb-1">Marks (out of {maxMark}):</label>
                                     <input
                                         type="number"
                                         value={marks[student._id] ?? ''} 
                                         onChange={(e) => handleMarkChange(student._id, e.target.value)}
-                                        className="p-2 border border-gray-300 rounded-lg w-full focus:ring-blue-500 focus:border-blue-500 text-gray-700 font-semibold"
+                                        className="p-2 border border-gray-300 rounded-lg w-full focus:ring-blue-500 focus:border-blue-500 text-gray-700 dark:text-gray-200 font-semibold"
                                         max={maxMark}
                                         min="0"
                                         placeholder="Enter Mark"
@@ -188,12 +188,12 @@ const EvaluateGroupPage = () => {
                                 </div>
 
                                 <div className="flex flex-col">
-                                    <label className="font-medium text-gray-700 mb-1">Comment (Optional):</label>
+                                    <label className="font-medium text-gray-700 dark:text-gray-200 mb-1">Comment (Optional):</label>
                                     <input
                                         type="text"
                                         value={comments[student._id] || ''}
                                         onChange={(e) => handleCommentChange(student._id, e.target.value)}
-                                        className="p-2 border border-gray-300 rounded-lg w-full focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+                                        className="p-2 border border-gray-300 rounded-lg w-full focus:ring-blue-500 focus:border-blue-500 text-gray-700 dark:text-gray-200"
                                         placeholder="Provide feedback"
                                     />
                                 </div>

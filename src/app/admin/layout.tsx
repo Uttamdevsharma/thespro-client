@@ -15,7 +15,7 @@ export default function AdminLayout({
   return (
     <PrivateRoute role="admin">
       <UIProvider>
-        <div className="flex flex-col h-screen bg-gray-50 overflow-hidden">
+        <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-950 overflow-hidden">
           <AuthNavbar />
           <div className="flex flex-1 overflow-hidden">
             <Sidebar role="admin" />

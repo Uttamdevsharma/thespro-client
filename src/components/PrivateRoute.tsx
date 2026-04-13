@@ -19,22 +19,33 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, role }) => {
   const router = useRouter();
 
   // Redirect handling in useEffect
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+
   useEffect(() => {
-    // Only act on redirection after client-side hydration check is fully complete
+    // Settle check for hydration
     if (isMounted && !loading) {
+      const timer = setTimeout(() => {
+        setIsAuthChecking(false);
+      }, 100); // Small buffer for state sync
+      return () => clearTimeout(timer);
+    }
+  }, [isMounted, loading]);
+
+  useEffect(() => {
+    if (!isAuthChecking) {
       if (!user) {
-        toast.error("Session expired or unauthorized access. Please log in again.");
+        toast.error("Session expired. Please log in again.", { id: 'auth-expired' });
         router.push('/login');
         return;
       }
 
       if (role && user.role !== role) {
-        toast.error("Unauthorized access. Please log in with appropriate credentials.");
+        toast.error(`Unauthorized access. Please log in as ${role}.`, { id: 'auth-unauthorized' });
         router.push('/login');
         return;
       }
     }
-  }, [user, role, router, loading, isMounted]);
+  }, [user, role, router, isAuthChecking]);
 
   // IMPORTANT: SSR / Hydration Shield
   // Server MUST render the same thing as the first Client render.

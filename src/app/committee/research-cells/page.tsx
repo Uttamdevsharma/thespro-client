@@ -52,41 +52,41 @@ const CommitteeResearchCellsPage = () => {
   if (cellsLoading || supervisorsLoading) return <Loader />;
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-8 flex items-center">
+        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-50 mb-8 flex items-center">
             <Layers className="mr-3 text-green-600" size={32} />
             Research Cell Management
         </h1>
 
         {/* Add New Cell Form */}
-        <div className="mb-10 p-8 border border-gray-100 rounded-2xl shadow-lg bg-white">
-            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        <div className="mb-10 p-8 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-lg bg-white dark:bg-gray-900">
+            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center">
                 <PlusCircle className="mr-2 text-green-500" size={20} />
                 Create New Research Cell
             </h2>
             <form onSubmit={handleAddCell} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">Cell Title</label>
+                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-200 mb-2">Cell Title</label>
                     <input
                         type="text"
                         name="title"
                         placeholder="e.g., Artificial Intelligence"
                         value={formData.title}
                         onChange={handleFormChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 font-medium"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 dark:text-gray-200 font-medium dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder-gray-400 dark:placeholder-gray-500"
                         required
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">Description</label>
+                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-200 mb-2">Description</label>
                     <input
                         type="text"
                         name="description"
                         placeholder="Brief overview of the research area"
                         value={formData.description}
                         onChange={handleFormChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 font-medium"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 dark:text-gray-200 font-medium dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder-gray-400 dark:placeholder-gray-500"
                         required
                     />
                 </div>
@@ -107,13 +107,13 @@ const CommitteeResearchCellsPage = () => {
             );
 
             return (
-                <div key={cell.id} className="bg-white p-6 rounded-2xl shadow-md border border-gray-100 hover:shadow-xl transition-all">
+                <div key={cell.id} className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-md border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-all">
                     <div className="mb-4">
-                        <h3 className="text-xl font-bold text-gray-900 border-b-2 border-green-500 pb-1 inline-block">{cell.title}</h3>
-                        <p className="text-sm text-gray-500 mt-3 leading-relaxed">{cell.description}</p>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-50 border-b-2 border-green-500 pb-1 inline-block">{cell.title}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 leading-relaxed">{cell.description}</p>
                     </div>
                     
-                    <div className="mt-6 pt-4 border-t border-gray-50">
+                    <div className="mt-6 pt-4 border-t border-gray-50 dark:border-gray-800/50">
                         <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center">
                             <Users size={14} className="mr-1" /> Assigned Supervisors ({assignedSupervisors.length})
                         </h4>

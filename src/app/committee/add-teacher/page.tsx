@@ -26,29 +26,29 @@ const CommitteeAddTeacherPage = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center gap-4 mb-10">
             <div className="p-3 bg-green-100 text-green-700 rounded-2xl shadow-sm border border-green-50">
                 <UserPlus size={32} />
             </div>
             <div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tight">Faculty Registration</h2>
+                <h2 className="text-3xl font-black text-gray-900 dark:text-gray-50 tracking-tight">Faculty Registration</h2>
                 <p className="text-sm font-bold text-gray-400 mt-1 uppercase tracking-widest">Onboard new supervisor to the system</p>
             </div>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden relative">
+        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden relative">
             <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                 <Sparkles size={120} className="text-green-500" />
             </div>
 
-            <div className="bg-gray-50/50 px-8 py-6 border-b border-gray-100 flex items-center justify-between">
+            <div className="bg-gray-50 dark:bg-gray-950/50 px-8 py-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <ShieldCheck size={20} className="text-green-600" />
-                    <span className="text-sm font-black text-gray-700 uppercase tracking-tighter">Secure Credential Setup</span>
+                    <span className="text-sm font-black text-gray-700 dark:text-gray-200 uppercase tracking-tighter">Secure Credential Setup</span>
                 </div>
-                <span className="text-[10px] font-black bg-gray-200 text-gray-500 px-2 py-0.5 rounded-md uppercase tracking-widest">Step 01/01</span>
+                <span className="text-[10px] font-black bg-gray-200 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-md uppercase tracking-widest">Step 01/01</span>
             </div>
 
             <form onSubmit={handleSubmit} className="p-10 space-y-8">
@@ -65,7 +65,7 @@ const CommitteeAddTeacherPage = () => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Ex: Tanpia Tasnim"
-                            className="block w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white outline-none transition-all font-bold text-gray-800 placeholder:text-gray-300 shadow-sm"
+                            className="block w-full pl-12 pr-4 py-4 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 outline-none transition-all font-bold text-gray-800 dark:text-gray-100 placeholder:text-gray-300 shadow-sm"
                             required
                         />
                     </div>
@@ -84,7 +84,7 @@ const CommitteeAddTeacherPage = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="name@cse.green.edu.bd"
-                            className="block w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white outline-none transition-all font-bold text-gray-800 placeholder:text-gray-300 shadow-sm"
+                            className="block w-full pl-12 pr-4 py-4 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 outline-none transition-all font-bold text-gray-800 dark:text-gray-100 placeholder:text-gray-300 shadow-sm"
                             required
                         />
                     </div>
@@ -103,7 +103,7 @@ const CommitteeAddTeacherPage = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
-                            className="block w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white outline-none transition-all font-bold text-gray-800 placeholder:text-gray-300 shadow-sm"
+                            className="block w-full pl-12 pr-4 py-4 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 outline-none transition-all font-bold text-gray-800 dark:text-gray-100 placeholder:text-gray-300 shadow-sm"
                             required
                         />
                     </div>

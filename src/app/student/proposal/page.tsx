@@ -10,8 +10,10 @@ import {
   useGetResearchCellsQuery, 
   useGetStudentsQuery, 
   useGetSubmissionDatesQuery,
-  useGetSupervisorsCapacityQuery
+  useGetSupervisorsCapacityQuery,
+  useGenerateProposalDescriptionMutation
 } from '@/store/features/apiSlice';
+import { Bot, Sparkles } from 'lucide-react';
 
 const StudentProposalPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -31,6 +33,19 @@ const StudentProposalPage = () => {
   });
 
   const [createProposal, { isLoading: isSubmitting }] = useCreateProposalMutation();
+  const [generateAI, { isLoading: isGenerating }] = useGenerateProposalDescriptionMutation();
+
+  const handleGenerateAI = async () => {
+    if (!title.trim()) return toast.error('Please enter a title first.');
+    
+    try {
+      const result = await generateAI({ title }).unwrap();
+      setAbstract(result.description);
+      toast.success('Description generated successfully!');
+    } catch (error: any) {
+      toast.error(error.data?.message || 'Failed to generate description.');
+    }
+  };
 
   const submissionDeadlinePassed = React.useMemo(() => {
     if (!deadlineData) return false;
@@ -68,42 +83,62 @@ const StudentProposalPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg">
-      <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center">Submit Proposal</h1>
+    <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+      <h1 className="text-3xl font-bold mb-8 text-gray-800 dark:text-gray-100 text-center">Submit Proposal</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Title */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Title</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter proposal title"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 sm:text-sm text-gray-700"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 sm:text-sm text-gray-700 dark:text-gray-200"
             required
           />
         </div>
 
         {/* Abstract */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Abstract</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200">Abstract</label>
+            <button
+              type="button"
+              onClick={handleGenerateAI}
+              disabled={isGenerating || !title.trim()}
+              className="flex items-center space-x-1.5 text-xs font-black text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-full transition-all disabled:opacity-50 active:scale-95"
+            >
+              {isGenerating ? (
+                <>
+                  <div className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                  <span>Generating...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={14} />
+                  <span>Generate with AI</span>
+                </>
+              )}
+            </button>
+          </div>
           <textarea
             value={abstract}
             onChange={(e) => setAbstract(e.target.value)}
             rows={5}
             placeholder="Enter a brief abstract"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 sm:text-sm text-gray-700"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 sm:text-sm text-gray-700 dark:text-gray-200"
             required
           />
         </div>
 
         {/* Type */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Type</label>
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 sm:text-sm text-gray-700"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 sm:text-sm text-gray-700 dark:text-gray-200"
           >
             <option>Thesis</option>
             <option>Project</option>
@@ -112,11 +147,11 @@ const StudentProposalPage = () => {
 
         {/* Research Cell */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Research Cell</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Research Cell</label>
           <select
             value={researchCell}
             onChange={(e) => setResearchCell(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 sm:text-sm text-gray-700"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 sm:text-sm text-gray-700 dark:text-gray-200"
             required
           >
             <option value="">Select a cell</option>
@@ -128,11 +163,11 @@ const StudentProposalPage = () => {
 
         {/* Supervisor */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Supervisor</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Supervisor</label>
           <select
             value={supervisor}
             onChange={(e) => setSupervisor(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 sm:text-sm text-gray-700 disabled:opacity-50"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 sm:text-sm text-gray-700 dark:text-gray-200 disabled:opacity-50"
             disabled={!researchCell || submissionDeadlinePassed}
             required
           >
@@ -153,7 +188,7 @@ const StudentProposalPage = () => {
 
         {/* Members */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Team Members</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Team Members</label>
           <MultiSelectDropdown
             allStudents={allStudents}
             members={members}

@@ -42,7 +42,7 @@ const CommitteeCreateDefenseBoardPage = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-5 mb-10">
             <button
@@ -50,21 +50,21 @@ const CommitteeCreateDefenseBoardPage = () => {
                     dispatch(clearBoardDraft());
                     router.push('/committee/defense-schedule');
                 }}
-                className="p-3 hover:bg-white rounded-xl border border-gray-200 shadow-sm transition-all cursor-pointer bg-gray-50 group"
+                className="p-3 hover:bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm transition-all cursor-pointer bg-gray-50 dark:bg-gray-950 group"
             >
-                <ArrowLeft size={24} className="text-gray-600 group-hover:text-green-600" />
+                <ArrowLeft size={24} className="text-gray-600 dark:text-gray-300 group-hover:text-green-600" />
             </button>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center">
+            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-50 tracking-tight flex items-center">
                 <Layers className="mr-3 text-green-600" size={32} />
                 Create New Defense Board
             </h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8 bg-white p-10 rounded-3xl shadow-2xl border border-gray-100">
+        <form onSubmit={handleSubmit} className="space-y-8 bg-white dark:bg-gray-900 p-10 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Board Number */}
             <div>
-                <label className="block text-sm font-black text-gray-500 uppercase tracking-widest mb-3 ml-1">Board Designation</label>
+                <label className="block text-sm font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-3 ml-1">Board Designation</label>
                 <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">#</span>
                     <input
@@ -73,7 +73,7 @@ const CommitteeCreateDefenseBoardPage = () => {
                         placeholder="e.g. 01, 02-B"
                         value={boardDraft.boardNumber}
                         onChange={handleChange}
-                        className="w-full pl-8 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white outline-none transition-all font-extrabold text-gray-800"
+                        className="w-full pl-8 pr-4 py-4 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 outline-none transition-all font-extrabold text-gray-800 dark:text-gray-100"
                         required
                     />
                 </div>
@@ -81,12 +81,12 @@ const CommitteeCreateDefenseBoardPage = () => {
 
             {/* Defense Type */}
             <div>
-                <label className="block text-sm font-black text-gray-500 uppercase tracking-widest mb-3 ml-1">Examination Phase</label>
+                <label className="block text-sm font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-3 ml-1">Examination Phase</label>
                 <select
                     name="defenseType"
                     value={boardDraft.defenseType}
                     onChange={handleChange}
-                    className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white outline-none transition-all font-bold text-gray-700"
+                    className="w-full px-4 py-4 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 outline-none transition-all font-bold text-gray-700 dark:text-gray-200"
                 >
                     <option value="Pre-Defense">Pre-Defense</option>
                     <option value="Final Defense">Final Defense</option>
@@ -97,7 +97,7 @@ const CommitteeCreateDefenseBoardPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Room */}
             <div>
-              <label className="block text-sm font-black text-gray-500 uppercase tracking-widest mb-3 ml-1 flex items-center">
+              <label className="block text-sm font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-3 ml-1 flex items-center">
                   <MapPin size={14} className="mr-1" /> Campus Venue
               </label>
               <select
@@ -105,12 +105,12 @@ const CommitteeCreateDefenseBoardPage = () => {
                 name="room"
                 value={boardDraft.room}
                 onChange={handleChange}
-                className="w-full px-4 py-4 bg-white border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 outline-none transition-all font-bold text-gray-900 shadow-sm"
+                className="w-full px-4 py-4 bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-green-400 outline-none transition-all font-bold text-gray-900 dark:text-gray-50 shadow-sm"
                 required
               >
                 <option value="" className="text-gray-400 text-sm">-- Choose Venue --</option>
                 {rooms?.map((room: any) => (
-                  <option key={room._id} value={room._id} className="text-gray-900 font-medium">
+                  <option key={room._id} value={room._id} className="text-gray-900 dark:text-gray-50 font-medium">
                     {room.name} (Cap: {room.capacity})
                   </option>
                 ))}
@@ -119,7 +119,7 @@ const CommitteeCreateDefenseBoardPage = () => {
 
             {/* Schedule */}
             <div>
-              <label className="block text-sm font-black text-gray-500 uppercase tracking-widest mb-3 ml-1 flex items-center">
+              <label className="block text-sm font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-3 ml-1 flex items-center">
                   <Clock size={14} className="mr-1" /> Time Assignment
               </label>
               <select
@@ -127,12 +127,12 @@ const CommitteeCreateDefenseBoardPage = () => {
                 name="schedule"
                 value={boardDraft.schedule}
                 onChange={handleChange}
-                className="w-full px-4 py-4 bg-white border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 outline-none transition-all font-bold text-gray-900 shadow-sm"
+                className="w-full px-4 py-4 bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-green-400 outline-none transition-all font-bold text-gray-900 dark:text-gray-50 shadow-sm"
                 required
               >
                 <option value="" className="text-gray-400 text-sm">-- Choose Slot --</option>
                 {scheduleSlots?.map((slot: any) => (
-                  <option key={slot._id} value={slot._id} className="text-gray-900 font-medium">
+                  <option key={slot._id} value={slot._id} className="text-gray-900 dark:text-gray-50 font-medium">
                     {new Date(slot.date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })} | {slot.startTime} - {slot.endTime}
                   </option>
                 ))}
@@ -140,7 +140,7 @@ const CommitteeCreateDefenseBoardPage = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-6 border-y border-gray-50">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-6 border-y border-gray-50 dark:border-gray-800/50">
             {/* Select Groups */}
             <div className="group">
                 <button

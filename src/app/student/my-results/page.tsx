@@ -19,8 +19,8 @@ interface AssessmentTableProps {
 
 const AssessmentTable: React.FC<AssessmentTableProps> = ({ title, comments }) => (
   <div className="mb-12">
-    <h2 className="text-xl font-bold text-gray-800 mb-4">{title}</h2>
-    <div className="overflow-hidden border border-gray-200 rounded shadow-sm">
+    <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">{title}</h2>
+    <div className="overflow-hidden border border-gray-200 dark:border-gray-700 rounded shadow-sm">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-[#50C878]">
           <tr>
@@ -32,15 +32,15 @@ const AssessmentTable: React.FC<AssessmentTableProps> = ({ title, comments }) =>
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200">
           {/* Supervisor Comments */}
           {comments.supervisor.map((c, i) => (
-            <tr key={`sup-${i}`} className="hover:bg-gray-50 transition-colors">
+            <tr key={`sup-${i}`} className="hover:bg-gray-50 dark:bg-gray-950 transition-colors">
               <td className="px-6 py-5 align-top">
-                <div className="text-sm font-bold text-gray-900">{c.evaluator}</div>
-                <div className="text-[10px] text-gray-500 uppercase font-medium">Supervisor</div>
+                <div className="text-sm font-bold text-gray-900 dark:text-gray-50">{c.evaluator}</div>
+                <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-medium">Supervisor</div>
               </td>
-              <td className="px-6 py-5 text-base text-gray-700 leading-relaxed">
+              <td className="px-6 py-5 text-base text-gray-700 dark:text-gray-200 leading-relaxed">
                 {c.comment}
               </td>
             </tr>
@@ -48,12 +48,12 @@ const AssessmentTable: React.FC<AssessmentTableProps> = ({ title, comments }) =>
 
           {/* Board Member Comments */}
           {comments.board.map((c, i) => (
-            <tr key={`board-${i}`} className="hover:bg-gray-50 transition-colors">
+            <tr key={`board-${i}`} className="hover:bg-gray-50 dark:bg-gray-950 transition-colors">
               <td className="px-6 py-5 align-top">
-                <div className="text-sm font-bold text-gray-900">{c.evaluator}</div>
-                <div className="text-[10px] text-gray-500 uppercase font-medium">Board Member</div>
+                <div className="text-sm font-bold text-gray-900 dark:text-gray-50">{c.evaluator}</div>
+                <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-medium">Board Member</div>
               </td>
-              <td className="px-6 py-5 text-base text-gray-700 leading-relaxed">
+              <td className="px-6 py-5 text-base text-gray-700 dark:text-gray-200 leading-relaxed">
                 {c.comment}
               </td>
             </tr>
@@ -88,14 +88,14 @@ const MyResultsPage = () => {
 
   if (!results) {
     return (
-      <div className="p-6 bg-white rounded-lg shadow-md text-center text-gray-500">
+      <div className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md text-center text-gray-500 dark:text-gray-400">
         No results found yet.
       </div>
     );
   }
 
   return (
-    <div className="bg-white min-h-screen py-10 px-6">
+    <div className="bg-white dark:bg-gray-900 min-h-screen py-10 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Pre-Defense Feedback Table */}
         <AssessmentTable 
@@ -111,8 +111,8 @@ const MyResultsPage = () => {
 
         {/* Final Result Summary Table */}
         <div className="mt-16">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Final Result Summary</h2>
-          <div className="overflow-hidden border border-gray-200 rounded shadow-sm">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Final Result Summary</h2>
+          <div className="overflow-hidden border border-gray-200 dark:border-gray-700 rounded shadow-sm">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-[#50C878]">
                 <tr>
@@ -122,17 +122,17 @@ const MyResultsPage = () => {
                   <th className="px-6 py-4 text-left text-sm font-semibold text-white">Point</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200">
                 {results.published ? (
-                  <tr className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-gray-900">{results.courseCode}</td>
-                    <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-700">{results.courseTitle}</td>
-                    <td className="px-6 py-5 whitespace-nowrap text-left text-sm font-semibold text-gray-900">{results.grade}</td>
-                    <td className="px-6 py-5 whitespace-nowrap text-left text-sm font-semibold text-gray-900">{results.point.toFixed(2)}</td>
+                  <tr className="hover:bg-gray-50 dark:bg-gray-950 transition-colors">
+                    <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-50">{results.courseCode}</td>
+                    <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{results.courseTitle}</td>
+                    <td className="px-6 py-5 whitespace-nowrap text-left text-sm font-semibold text-gray-900 dark:text-gray-50">{results.grade}</td>
+                    <td className="px-6 py-5 whitespace-nowrap text-left text-sm font-semibold text-gray-900 dark:text-gray-50">{results.point.toFixed(2)}</td>
                   </tr>
                 ) : (
                   <tr>
-                    <td colSpan={4} className="px-6 py-10 text-center text-sm text-gray-500 font-medium italic bg-gray-50">
+                    <td colSpan={4} className="px-6 py-10 text-center text-sm text-gray-500 dark:text-gray-400 font-medium italic bg-gray-50 dark:bg-gray-950">
                       Your final grade is currently being processed.
                     </td>
                   </tr>

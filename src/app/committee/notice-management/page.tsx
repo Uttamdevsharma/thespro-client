@@ -48,11 +48,11 @@ const CommitteeNoticeManagementPage = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">
       <div className="max-w-4xl mx-auto space-y-10">
         
         {/* Create Notice Section */}
-        <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
+        <div className="bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8 border border-gray-100 dark:border-gray-800">
             <h1 className="text-3xl font-extrabold text-center text-green-600 mb-8 flex items-center justify-center">
                 <Megaphone className="mr-3" size={32} />
                 Notice Management
@@ -60,7 +60,7 @@ const CommitteeNoticeManagementPage = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                    <label htmlFor="title" className="block text-gray-700 font-bold mb-2">
+                    <label htmlFor="title" className="block text-gray-700 dark:text-gray-200 font-bold mb-2">
                         Notice Title
                     </label>
                     <input
@@ -69,13 +69,13 @@ const CommitteeNoticeManagementPage = () => {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="Importance: Proposal Submission Deadline"
-                        className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700 font-medium"
+                        className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700 dark:text-gray-200 font-medium"
                         required
                     />
                 </div>
 
                 <div>
-                    <label htmlFor="description" className="block text-gray-700 font-bold mb-2">
+                    <label htmlFor="description" className="block text-gray-700 dark:text-gray-200 font-bold mb-2">
                         Notice Description
                     </label>
                     <textarea
@@ -84,21 +84,21 @@ const CommitteeNoticeManagementPage = () => {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Enter the details of the announcement..."
-                        className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700 font-medium"
+                        className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700 dark:text-gray-200 font-medium"
                         required
                     ></textarea>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                     <div>
-                        <label htmlFor="sendTo" className="block text-gray-700 font-bold mb-2">
+                        <label htmlFor="sendTo" className="block text-gray-700 dark:text-gray-200 font-bold mb-2">
                             Send Notice To
                         </label>
                         <select
                             id="sendTo"
                             value={sendTo}
                             onChange={(e) => setSendTo(e.target.value)}
-                            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700 font-bold"
+                            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700 dark:text-gray-200 font-bold"
                         >
                             <option value="all">Everyone</option>
                             <option value="supervisor">Supervisors Only</option>
@@ -117,8 +117,8 @@ const CommitteeNoticeManagementPage = () => {
         </div>
 
         {/* Existing Notices Section */}
-        <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
-            <h2 className="text-2xl font-bold text-gray-800 mb-8 border-b pb-4 flex items-center">
+        <div className="bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8 border border-gray-100 dark:border-gray-800">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-8 border-b pb-4 flex items-center">
                 <span className="bg-green-100 text-green-600 p-2 rounded-lg mr-3"><Send size={20} /></span>
                 History of Broadcasted Notices
             </h2>
@@ -128,11 +128,11 @@ const CommitteeNoticeManagementPage = () => {
                     {notices.map((notice: any) => (
                         <div
                             key={notice._id}
-                            className="p-6 rounded-xl border border-gray-100 bg-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-white hover:shadow-md transition-all group"
+                            className="p-6 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-white dark:bg-gray-900 hover:shadow-md transition-all group"
                         >
                             <div className="flex-1">
                                 <h3 className="text-xl font-bold text-green-700 mb-2 group-hover:text-green-800">{notice.title}</h3>
-                                <p className="text-gray-700 text-sm mb-4 leading-relaxed">{notice.description}</p>
+                                <p className="text-gray-700 dark:text-gray-200 text-sm mb-4 leading-relaxed">{notice.description}</p>
                                 <div className="flex flex-wrap gap-4 text-xs font-bold text-gray-400 uppercase tracking-widest">
                                     <span className="flex items-center"><Users size={14} className="mr-1" /> {notice.recipients.length} Recipients</span>
                                     <span className="flex items-center"><UserCheck size={14} className="mr-1" /> {notice.sender?.name || 'Committee'}</span>

@@ -24,17 +24,17 @@ const ResearchCellInfoPage = () => {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Research Cell Information</h1>
       {teachers.length === 0 ? (
-        <div className="bg-white p-6 rounded-lg shadow-md text-center text-gray-500">
+        <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md text-center text-gray-500 dark:text-gray-400">
           No teachers have been assigned to any research cells yet.
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {teachers.map((teacher) => (
-            <div key={teacher._id} className="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
-              <h2 className="text-xl font-bold text-gray-800 mb-2">{teacher.name}</h2>
-              <p className="text-sm text-gray-600 mb-4">{teacher.email}</p>
+            <div key={teacher._id} className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md border border-gray-100 dark:border-gray-800 hover:shadow-lg transition-shadow">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">{teacher.name}</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{teacher.email}</p>
               <div>
-                <h3 className="text-md font-semibold text-gray-700 mb-3">Assigned Cells:</h3>
+                <h3 className="text-md font-semibold text-gray-700 dark:text-gray-200 mb-3">Assigned Cells:</h3>
                 <div className="flex flex-wrap gap-2">
                   {teacher.researchCells.map((cell: any) => (
                     <div key={cell._id} className="inline-block bg-green-100 text-green-800 rounded-full px-3 py-1 text-sm font-semibold">

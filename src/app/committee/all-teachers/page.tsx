@@ -17,11 +17,11 @@ const CommitteeAllTeachersPage = () => {
   );
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
             <div>
-                <h1 className="text-3xl font-black text-gray-900 tracking-tight flex items-center">
+                <h1 className="text-3xl font-black text-gray-900 dark:text-gray-50 tracking-tight flex items-center">
                     <GraduationCap className="mr-3 text-green-600" size={32} />
                     Faculty Directory
                 </h1>
@@ -37,11 +37,11 @@ const CommitteeAllTeachersPage = () => {
             </Link>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
             <div className="overflow-x-auto">
                 <table className="min-w-full text-left border-collapse">
                     <thead>
-                        <tr className="bg-gray-50/50 border-b border-gray-100">
+                        <tr className="bg-gray-50 dark:bg-gray-950/50 border-b border-gray-100 dark:border-gray-800">
                             <th className="py-5 px-8 text-[10px] font-black text-gray-400 uppercase tracking-widest w-20">Identity</th>
                             <th className="py-5 px-8 text-[10px] font-black text-gray-400 uppercase tracking-widest">Faculty Member</th>
                             <th className="py-5 px-8 text-[10px] font-black text-gray-400 uppercase tracking-widest">Communication</th>
@@ -54,7 +54,7 @@ const CommitteeAllTeachersPage = () => {
                             teachers.map((teacher: any, index: number) => (
                                 <tr key={teacher._id} className="hover:bg-green-50/20 transition-all group">
                                     <td className="py-6 px-8">
-                                        <div className="w-10 h-10 bg-gray-100 text-gray-400 flex items-center justify-center rounded-xl font-black text-xs border border-gray-200 group-hover:bg-green-600 group-hover:text-white group-hover:border-green-600 transition-all">
+                                        <div className="w-10 h-10 bg-gray-100 text-gray-400 flex items-center justify-center rounded-xl font-black text-xs border border-gray-200 dark:border-gray-700 group-hover:bg-green-600 group-hover:text-white group-hover:border-green-600 transition-all">
                                             {index + 1 < 10 ? `0${index + 1}` : index + 1}
                                         </div>
                                     </td>
@@ -63,11 +63,11 @@ const CommitteeAllTeachersPage = () => {
                                             <div className="bg-blue-50 p-2 rounded-lg text-blue-500">
                                                 <User size={18} />
                                             </div>
-                                            <span className="font-extrabold text-gray-900 tracking-tight uppercase group-hover:text-green-700 transition-colors">{teacher.name}</span>
+                                            <span className="font-extrabold text-gray-900 dark:text-gray-50 tracking-tight uppercase group-hover:text-green-700 transition-colors">{teacher.name}</span>
                                         </div>
                                     </td>
                                     <td className="py-6 px-8">
-                                        <div className="flex items-center text-sm font-bold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100 group-hover:bg-white transition-all">
+                                        <div className="flex items-center text-sm font-bold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-950 px-3 py-1.5 rounded-xl border border-gray-100 dark:border-gray-800 group-hover:bg-white dark:bg-gray-900 transition-all">
                                             <Mail size={14} className="mr-2 text-blue-400" />
                                             {teacher.email}
                                         </div>

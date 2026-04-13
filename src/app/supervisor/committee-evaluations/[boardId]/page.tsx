@@ -17,35 +17,35 @@ const SupervisorBoardGroupsPage = () => {
 
   if (isLoading) return <Loader />;
   if (isError) return <div className="p-6 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-6xl mx-auto mt-10">Error: {(error as any)?.data?.message || (error as any)?.error}</div>;
-  if (!boardDetails) return <div className="p-6 bg-white rounded-lg shadow-md text-center text-gray-500 max-w-6xl mx-auto mt-10">No board details found.</div>;
+  if (!boardDetails) return <div className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md text-center text-gray-500 dark:text-gray-400 max-w-6xl mx-auto mt-10">No board details found.</div>;
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+    <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">
+      <div className="max-w-6xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 p-6">
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={() => router.push('/supervisor/committee-evaluations')}
-            className="p-2 hover:bg-gray-100 rounded-full border border-gray-200 transition-all cursor-pointer"
+            className="p-2 hover:bg-gray-100 rounded-full border border-gray-200 dark:border-gray-700 transition-all cursor-pointer"
           >
-            <ArrowLeft size={20} className="text-gray-600" />
+            <ArrowLeft size={20} className="text-gray-600 dark:text-gray-300" />
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
             Groups for Board {boardDetails.boardNumber} ({boardDetails.defenseType})
           </h1>
         </div>
 
         {/* Board Details Summary */}
         <div className="bg-green-50 border border-green-100 rounded-lg p-5 mb-6">
-          <p className="text-gray-700 mb-1">
+          <p className="text-gray-700 dark:text-gray-200 mb-1">
             <strong>Date:</strong> {boardDetails.date ? format(new Date(boardDetails.date), 'PPP') : 'N/A'}
           </p>
-          <p className="text-gray-700 mb-1">
+          <p className="text-gray-700 dark:text-gray-200 mb-1">
             <strong>Time:</strong>{' '}
             {boardDetails.schedule?.startTime && boardDetails.schedule?.endTime
               ? `${boardDetails.schedule.startTime} - ${boardDetails.schedule.endTime}`
               : 'N/A'}
           </p>
-          <p className="text-gray-700">
+          <p className="text-gray-700 dark:text-gray-200">
             <strong>Room:</strong> {boardDetails.room?.name || 'N/A'}
           </p>
         </div>
@@ -54,26 +54,26 @@ const SupervisorBoardGroupsPage = () => {
         {boardDetails.groups && boardDetails.groups.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-gray-950">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Group SL
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Project Title
                   </th>
-                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Action
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200">
                 {boardDetails.groups.map((group: any, index: number) => (
-                  <tr key={group._id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
+                  <tr key={group._id} className="hover:bg-gray-50 dark:bg-gray-950 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-gray-50">
                       {index + 1}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
                       {group.title}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -91,7 +91,7 @@ const SupervisorBoardGroupsPage = () => {
             </table>
           </div>
         ) : (
-          <div className="p-10 text-center text-gray-500 bg-gray-50 rounded-lg border border-dashed">
+          <div className="p-10 text-center text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-950 rounded-lg border border-dashed">
             <p>No groups found for this board.</p>
           </div>
         )}

@@ -92,7 +92,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
           <button
             onClick={() => handleDropdownToggle(link.label)}
             className={`${baseClasses} w-full text-left flex justify-between items-center ${
-              openDropdown === link.label ? 'bg-gray-100 text-[#50C878]' : 'text-gray-600 hover:bg-gray-50'
+              openDropdown === link.label ? 'bg-gray-100 dark:bg-gray-800 text-[#50C878]' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-800'
             }`}
           >
             <span>{link.label}</span>
@@ -120,7 +120,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
         href={link.to}
         onClick={handleLinkClick}
         className={`${baseClasses} ${subLinkClass} ${
-          isActive ? 'bg-[#50C878] text-white shadow-lg shadow-green-100' : 'text-gray-600 hover:bg-gray-50 hover:text-[#50C878]'
+          isActive ? 'bg-[#50C878] text-white shadow-lg shadow-green-100/50' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-800 hover:text-[#50C878] dark:hover:text-[#50C878]'
         }`}
       >
         {link.label}
@@ -140,15 +140,15 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
 
       {/* Sidebar Container */}
       <div className={`
-        fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-gray-100 transform transition-transform duration-300 ease-in-out
-        md:relative md:translate-x-0 h-screen md:h-auto overflow-y-auto
+        fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 transform transition-transform duration-300 ease-in-out
+        md:relative md:translate-x-0 h-screen md:h-auto overflow-y-auto custom-scrollbar
         ${isSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'}
       `}>
         <div className="flex flex-col h-full">
             {/* Mobile Header in Sidebar */}
-            <div className="flex items-center justify-between p-6 md:hidden border-b border-gray-50">
+            <div className="flex items-center justify-between p-6 md:hidden border-b border-gray-50 dark:border-gray-800">
                 <span className="text-xl font-black text-[#50C878]">Navigation</span>
-                <button onClick={closeSidebar} className="p-2 text-gray-400 hover:text-gray-600">
+                <button onClick={closeSidebar} className="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-200">
                     <X size={24} />
                 </button>
             </div>
@@ -162,8 +162,8 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
             </ul>
             
             {/* Footer space */}
-            <div className="p-6 border-t border-gray-50 mt-auto">
-                <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest text-center">Version 1.0 - ThesPro</p>
+            <div className="p-6 border-t border-gray-50 dark:border-gray-800 mt-auto">
+                <p className="text-[10px] text-gray-400 dark:text-gray-500 dark:text-gray-400 font-black uppercase tracking-widest text-center">Version 1.0 - ThesPro</p>
             </div>
         </div>
       </div>

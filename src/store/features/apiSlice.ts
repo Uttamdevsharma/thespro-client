@@ -61,8 +61,28 @@ export const apiSlice = createApi({
       providesTags: ['Departments'],
     }),
     getPublicDepartments: builder.query<any, void>({
-      query: () => '/admin/departments/public',
+      query: () => '/public/departments',
       providesTags: ['Departments'],
+    }),
+    getPublicResearchCells: builder.query<any, void>({
+      query: () => '/public/research-cells',
+      providesTags: ['Cells'],
+    }),
+    getPublicFacultyByDepartment: builder.query<any, string>({
+      query: (deptId) => `/public/faculty/${deptId}`,
+      providesTags: ['Teachers'],
+    }),
+    getPublicFacultyProfile: builder.query<any, string>({
+      query: (id) => `/public/faculty/profile/${id}`,
+      providesTags: ['User'],
+    }),
+    getPublicNotices: builder.query<any, void>({
+      query: () => '/public/notices',
+      providesTags: ['Notices'],
+    }),
+    getPublicStats: builder.query<any, void>({
+      query: () => '/public/stats',
+      providesTags: ['Students', 'Teachers', 'Departments', 'Proposals'],
     }),
     createDepartment: builder.mutation<any, { name: string }>({
       query: (data) => ({
@@ -86,6 +106,20 @@ export const apiSlice = createApi({
         method: 'DELETE',
       }),
       invalidatesTags: ['Departments'],
+    }),
+    chatWithAI: builder.mutation<any, { message: string; chatHistory: any[] }>({
+      query: (data) => ({
+        url: '/ai/chat',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    generateProposalDescription: builder.mutation<any, { title: string }>({
+      query: (data) => ({
+        url: '/ai/generate-description',
+        method: 'POST',
+        body: data,
+      }),
     }),
     getAdminTeachers: builder.query<any, string | void>({
       query: (deptId) => `/admin/teachers${deptId ? `?departmentId=${deptId}` : ''}`,
@@ -657,6 +691,11 @@ export const {
   useGetAdminStatsQuery,
   useGetAdminDepartmentsQuery,
   useGetPublicDepartmentsQuery,
+  useGetPublicResearchCellsQuery,
+  useGetPublicNoticesQuery,
+  useGetPublicStatsQuery,
+  useGetPublicFacultyByDepartmentQuery,
+  useGetPublicFacultyProfileQuery,
   useCreateDepartmentMutation,
   useUpdateDepartmentMutation,
   useDeleteDepartmentMutation,
@@ -669,4 +708,6 @@ export const {
   useAssignAdminCommitteeMutation,
   useRemoveAdminCommitteeMutation,
   useUpdateSupervisorProfileMutation,
+  useChatWithAIMutation,
+  useGenerateProposalDescriptionMutation,
 } = apiSlice;

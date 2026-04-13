@@ -49,11 +49,11 @@ const SupervisorNoticePage = () => {
 
   if (proposalsError || noticesError) {
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
-            <div className="bg-white w-full max-w-2xl shadow-xl rounded-2xl p-12 text-center border border-red-100">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center py-10 px-4">
+            <div className="bg-white dark:bg-gray-900 w-full max-w-2xl shadow-xl rounded-2xl p-12 text-center border border-red-100">
                 <div className="bg-red-50 text-red-600 p-4 rounded-lg inline-block mb-4 text-4xl">!</div>
-                <h2 className="text-xl font-bold text-gray-800 mb-2">Error loading notice data</h2>
-                <p className="text-gray-500 mb-6 italic">Could not fetch groups or previously sent notices.</p>
+                <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">Error loading notice data</h2>
+                <p className="text-gray-500 dark:text-gray-400 mb-6 italic">Could not fetch groups or previously sent notices.</p>
                 <button 
                   onClick={() => window.location.reload()}
                   className="bg-gray-800 hover:bg-gray-900 text-white px-6 py-2 rounded-lg transition-colors"
@@ -66,8 +66,8 @@ const SupervisorNoticePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
-      <div className="bg-white w-full max-w-2xl shadow-xl rounded-2xl p-8 border border-gray-100">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center py-10 px-4">
+      <div className="bg-white dark:bg-gray-900 w-full max-w-2xl shadow-xl rounded-2xl p-8 border border-gray-100 dark:border-gray-800">
         <h1 className="text-3xl font-bold text-center text-green-600 mb-8">
           📢 Send Notice to Student Group
         </h1>
@@ -78,14 +78,14 @@ const SupervisorNoticePage = () => {
             <form onSubmit={handleSubmitNotice} className="space-y-6">
             <div className="space-y-4">
                 <div>
-                <label htmlFor="filterGroups" className="block text-gray-700 font-semibold mb-2">
+                <label htmlFor="filterGroups" className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
                     Filter Groups
                 </label>
                 <select
                     id="filterGroups"
                     value={currentFilter}
                     onChange={(e) => setCurrentFilter(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700 dark:text-gray-200"
                 >
                     <option value="my_supervision">Under My Supervision</option>
                     <option value="my_supervision_with_course_supervision">Under My Supervision with Course Supervision</option>
@@ -94,14 +94,14 @@ const SupervisorNoticePage = () => {
                 </div>
 
                 <div>
-                <label htmlFor="selectGroup" className="block text-gray-700 font-semibold mb-2">
+                <label htmlFor="selectGroup" className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
                     Select Group
                 </label>
                 <select
                     id="selectGroup"
                     value={selectedProposalId}
                     onChange={(e) => setSelectedProposalId(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700 dark:text-gray-200"
                     required
                 >
                     <option value="">-- Select a Proposal or Group --</option>
@@ -116,7 +116,7 @@ const SupervisorNoticePage = () => {
             </div>
 
             <div>
-                <label htmlFor="noticeTitle" className="block text-gray-700 font-semibold mb-2">
+                <label htmlFor="noticeTitle" className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
                 Notice Title
                 </label>
                 <input
@@ -125,13 +125,13 @@ const SupervisorNoticePage = () => {
                 value={noticeTitle}
                 onChange={(e) => setNoticeTitle(e.target.value)}
                 placeholder="Enter notice title..."
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700 dark:text-gray-200"
                 required
                 />
             </div>
 
             <div>
-                <label htmlFor="noticeDescription" className="block text-gray-700 font-semibold mb-2">
+                <label htmlFor="noticeDescription" className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
                 Notice Description
                 </label>
                 <textarea
@@ -140,7 +140,7 @@ const SupervisorNoticePage = () => {
                 onChange={(e) => setNoticeDescription(e.target.value)}
                 rows={5}
                 placeholder="Write your notice message here..."
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-400 focus:border-green-400 outline-none text-gray-700 dark:text-gray-200"
                 required
                 ></textarea>
             </div>
@@ -157,17 +157,17 @@ const SupervisorNoticePage = () => {
         )}
       </div>
 
-      <div className="bg-white w-full max-w-2xl mt-12 shadow-lg rounded-2xl p-8 border border-gray-100">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">📄 Sent Notices</h2>
+      <div className="bg-white dark:bg-gray-900 w-full max-w-2xl mt-12 shadow-lg rounded-2xl p-8 border border-gray-100 dark:border-gray-800">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b pb-4">📄 Sent Notices</h2>
         {noticesLoading ? (
             <NoticeListSkeleton count={4} />
         ) : sentNotices && sentNotices.length > 0 ? (
           <div className="space-y-6">
             {sentNotices.map((notice: any) => (
-              <div key={notice._id} className="p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-md transition-all">
+              <div key={notice._id} className="p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 hover:bg-white dark:bg-gray-900 hover:shadow-md transition-all">
                 <h3 className="text-lg font-bold text-green-700 mb-1">{notice.title}</h3>
-                <p className="text-gray-700 text-sm mb-3 leading-relaxed">{notice.description}</p>
-                <div className="flex justify-between items-center text-xs text-gray-500 font-medium">
+                <p className="text-gray-700 dark:text-gray-200 text-sm mb-3 leading-relaxed">{notice.description}</p>
+                <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 font-medium">
                   <span>Sent to {notice.recipients.length} users</span>
                   <span>{new Date(notice.createdAt).toLocaleDateString()}</span>
                 </div>
@@ -175,7 +175,7 @@ const SupervisorNoticePage = () => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-500 py-10 italic">No notices sent yet.</p>
+          <p className="text-center text-gray-500 dark:text-gray-400 py-10 italic">No notices sent yet.</p>
         )}
       </div>
     </div>

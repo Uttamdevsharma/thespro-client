@@ -44,7 +44,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
+      <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-xl w-full max-w-md">
         <h2 className="text-2xl font-bold mb-4">Profile</h2>
         <div className="mb-4">
           <p><strong>Full Name:</strong> {user?.name}</p>

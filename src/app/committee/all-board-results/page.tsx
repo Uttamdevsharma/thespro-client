@@ -46,11 +46,11 @@ const CommitteeAllBoardResultsPage = () => {
   }
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
             <div>
-                <h1 className="text-3xl font-black text-gray-900 tracking-tight flex items-center">
+                <h1 className="text-3xl font-black text-gray-900 dark:text-gray-50 tracking-tight flex items-center">
                     <Trophy className="mr-3 text-green-600" size={32} />
                     Examination Results Oversight
                 </h1>
@@ -63,7 +63,7 @@ const CommitteeAllBoardResultsPage = () => {
                     <select
                         value={defenseType}
                         onChange={(e) => setDefenseType(e.target.value)}
-                        className="block w-full md:w-48 pl-10 pr-4 py-3 bg-white border border-gray-200 text-gray-700 text-sm font-bold rounded-xl shadow-sm focus:ring-2 focus:ring-green-400 outline-none transition-all"
+                        className="block w-full md:w-48 pl-10 pr-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-xl shadow-sm focus:ring-2 focus:ring-green-400 outline-none transition-all"
                     >
                         <option value="Pre-Defense">Pre-Defense</option>
                         <option value="Final Defense">Final Defense</option>
@@ -81,16 +81,16 @@ const CommitteeAllBoardResultsPage = () => {
             </div>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
             <div className="overflow-x-auto">
                 <table className="min-w-full text-left border-collapse">
                     <thead>
-                        <tr className="bg-gray-100 border-b border-gray-200">
-                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 uppercase tracking-widest">Board Designation</th>
-                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 uppercase tracking-widest text-center">Examination Type</th>
-                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 uppercase tracking-widest text-center">Venue</th>
-                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 uppercase tracking-widest text-center">Schedule</th>
-                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 uppercase tracking-widest text-right">Review</th>
+                        <tr className="bg-gray-100 border-b border-gray-200 dark:border-gray-700">
+                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 dark:text-gray-100 uppercase tracking-widest">Board Designation</th>
+                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 dark:text-gray-100 uppercase tracking-widest text-center">Examination Type</th>
+                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 dark:text-gray-100 uppercase tracking-widest text-center">Venue</th>
+                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 dark:text-gray-100 uppercase tracking-widest text-center">Schedule</th>
+                            <th className="py-5 px-8 text-[10px] font-black text-gray-800 dark:text-gray-100 uppercase tracking-widest text-right">Review</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
@@ -102,27 +102,27 @@ const CommitteeAllBoardResultsPage = () => {
                                             <div className="w-10 h-10 bg-green-100 text-green-700 flex items-center justify-center rounded-xl font-black mr-4 shadow-sm group-hover:bg-green-600 group-hover:text-white transition-all">
                                                 {boardResult.board.boardNumber}
                                             </div>
-                                            <span className="font-extrabold text-gray-900 tracking-tight">Board ID #{boardResult.board.boardNumber}</span>
+                                            <span className="font-extrabold text-gray-900 dark:text-gray-50 tracking-tight">Board ID #{boardResult.board.boardNumber}</span>
                                         </div>
                                     </td>
-                                    <td className="py-6 px-8 text-center text-gray-700">
+                                    <td className="py-6 px-8 text-center text-gray-700 dark:text-gray-200">
                                         <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${boardResult.board.defenseType === 'Pre-Defense' ? 'bg-amber-50 text-amber-800 border-amber-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200'}`}>
                                             {boardResult.board.defenseType}
                                         </span>
                                     </td>
                                     <td className="py-6 px-8 text-center">
-                                        <div className="inline-block bg-gray-50 px-3 py-1 rounded-lg text-sm font-bold text-gray-900 border border-gray-200 uppercase tracking-tight">
+                                        <div className="inline-block bg-gray-50 dark:bg-gray-950 px-3 py-1 rounded-lg text-sm font-bold text-gray-900 dark:text-gray-50 border border-gray-200 dark:border-gray-700 uppercase tracking-tight">
                                             {boardResult.board.room.name}
                                         </div>
                                     </td>
                                     <td className="py-6 px-8 text-center">
-                                        <div className="text-sm font-bold text-gray-900">{new Date(boardResult.board.date).toLocaleDateString()}</div>
-                                        <div className="text-[10px] font-black text-gray-700 mt-0.5">{boardResult.board.schedule.startTime} - {boardResult.board.schedule.endTime}</div>
+                                        <div className="text-sm font-bold text-gray-900 dark:text-gray-50">{new Date(boardResult.board.date).toLocaleDateString()}</div>
+                                        <div className="text-[10px] font-black text-gray-700 dark:text-gray-200 mt-0.5">{boardResult.board.schedule.startTime} - {boardResult.board.schedule.endTime}</div>
                                     </td>
                                     <td className="py-6 px-8 text-right">
                                         <button 
                                             onClick={() => setSelectedBoard(boardResult)} 
-                                            className="inline-flex items-center px-5 py-2 text-xs font-black text-green-700 bg-white border-2 border-green-600 rounded-xl hover:bg-green-600 hover:text-white transition-all transform active:scale-95 shadow-sm"
+                                            className="inline-flex items-center px-5 py-2 text-xs font-black text-green-700 bg-white dark:bg-gray-900 border-2 border-green-600 rounded-xl hover:bg-green-600 hover:text-white transition-all transform active:scale-95 shadow-sm"
                                         >
                                             <BarChart3 className="mr-2" size={14} />
                                             Audit Results
@@ -132,7 +132,7 @@ const CommitteeAllBoardResultsPage = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={5} className="p-20 text-center text-gray-500 font-bold italic">No results detected for {defenseType} phase.</td>
+                                <td colSpan={5} className="p-20 text-center text-gray-500 dark:text-gray-400 font-bold italic">No results detected for {defenseType} phase.</td>
                             </tr>
                         )}
                     </tbody>
@@ -149,20 +149,20 @@ const GroupList = ({ board, onGroupSelect, onBack }: any) => {
       <div className="p-8 max-w-5xl mx-auto animate-in slide-in-from-left duration-300">
         <button 
             onClick={onBack} 
-            className="flex items-center gap-2 mb-8 text-gray-500 hover:text-green-600 font-black transition-colors group"
+            className="flex items-center gap-2 mb-8 text-gray-500 dark:text-gray-400 hover:text-green-600 font-black transition-colors group"
         >
           <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" /> BACK TO BOARDS OVERSIGHT
         </button>
         
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
-            <div className="p-8 bg-gray-50/50 border-b border-gray-100 flex justify-between items-center">
-                <h1 className="text-2xl font-black text-gray-900 tracking-tight">Assigned Groups: Board #{board.board.boardNumber}</h1>
+        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+            <div className="p-8 bg-gray-50 dark:bg-gray-950/50 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+                <h1 className="text-2xl font-black text-gray-900 dark:text-gray-50 tracking-tight">Assigned Groups: Board #{board.board.boardNumber}</h1>
                 <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">{board.proposals.length} Units</span>
             </div>
             <div className="overflow-x-auto">
                 <table className="min-w-full text-left">
                     <thead>
-                        <tr className="border-b border-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest bg-white">
+                        <tr className="border-b border-gray-50 dark:border-gray-800/50 text-[10px] font-black text-gray-400 uppercase tracking-widest bg-white dark:bg-gray-900">
                             <th className="py-5 px-8">Serial</th>
                             <th className="py-5 px-8">Research Identity</th>
                             <th className="py-5 px-8 text-right">Controls</th>
@@ -178,7 +178,7 @@ const GroupList = ({ board, onGroupSelect, onBack }: any) => {
                                             <FlaskConical size={20} />
                                         </div>
                                         <div>
-                                            <p className="font-extrabold text-gray-900 group-hover:text-green-700 transition-colors tracking-tight">{proposalResult.proposal.title}</p>
+                                            <p className="font-extrabold text-gray-900 dark:text-gray-50 group-hover:text-green-700 transition-colors tracking-tight">{proposalResult.proposal.title}</p>
                                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">Approved Document ID: {proposalResult.proposal._id.substring(0,8)}</span>
                                         </div>
                                     </div>
@@ -206,12 +206,12 @@ const StudentWiseEvaluation = ({ group, onBack }: any) => {
       <div className="p-8 max-w-7xl mx-auto animate-in slide-in-from-right duration-300">
         <button 
             onClick={onBack} 
-            className="flex items-center gap-2 mb-8 text-gray-500 hover:text-green-600 font-black transition-colors group"
+            className="flex items-center gap-2 mb-8 text-gray-500 dark:text-gray-400 hover:text-green-600 font-black transition-colors group"
         >
           <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" /> BACK TO UNIT LIST
         </button>
   
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
             <div className="p-8 bg-green-600 text-white relative">
                 <div className="absolute top-0 right-0 p-8 opacity-20 pointer-events-none">
                     <CheckCircle2 size={120} />
@@ -242,29 +242,29 @@ const StudentWiseEvaluation = ({ group, onBack }: any) => {
                             const total = (supervisorEval?.marks || 0) + committeeAvg;
     
                             return (
-                                <tr key={studentResult.student._id} className="bg-gray-50/50 hover:bg-green-50/30 transition-all rounded-2xl group border border-gray-100">
+                                <tr key={studentResult.student._id} className="bg-gray-50 dark:bg-gray-950/50 hover:bg-green-50/30 transition-all rounded-2xl group border border-gray-100 dark:border-gray-800">
                                     <td className="py-5 px-6 rounded-l-2xl">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center font-black text-gray-300">
+                                            <div className="w-10 h-10 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center justify-center font-black text-gray-300">
                                                 {studentResult.student.name.charAt(0)}
                                             </div>
                                             <div>
-                                                <p className="font-black text-gray-900 group-hover:text-green-700 transition-colors uppercase tracking-tight">{studentResult.student.name}</p>
+                                                <p className="font-black text-gray-900 dark:text-gray-50 group-hover:text-green-700 transition-colors uppercase tracking-tight">{studentResult.student.name}</p>
                                                 <p className="text-[10px] font-black text-gray-400 font-mono tracking-tighter">{studentResult.student.studentId}</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="py-5 px-6 text-sm font-bold text-gray-600">
+                                    <td className="py-5 px-6 text-sm font-bold text-gray-600 dark:text-gray-300">
                                         <div className="flex items-center">
                                             <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                                             {group.proposal.supervisorId?.name || 'N/A'}
                                         </div>
                                     </td>
                                     <td className="py-5 px-6 text-center">
-                                        <span className="bg-white border border-gray-100 px-4 py-1.5 rounded-xl font-black text-gray-700 shadow-sm">{supervisorEval?.marks || 'N/A'}</span>
+                                        <span className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 px-4 py-1.5 rounded-xl font-black text-gray-700 dark:text-gray-200 shadow-sm">{supervisorEval?.marks || 'N/A'}</span>
                                     </td>
                                     <td className="py-5 px-6 text-center">
-                                        <span className="bg-white border border-gray-100 px-4 py-1.5 rounded-xl font-black text-gray-700 shadow-sm">{committeeAvg.toFixed(2)}</span>
+                                        <span className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 px-4 py-1.5 rounded-xl font-black text-gray-700 dark:text-gray-200 shadow-sm">{committeeAvg.toFixed(2)}</span>
                                     </td>
                                     <td className="py-5 px-6 text-right rounded-r-2xl">
                                         <span className="text-2xl font-black text-green-600 tabular-nums">{total.toFixed(2)}</span>

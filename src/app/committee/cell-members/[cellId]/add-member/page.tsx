@@ -55,19 +55,19 @@ const CommitteeAddMembersToCellPage = () => {
   if (allTeachersError || cellsError || !researchCell) return <div className="p-10 text-center text-red-500 font-bold max-w-6xl mx-auto mt-10 bg-red-50 rounded-xl border border-red-100">Error: Could not load data.</div>;
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
             <div className="flex items-center gap-5">
                 <button
                     onClick={() => router.push(`/committee/cell-members/${cellId}`)}
-                    className="p-3 hover:bg-white rounded-xl border border-gray-200 shadow-sm transition-all cursor-pointer bg-gray-50 group"
+                    className="p-3 hover:bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm transition-all cursor-pointer bg-gray-50 dark:bg-gray-950 group"
                 >
-                    <ArrowLeft size={24} className="text-gray-600 group-hover:text-green-600" />
+                    <ArrowLeft size={24} className="text-gray-600 dark:text-gray-300 group-hover:text-green-600" />
                 </button>
                 <div>
-                    <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Add Members to {researchCell.title}</h1>
-                    <p className="text-sm text-gray-500 font-medium mt-1">Select teachers to assign to this research area.</p>
+                    <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-50 tracking-tight">Add Members to {researchCell.title}</h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 font-medium mt-1">Select teachers to assign to this research area.</p>
                 </div>
             </div>
 
@@ -81,16 +81,16 @@ const CommitteeAddMembersToCellPage = () => {
             </button>
         </div>
 
-        <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-xl">
-            <div className="px-8 py-5 border-b border-gray-100 bg-gray-50/50">
-                <h3 className="font-extrabold text-gray-700 text-xs uppercase tracking-widest">Available Teachers</h3>
+        <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xl">
+            <div className="px-8 py-5 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950/50">
+                <h3 className="font-extrabold text-gray-700 dark:text-gray-200 text-xs uppercase tracking-widest">Available Teachers</h3>
             </div>
 
             {teachersNotAssignedToCell && teachersNotAssignedToCell.length > 0 ? (
                 <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse bg-white">
+                    <table className="w-full text-left border-collapse bg-white dark:bg-gray-900">
                         <thead>
-                            <tr className="bg-gray-50/20 border-b border-gray-100">
+                            <tr className="bg-gray-50 dark:bg-gray-950/20 border-b border-gray-100 dark:border-gray-800">
                                 <th className="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider w-16">Select</th>
                                 <th className="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider w-16">Serial</th>
                                 <th className="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Teacher Name</th>
@@ -105,13 +105,13 @@ const CommitteeAddMembersToCellPage = () => {
                                     onClick={() => handleCheckboxChange(teacher._id)}
                                 >
                                     <td className="px-8 py-5">
-                                        <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${selectedTeacherIds.includes(teacher._id) ? 'bg-green-500 border-green-500 text-white' : 'border-gray-300 bg-white'}`}>
+                                        <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${selectedTeacherIds.includes(teacher._id) ? 'bg-green-500 border-green-500 text-white' : 'border-gray-300 bg-white dark:bg-gray-900'}`}>
                                             {selectedTeacherIds.includes(teacher._id) && <CheckCircle2 size={16} />}
                                         </div>
                                     </td>
                                     <td className="px-8 py-5 text-sm font-bold text-gray-400">{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
-                                    <td className="px-8 py-5 text-sm font-bold text-gray-900 group-hover:text-green-700 transition-colors">{teacher.name}</td>
-                                    <td className="px-8 py-5 text-sm text-gray-600 font-medium">{teacher.email}</td>
+                                    <td className="px-8 py-5 text-sm font-bold text-gray-900 dark:text-gray-50 group-hover:text-green-700 transition-colors">{teacher.name}</td>
+                                    <td className="px-8 py-5 text-sm text-gray-600 dark:text-gray-300 font-medium">{teacher.email}</td>
                                 </tr>
                             ))}
                         </tbody>

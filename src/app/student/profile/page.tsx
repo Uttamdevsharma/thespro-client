@@ -80,8 +80,8 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg border border-gray-100">
-      <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center">Your Profile</h1>
+    <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800">
+      <h1 className="text-3xl font-bold mb-8 text-gray-800 dark:text-gray-100 text-center">Your Profile</h1>
       <form onSubmit={handleUpdateProfile} className="space-y-6">
         <div className="flex flex-col items-center mb-8">
           <div className="relative w-32 h-32 mb-4">
@@ -111,57 +111,57 @@ const ProfilePage = () => {
               />
             </label>
           </div>
-          <p className="text-sm text-gray-500">Pick a profile picture</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Pick a profile picture</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+            <label htmlFor="name" className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Full Name</label>
             <input
               type="text"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 dark:text-gray-200"
               required
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+            <label htmlFor="email" className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Email Address</label>
             <input
               type="email"
               id="email"
               value={email}
               disabled
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-gray-50 cursor-not-allowed text-gray-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-gray-50 dark:bg-gray-950 cursor-not-allowed text-gray-500 dark:text-gray-400"
             />
           </div>
         </div>
 
-        <div className="border-t border-gray-100 pt-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Change Password</h2>
+        <div className="border-t border-gray-100 dark:border-gray-800 pt-6">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Change Password</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="currentPassword" className="block text-sm font-semibold text-gray-700 mb-2">Current Password</label>
+              <label htmlFor="currentPassword" className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Current Password</label>
               <input
                 type="password"
                 id="currentPassword"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 autoComplete="current-password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 dark:text-gray-200"
                 placeholder="Enter current password"
               />
             </div>
             <div>
-              <label htmlFor="newPassword" className="block text-sm font-semibold text-gray-700 mb-2">New Password</label>
+              <label htmlFor="newPassword" className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">New Password</label>
               <input
                 type="password"
                 id="newPassword"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 autoComplete="new-password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-700 dark:text-gray-200"
                 placeholder="Enter new password"
               />
             </div>

@@ -88,12 +88,12 @@ const SupervisorProfilePage = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
-      <div className="bg-white rounded-3xl shadow-xl shadow-gray-100 overflow-hidden border border-gray-100">
+      <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl shadow-gray-100 overflow-hidden border border-gray-100 dark:border-gray-800">
         <div className="h-32 bg-[#50C878] relative">
           <div className="absolute -bottom-16 left-8">
             <div className="relative group">
-              <div className="w-32 h-32 rounded-3xl bg-white p-2 shadow-lg shadow-gray-200">
-                <div className="w-full h-full rounded-2xl bg-gray-50 flex items-center justify-center overflow-hidden border-2 border-gray-100 position-relative group-hover:border-[#50C878] transition-colors">
+              <div className="w-32 h-32 rounded-3xl bg-white dark:bg-gray-900 p-2 shadow-lg shadow-gray-200">
+                <div className="w-full h-full rounded-2xl bg-gray-50 dark:bg-gray-950 flex items-center justify-center overflow-hidden border-2 border-gray-100 dark:border-gray-800 position-relative group-hover:border-[#50C878] transition-colors">
                   {previewImage ? (
                     <img src={previewImage} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
@@ -107,7 +107,7 @@ const SupervisorProfilePage = () => {
                     type="file"
                     id="profileImage"
                     accept="image/*"
-                    className="hidden"
+                    className="hidden dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder-gray-400 dark:placeholder-gray-500"
                     onChange={handleImageChange}
                   />
                 </div>
@@ -118,7 +118,7 @@ const SupervisorProfilePage = () => {
 
         <div className="pt-20 px-8 pb-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-black text-gray-900 tracking-tight">Supervisor Profile</h1>
+            <h1 className="text-3xl font-black text-gray-900 dark:text-gray-50 tracking-tight">Supervisor Profile</h1>
             <p className="text-sm font-bold text-gray-400 mt-1 uppercase tracking-widest">Manage your professional information</p>
           </div>
 
@@ -136,7 +136,7 @@ const SupervisorProfilePage = () => {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full pl-11 pr-4 py-3 bg-gray-50 border-2 border-transparent text-gray-900 text-sm rounded-xl focus:ring-0 focus:border-[#50C878] focus:bg-white transition-all font-bold placeholder-gray-400"
+                    className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-950 border-2 border-transparent text-gray-900 dark:text-gray-50 text-sm rounded-xl focus:ring-0 focus:border-[#50C878] focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 transition-all font-bold placeholder-gray-400 dark:placeholder-gray-500"
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -151,7 +151,7 @@ const SupervisorProfilePage = () => {
                     type="email"
                     value={formData.email}
                     disabled
-                    className="w-full pl-11 pr-4 py-3 bg-gray-100 border-2 border-transparent text-gray-500 text-sm rounded-xl font-bold cursor-not-allowed"
+                    className="w-full pl-11 pr-4 py-3 bg-gray-100 border-2 border-transparent text-gray-500 dark:text-gray-400 text-sm rounded-xl font-bold cursor-not-allowed dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder-gray-400 dark:placeholder-gray-500"
                   />
                 </div>
               </div>
@@ -168,7 +168,7 @@ const SupervisorProfilePage = () => {
                   value={formData.education}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full pl-11 pr-4 py-3 bg-gray-50 border-2 border-transparent text-gray-900 text-sm rounded-xl focus:ring-0 focus:border-[#50C878] focus:bg-white transition-all font-medium placeholder-gray-400 resize-none"
+                  className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-950 border-2 border-transparent text-gray-900 dark:text-gray-50 text-sm rounded-xl focus:ring-0 focus:border-[#50C878] focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 transition-all font-medium placeholder-gray-400 dark:placeholder-gray-500 resize-none"
                   placeholder="E.g., Ph.D. in Computer Science from University X"
                 ></textarea>
               </div>
@@ -185,7 +185,7 @@ const SupervisorProfilePage = () => {
                   value={formData.experience}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full pl-11 pr-4 py-3 bg-gray-50 border-2 border-transparent text-gray-900 text-sm rounded-xl focus:ring-0 focus:border-[#50C878] focus:bg-white transition-all font-medium placeholder-gray-400 resize-none"
+                  className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-950 border-2 border-transparent text-gray-900 dark:text-gray-50 text-sm rounded-xl focus:ring-0 focus:border-[#50C878] focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 transition-all font-medium placeholder-gray-400 dark:placeholder-gray-500 resize-none"
                   placeholder="E.g., 10+ years teaching experience at University Y"
                 ></textarea>
               </div>
@@ -202,13 +202,13 @@ const SupervisorProfilePage = () => {
                   value={formData.research}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full pl-11 pr-4 py-3 bg-gray-50 border-2 border-transparent text-gray-900 text-sm rounded-xl focus:ring-0 focus:border-[#50C878] focus:bg-white transition-all font-medium placeholder-gray-400 resize-none"
+                  className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-950 border-2 border-transparent text-gray-900 dark:text-gray-50 text-sm rounded-xl focus:ring-0 focus:border-[#50C878] focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 transition-all font-medium placeholder-gray-400 dark:placeholder-gray-500 resize-none"
                   placeholder="E.g., Artificial Intelligence, Machine Learning, Data Science"
                 ></textarea>
               </div>
             </div>
 
-            <div className="flex justify-end pt-4 border-t border-gray-50">
+            <div className="flex justify-end pt-4 border-t border-gray-50 dark:border-gray-800/50">
               <button
                 type="submit"
                 disabled={isLoading}

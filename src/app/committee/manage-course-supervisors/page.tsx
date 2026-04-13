@@ -63,23 +63,23 @@ const CommitteeManageCourseSupervisorsPage = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-7xl mx-auto space-y-12">
         
         <header>
-            <h1 className="text-4xl font-black text-gray-900 tracking-tight flex items-center mb-2">
+            <h1 className="text-4xl font-black text-gray-900 dark:text-gray-50 tracking-tight flex items-center mb-2">
                 <ShieldCheck className="mr-3 text-green-600" size={40} />
                 Strategic Supervision Management
             </h1>
-            <p className="text-gray-500 font-bold text-lg italic">Hierarchy configuration for Course Supervisors and Main Supervisors</p>
+            <p className="text-gray-500 dark:text-gray-400 font-bold text-lg italic">Hierarchy configuration for Course Supervisors and Main Supervisors</p>
         </header>
 
-        <section className="bg-white p-10 rounded-3xl shadow-2xl border border-gray-100 relative overflow-hidden">
+        <section className="bg-white dark:bg-gray-900 p-10 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                 <Settings size={120} />
             </div>
             
-            <h2 className="text-xl font-black text-gray-800 mb-8 flex items-center">
+            <h2 className="text-xl font-black text-gray-800 dark:text-gray-100 mb-8 flex items-center">
                 <UserPlus className="mr-2 text-green-500" size={24} /> 
                 Configure Supervisor Role
             </h2>
@@ -93,7 +93,7 @@ const CommitteeManageCourseSupervisorsPage = () => {
                         id="supervisorSelect"
                         value={selectedSupervisorId}
                         onChange={handleSupervisorSelect}
-                        className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white outline-none transition-all font-bold text-gray-700"
+                        className="w-full px-4 py-4 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 outline-none transition-all font-bold text-gray-700 dark:text-gray-200"
                         required
                     >
                         <option value="">-- Choose a Faculty Member --</option>
@@ -105,17 +105,17 @@ const CommitteeManageCourseSupervisorsPage = () => {
 
                 {selectedSupervisorId && (
                     <div className="animate-in fade-in slide-in-from-top-4 duration-300">
-                        <label className="inline-flex items-center cursor-pointer group p-4 bg-gray-50 rounded-2xl border-2 border-transparent hover:border-green-200 transition-all">
+                        <label className="inline-flex items-center cursor-pointer group p-4 bg-gray-50 dark:bg-gray-950 rounded-2xl border-2 border-transparent hover:border-green-200 transition-all">
                             <input
                                 type="checkbox"
-                                className="hidden"
+                                className="hidden dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder-gray-400 dark:placeholder-gray-500"
                                 checked={isCourseSupervisor}
                                 onChange={(e) => setIsCourseSupervisor(e.target.checked)}
                             />
-                            <div className={`w-6 h-6 rounded-md border-2 mr-3 flex items-center justify-center transition-all ${isCourseSupervisor ? 'bg-green-600 border-green-600 text-white' : 'border-gray-300 bg-white'}`}>
+                            <div className={`w-6 h-6 rounded-md border-2 mr-3 flex items-center justify-center transition-all ${isCourseSupervisor ? 'bg-green-600 border-green-600 text-white' : 'border-gray-300 bg-white dark:bg-gray-900'}`}>
                                 {isCourseSupervisor && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
                             </div>
-                            <span className="font-black text-gray-700 uppercase tracking-tighter">Designate as Course Supervisor</span>
+                            <span className="font-black text-gray-700 dark:text-gray-200 uppercase tracking-tighter">Designate as Course Supervisor</span>
                         </label>
                     </div>
                 )}
@@ -129,7 +129,7 @@ const CommitteeManageCourseSupervisorsPage = () => {
                             id="mainSupervisorSelect"
                             value={selectedMainSupervisor}
                             onChange={(e) => setSelectedMainSupervisor(e.target.value)}
-                            className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white outline-none transition-all font-bold text-gray-700"
+                            className="w-full px-4 py-4 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-green-400 focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 outline-none transition-all font-bold text-gray-700 dark:text-gray-200"
                             required
                         >
                             <option value="">-- Assign to Main Supervisor --</option>
@@ -152,15 +152,15 @@ const CommitteeManageCourseSupervisorsPage = () => {
         </section>
 
         <section>
-            <h2 className="text-2xl font-black text-gray-900 mb-6 flex items-center">
+            <h2 className="text-2xl font-black text-gray-900 dark:text-gray-50 mb-6 flex items-center">
                 <Layout className="mr-3 text-green-600" size={28} />
                 Current Hierarchy Mappings
             </h2>
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
                 {supervisors.filter(s => s.isCourseSupervisor).length > 0 ? (
                     <div className="overflow-x-auto">
                         <table className="min-w-full text-left">
-                            <thead className="bg-gray-50">
+                            <thead className="bg-gray-50 dark:bg-gray-950">
                                 <tr>
                                     <th className="py-4 px-8 text-[10px] font-black text-gray-400 uppercase tracking-widest">Course Supervisor</th>
                                     <th className="py-4 px-8 text-center text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</th>
@@ -175,7 +175,7 @@ const CommitteeManageCourseSupervisorsPage = () => {
                                                 <div className="w-8 h-8 bg-green-100 text-green-700 rounded-lg flex items-center justify-center font-black mr-3 shadow-sm group-hover:bg-green-600 group-hover:text-white transition-all">
                                                     {cs.name.charAt(0)}
                                                 </div>
-                                                <span className="font-black text-gray-800 tracking-tight">{cs.name}</span>
+                                                <span className="font-black text-gray-800 dark:text-gray-100 tracking-tight">{cs.name}</span>
                                             </div>
                                         </td>
                                         <td className="py-5 px-8 text-center">
@@ -183,9 +183,9 @@ const CommitteeManageCourseSupervisorsPage = () => {
                                         </td>
                                         <td className="py-5 px-8 text-right">
                                             {cs.mainSupervisor ? (
-                                                <div className="flex items-center justify-end text-sm font-bold text-gray-500">
+                                                <div className="flex items-center justify-end text-sm font-bold text-gray-500 dark:text-gray-400">
                                                     <span className="opacity-60 text-[9px] mr-2 uppercase">Main:</span>
-                                                    <span className="text-gray-900">{supervisors.find(s => s._id === cs.mainSupervisor)?.name || 'Unknown Reference'}</span>
+                                                    <span className="text-gray-900 dark:text-gray-50">{supervisors.find(s => s._id === cs.mainSupervisor)?.name || 'Unknown Reference'}</span>
                                                 </div>
                                             ) : (
                                                 <span className="text-[10px] font-black text-red-400 uppercase tracking-tighter italic">No Strategic Head Assigned</span>
@@ -202,14 +202,14 @@ const CommitteeManageCourseSupervisorsPage = () => {
             </div>
         </section>
 
-        <section className="pt-10 border-t-2 border-dashed border-gray-200">
+        <section className="pt-10 border-t-2 border-dashed border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-8">
-                <h2 className="text-3xl font-black text-gray-900 tracking-tight flex items-center">
+                <h2 className="text-3xl font-black text-gray-900 dark:text-gray-50 tracking-tight flex items-center">
                     <Users className="mr-3 text-green-600" size={32} />
                     Defense Logistics Overview
                 </h2>
                 <div className="flex gap-2">
-                    <span className="bg-gray-100 text-gray-500 px-3 py-1 rounded-full text-[10px] font-black uppercase">Infrastructure Control</span>
+                    <span className="bg-gray-100 text-gray-500 dark:text-gray-400 px-3 py-1 rounded-full text-[10px] font-black uppercase">Infrastructure Control</span>
                 </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">

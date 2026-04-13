@@ -54,15 +54,15 @@ const CommitteeAssignment = () => {
 
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl font-bold text-gray-800">Department Committee Assignment</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Department Committee Assignment</h1>
 
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 max-w-2xl">
-                <h2 className="text-xl font-bold mb-6 text-gray-800">Assign New Committee Member</h2>
+            <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 max-w-2xl">
+                <h2 className="text-xl font-bold mb-6 text-gray-800 dark:text-gray-100">Assign New Committee Member</h2>
                 <form onSubmit={handleAssign} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-semibold text-gray-600 mb-1">Select Teacher</label>
+                        <label className="block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-1">Select Teacher</label>
                         <select 
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 bg-white"
+                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900"
                             value={newAssignment.userId}
                             onChange={e => setNewAssignment({...newAssignment, userId: e.target.value})}
                             required
@@ -74,9 +74,9 @@ const CommitteeAssignment = () => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-gray-600 mb-1">Select Department</label>
+                        <label className="block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-1">Select Department</label>
                         <select 
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 bg-white"
+                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900"
                             value={newAssignment.departmentId}
                             onChange={e => setNewAssignment({...newAssignment, departmentId: e.target.value})}
                             required
@@ -93,11 +93,11 @@ const CommitteeAssignment = () => {
                 </form>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center space-x-4 mb-6">
-                    <span className="text-gray-600 font-medium">View Assignments for:</span>
+                    <span className="text-gray-600 dark:text-gray-300 font-medium">View Assignments for:</span>
                     <select 
-                        className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 bg-white"
+                        className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900"
                         value={selectedDept}
                         onChange={e => setSelectedDept(e.target.value)}
                     >
@@ -111,7 +111,7 @@ const CommitteeAssignment = () => {
                 {isLoading ? <TableSkeleton rows={5} cols={3} /> : (
                     <div className="overflow-x-auto">
                          <table className="w-full text-left">
-                            <thead className="bg-gray-50 uppercase text-xs font-semibold text-gray-500">
+                            <thead className="bg-gray-50 dark:bg-gray-950 uppercase text-xs font-semibold text-gray-500 dark:text-gray-400">
                                 <tr>
                                     <th className="px-6 py-4">Committee Member</th>
                                     <th className="px-6 py-4">Assigned Department</th>
@@ -120,11 +120,11 @@ const CommitteeAssignment = () => {
                             </thead>
                             <tbody className="divide-y divide-gray-100">
                                 {assignments?.map((a: any) => (
-                                    <tr key={a._id} className="hover:bg-gray-50 transition-colors">
+                                    <tr key={a._id} className="hover:bg-gray-50 dark:bg-gray-950 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex flex-col">
-                                                <span className="font-bold text-gray-800">{a.userId?.name}</span>
-                                                <span className="text-xs text-gray-500">{a.userId?.email}</span>
+                                                <span className="font-bold text-gray-800 dark:text-gray-100">{a.userId?.name}</span>
+                                                <span className="text-xs text-gray-500 dark:text-gray-400">{a.userId?.email}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">

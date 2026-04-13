@@ -107,14 +107,14 @@ const SupervisorChatPage = () => {
 
   if (loading) {
     return (
-      <div className="p-6 bg-white rounded-lg shadow-md text-center text-gray-500">
+      <div className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md text-center text-gray-500 dark:text-gray-400">
         Loading chat...
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-120px)] bg-white rounded-xl shadow-lg border border-gray-200">
+    <div className="flex flex-col h-[calc(100vh-120px)] bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
       {/* Header */}
       <div className="flex justify-between items-center bg-[#50C878] text-white px-6 py-3 rounded-t-xl shadow">
         <h1 className="text-xl font-semibold">Supervisor Chat</h1>
@@ -122,7 +122,7 @@ const SupervisorChatPage = () => {
           <select
             value={currentFilter}
             onChange={(e) => setCurrentFilter(e.target.value)}
-            className="bg-white text-gray-800 px-3 py-1 rounded-md focus:ring-2 focus:ring-green-300 focus:outline-none text-sm font-medium"
+            className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 px-3 py-1 rounded-md focus:ring-2 focus:ring-green-300 focus:outline-none text-sm font-medium"
           >
             <option value="my_supervision">Under My Supervision</option>
             <option value="my_supervision_with_course_supervision">Under My Supervision with Course Supervision</option>
@@ -131,7 +131,7 @@ const SupervisorChatPage = () => {
           <select
             value={selectedProposalId || ""}
             onChange={(e) => setSelectedProposalId(e.target.value)}
-            className="bg-white text-gray-800 px-3 py-1 rounded-md focus:ring-2 focus:ring-green-300 focus:outline-none text-sm font-medium"
+            className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 px-3 py-1 rounded-md focus:ring-2 focus:ring-green-300 focus:outline-none text-sm font-medium"
           >
             <option value="" disabled>
               Select Proposal
@@ -146,7 +146,7 @@ const SupervisorChatPage = () => {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-50 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-950 custom-scrollbar">
         {messages.map((msg) => (
           <div
             key={msg._id}
@@ -158,7 +158,7 @@ const SupervisorChatPage = () => {
               className={`max-w-[70%] px-4 py-2 rounded-2xl shadow ${
                 msg.sender._id === (user as any)?._id
                   ? "bg-[#50C878] text-white rounded-br-none"
-                  : "bg-white text-gray-800 border border-gray-200 rounded-bl-none"
+                  : "bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-700 rounded-bl-none"
               }`}
             >
               <p className="font-semibold text-sm mb-1">{msg.sender.name}</p>
@@ -181,7 +181,7 @@ const SupervisorChatPage = () => {
                   )}
                 </a>
               )}
-              <p className={`text-xs mt-1 ${msg.sender._id === (user as any)?._id ? 'text-gray-200' : 'text-gray-500'}`}>
+              <p className={`text-xs mt-1 ${msg.sender._id === (user as any)?._id ? 'text-gray-200' : 'text-gray-500 dark:text-gray-400'}`}>
                 {new Date(msg.createdAt).toLocaleTimeString()}
               </p>
             </div>
@@ -191,24 +191,24 @@ const SupervisorChatPage = () => {
       </div>
 
       {/* Input Area */}
-      <div className="flex items-center p-3 bg-white border-t border-gray-200 rounded-b-xl">
+      <div className="flex items-center p-3 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 rounded-b-xl">
         <input
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
           placeholder="Type a message..."
-          className="flex-1 border border-gray-300 rounded-full px-4 py-2 mr-2 focus:ring-2 focus:ring-[#50C878] focus:outline-none text-gray-700"
+          className="flex-1 border border-gray-300 rounded-full px-4 py-2 mr-2 focus:ring-2 focus:ring-[#50C878] focus:outline-none text-gray-700 dark:text-gray-200"
         />
         <input
           type="file"
           onChange={handleFileChange}
           id="file-upload"
-          className="hidden"
+          className="hidden dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:placeholder-gray-400 dark:placeholder-gray-500"
         />
         <label
           htmlFor="file-upload"
-          className="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-3 py-2 rounded-full mr-2"
+          className="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-700 dark:text-gray-200 font-medium px-3 py-2 rounded-full mr-2"
         >
           📎
         </label>

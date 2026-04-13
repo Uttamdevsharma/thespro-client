@@ -57,13 +57,13 @@ export const RoomManager = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mb-10">
-      <div className="p-8 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden mb-10">
+      <div className="p-8 border-b border-gray-50 dark:border-gray-800/50 flex justify-between items-center bg-gray-50 dark:bg-gray-950/30">
         <div>
-          <h2 className="text-2xl font-extrabold text-gray-800 flex items-center">
+          <h2 className="text-2xl font-extrabold text-gray-800 dark:text-gray-100 flex items-center">
             <MapPin className="mr-2 text-green-500" size={24} /> Room Manager
           </h2>
-          <p className="text-sm text-gray-500 mt-1 font-medium italic">Configure venue capacity for defenses</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium italic">Configure venue capacity for defenses</p>
         </div>
         <button 
           onClick={() => handleOpenModal()} 
@@ -75,30 +75,30 @@ export const RoomManager = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] bg-gray-900/60 backdrop-blur-sm flex justify-center items-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in duration-300">
-            <div className="p-8 border-b border-gray-50 bg-gray-50/50">
-              <h3 className="text-2xl font-bold text-gray-800">{isEditing ? 'Update Room' : 'New Room Registration'}</h3>
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in duration-300">
+            <div className="p-8 border-b border-gray-50 dark:border-gray-800/50 bg-gray-50 dark:bg-gray-950/50">
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{isEditing ? 'Update Room' : 'New Room Registration'}</h3>
             </div>
             <form onSubmit={handleSubmit} className="p-8 space-y-6">
               <div>
-                <label className="block text-sm font-bold text-gray-600 mb-2">Internal Room Designation</label>
+                <label className="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-2">Internal Room Designation</label>
                 <input 
                   type="text" name="name" value={formData.name} onChange={handleChange} 
                   placeholder="e.g. Lab 402, Seminar Hall"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:bg-white outline-none transition-all font-semibold" 
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-green-500 focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 outline-none transition-all font-semibold" 
                   required 
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-600 mb-2">Max Group Capacity</label>
+                <label className="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-2">Max Group Capacity</label>
                 <input 
                   type="number" name="capacity" value={formData.capacity} onChange={handleChange} 
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:bg-white outline-none font-bold" 
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-green-500 focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 outline-none font-bold" 
                   required min={1} 
                 />
               </div>
               <div className="flex justify-end gap-3 pt-4">
-                <button type="button" onClick={handleCloseModal} className="px-6 py-3 text-gray-500 font-bold hover:bg-gray-100 rounded-xl transition-all">Cancel</button>
+                <button type="button" onClick={handleCloseModal} className="px-6 py-3 text-gray-500 dark:text-gray-400 font-bold hover:bg-gray-100 rounded-xl transition-all">Cancel</button>
                 <button type="submit" className="px-8 py-3 bg-green-600 text-white font-extrabold rounded-xl hover:bg-green-700 shadow-xl transition-all">
                   {isEditing ? 'Confirm Changes' : 'Initialize Room'}
                 </button>
@@ -117,7 +117,7 @@ export const RoomManager = () => {
         ) : (
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50/50 border-b border-gray-100">
+              <tr className="bg-gray-50 dark:bg-gray-950/50 border-b border-gray-100 dark:border-gray-800">
                 <th className="py-5 px-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Designation</th>
                 <th className="py-5 px-8 text-xs font-bold text-gray-400 uppercase tracking-widest text-center">Load Capacity</th>
                 <th className="py-5 px-8 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">Control</th>
@@ -126,7 +126,7 @@ export const RoomManager = () => {
             <tbody className="divide-y divide-gray-50">
               {rooms?.map((room: any) => (
                 <tr key={room._id} className="hover:bg-green-50/20 transition-all group">
-                  <td className="py-5 px-8 font-extrabold text-gray-800 group-hover:text-green-700">{room.name}</td>
+                  <td className="py-5 px-8 font-extrabold text-gray-800 dark:text-gray-100 group-hover:text-green-700">{room.name}</td>
                   <td className="py-5 px-8 text-center">
                     <span className="bg-green-100 text-green-700 px-4 py-1.5 rounded-full text-xs font-extrabold border border-green-200 shadow-sm">
                       {room.capacity} Groups
@@ -192,13 +192,13 @@ export const ScheduleManager = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-      <div className="p-8 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <div className="p-8 border-b border-gray-50 dark:border-gray-800/50 flex justify-between items-center bg-gray-50 dark:bg-gray-950/30">
         <div>
-          <h2 className="text-2xl font-extrabold text-gray-800 flex items-center">
+          <h2 className="text-2xl font-extrabold text-gray-800 dark:text-gray-100 flex items-center">
             <Clock className="mr-2 text-blue-500" size={24} /> Schedule Slots
           </h2>
-          <p className="text-sm text-gray-500 mt-1 font-medium italic">Define active timelines for defense sessions</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium italic">Define active timelines for defense sessions</p>
         </div>
         <button 
           onClick={() => handleOpenModal()} 
@@ -210,27 +210,27 @@ export const ScheduleManager = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] bg-gray-900/60 backdrop-blur-sm flex justify-center items-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in duration-300">
-            <div className="p-8 border-b border-gray-50 bg-gray-50/50">
-              <h3 className="text-2xl font-bold text-gray-800">{isEditing ? 'Modify Slot' : 'Create Time Slot'}</h3>
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in duration-300">
+            <div className="p-8 border-b border-gray-50 dark:border-gray-800/50 bg-gray-50 dark:bg-gray-950/50">
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{isEditing ? 'Modify Slot' : 'Create Time Slot'}</h3>
             </div>
             <form onSubmit={handleSubmit} className="p-8 space-y-6">
               <div>
-                <label className="block text-sm font-bold text-gray-600 mb-2">Calendar Date</label>
-                <input type="date" name="date" value={formData.date} onChange={handleChange} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-semibold" required />
+                <label className="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-2">Calendar Date</label>
+                <input type="date" name="date" value={formData.date} onChange={handleChange} className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-semibold" required />
               </div>
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-gray-600 mb-2">Start Time</label>
-                  <input type="time" name="startTime" value={formData.startTime} onChange={handleChange} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-bold" required />
+                  <label className="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-2">Start Time</label>
+                  <input type="time" name="startTime" value={formData.startTime} onChange={handleChange} className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-bold" required />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-600 mb-2">End Time</label>
-                  <input type="time" name="endTime" value={formData.endTime} onChange={handleChange} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-bold" required />
+                  <label className="block text-sm font-bold text-gray-600 dark:text-gray-300 mb-2">End Time</label>
+                  <input type="time" name="endTime" value={formData.endTime} onChange={handleChange} className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 font-bold" required />
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-4">
-                <button type="button" onClick={handleCloseModal} className="px-6 py-3 text-gray-500 font-bold hover:bg-gray-100 rounded-xl transition-all">Cancel</button>
+                <button type="button" onClick={handleCloseModal} className="px-6 py-3 text-gray-500 dark:text-gray-400 font-bold hover:bg-gray-100 rounded-xl transition-all">Cancel</button>
                 <button type="submit" className="px-8 py-3 bg-blue-600 text-white font-extrabold rounded-xl hover:bg-blue-700 shadow-xl transition-all">
                   {isEditing ? 'Confirm Changes' : 'Initialize Slot'}
                 </button>
@@ -243,7 +243,7 @@ export const ScheduleManager = () => {
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-gray-50/50 border-b border-gray-100">
+            <tr className="bg-gray-50 dark:bg-gray-950/50 border-b border-gray-100 dark:border-gray-800">
               <th className="py-5 px-8 text-xs font-bold text-gray-400 uppercase tracking-widest">Event Date</th>
               <th className="py-5 px-8 text-xs font-bold text-gray-400 uppercase tracking-widest text-center">Duration</th>
               <th className="py-5 px-8 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">Control</th>
@@ -252,7 +252,7 @@ export const ScheduleManager = () => {
           <tbody className="divide-y divide-gray-50">
             {scheduleSlots?.map((slot: any) => (
               <tr key={slot._id} className="hover:bg-blue-50/20 transition-all group">
-                <td className="py-5 px-8 text-gray-800 font-extrabold group-hover:text-blue-700">
+                <td className="py-5 px-8 text-gray-800 dark:text-gray-100 font-extrabold group-hover:text-blue-700">
                   {new Date(slot.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                 </td>
                 <td className="py-5 px-8 text-center">
@@ -276,15 +276,15 @@ export const ScheduleManager = () => {
 // --- Main DefenseSchedule Component ---
 const CommitteeDefenseSchedulePage = () => {
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-8">
       <div className="max-w-7xl mx-auto">
         <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 gap-8">
           <div>
-            <h1 className="text-4xl font-black text-gray-900 tracking-tight flex items-center">
+            <h1 className="text-4xl font-black text-gray-900 dark:text-gray-50 tracking-tight flex items-center">
                 <Calendar className="mr-4 text-green-600" size={40} />
                 Global Defense Schedule
             </h1>
-            <p className="text-gray-500 mt-2 font-bold text-lg flex items-center italic">
+            <p className="text-gray-500 dark:text-gray-400 mt-2 font-bold text-lg flex items-center italic">
                 Strategic oversight of academic assessment timelines and venues
             </p>
           </div>

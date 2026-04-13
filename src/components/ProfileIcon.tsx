@@ -60,25 +60,25 @@ const ProfileIcon = () => {
   return (
     <div className="relative" ref={dropdownRef}>
       <button onClick={toggleDropdown} className="focus:outline-none flex items-center">
-        <FaUserCircle className="w-8 h-8 text-gray-600" />
+        <FaUserCircle className="w-8 h-8 text-gray-600 dark:text-gray-300" />
       </button>
 
       {dropdownOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-          <div className="px-4 py-2 text-sm text-gray-700">
+        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-md shadow-lg py-1 z-50">
+          <div className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200">
             <p className="font-semibold">{user?.name}</p>
           </div>
-          <div className="border-t border-gray-200"></div>
+          <div className="border-t border-gray-200 dark:border-gray-700"></div>
           <button
             onClick={openModal}
-            className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            className="w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100"
           >
             View Profile
           </button>
-          <div className="border-t border-gray-200"></div>
+          <div className="border-t border-gray-200 dark:border-gray-700"></div>
           <button
             onClick={handleLogout}
-            className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            className="w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100"
           >
             <FaSignOutAlt className="inline-block mr-2" />
             Logout

@@ -38,19 +38,19 @@ const CommitteeCellMembersDetailPage = () => {
   if (allTeachersError || cellsError || !researchCell) return <div className="p-10 text-center text-red-500 font-bold max-w-6xl mx-auto mt-10 bg-red-50 rounded-xl border border-red-100">Error: Could not load cell details or members.</div>;
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
             <div className="flex items-center gap-5">
                 <button
                     onClick={() => router.push('/committee/cell-members')}
-                    className="p-3 hover:bg-white rounded-xl border border-gray-200 shadow-sm transition-all cursor-pointer bg-gray-50 group"
+                    className="p-3 hover:bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm transition-all cursor-pointer bg-gray-50 dark:bg-gray-950 group"
                 >
-                    <ArrowLeft size={24} className="text-gray-600 group-hover:text-green-600" />
+                    <ArrowLeft size={24} className="text-gray-600 dark:text-gray-300 group-hover:text-green-600" />
                 </button>
                 <div>
-                    <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">{researchCell.title}</h1>
-                    <p className="text-sm text-gray-500 font-medium mt-1">{researchCell.description}</p>
+                    <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-50 tracking-tight">{researchCell.title}</h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 font-medium mt-1">{researchCell.description}</p>
                 </div>
             </div>
 
@@ -63,17 +63,17 @@ const CommitteeCellMembersDetailPage = () => {
             </button>
         </div>
 
-        <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-xl">
-            <div className="px-8 py-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
-                <h3 className="font-extrabold text-gray-700 text-xs uppercase tracking-widest">Cell Members List</h3>
+        <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden shadow-xl">
+            <div className="px-8 py-5 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950/50 flex justify-between items-center">
+                <h3 className="font-extrabold text-gray-700 dark:text-gray-200 text-xs uppercase tracking-widest">Cell Members List</h3>
                 <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">{cellMembers?.length || 0} Members</span>
             </div>
 
             {cellMembers && cellMembers.length > 0 ? (
                 <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse bg-white">
+                    <table className="w-full text-left border-collapse bg-white dark:bg-gray-900">
                         <thead>
-                            <tr className="bg-gray-50/20 border-b border-gray-100">
+                            <tr className="bg-gray-50 dark:bg-gray-950/20 border-b border-gray-100 dark:border-gray-800">
                                 <th className="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Serial</th>
                                 <th className="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Name</th>
                                 <th className="px-8 py-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Email Address</th>
@@ -84,8 +84,8 @@ const CommitteeCellMembersDetailPage = () => {
                             {cellMembers.map((member: any, index: number) => (
                                 <tr key={member._id} className="hover:bg-green-50/20 transition-colors group">
                                     <td className="px-8 py-5 text-sm font-bold text-gray-400">{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
-                                    <td className="px-8 py-5 text-sm font-bold text-gray-900 group-hover:text-green-700 transition-colors">{member.name}</td>
-                                    <td className="px-8 py-5 text-sm text-gray-600 font-medium">{member.email}</td>
+                                    <td className="px-8 py-5 text-sm font-bold text-gray-900 dark:text-gray-50 group-hover:text-green-700 transition-colors">{member.name}</td>
+                                    <td className="px-8 py-5 text-sm text-gray-600 dark:text-gray-300 font-medium">{member.email}</td>
                                     <td className="px-8 py-5 text-right">
                                         <button
                                             onClick={() => handleRemoveMember(member._id, member.name)}
@@ -103,7 +103,7 @@ const CommitteeCellMembersDetailPage = () => {
                 </div>
             ) : (
                 <div className="p-20 text-center">
-                    <div className="bg-gray-50 inline-block p-4 rounded-full mb-4">
+                    <div className="bg-gray-50 dark:bg-gray-950 inline-block p-4 rounded-full mb-4">
                         <User size={32} className="text-gray-400" />
                     </div>
                     <p className="text-gray-400 text-lg font-medium italic">No members assigned to this cell yet.</p>

@@ -55,17 +55,17 @@ const CommitteeAssignCellToTeacherPage = () => {
   if (teacherError || cellsError || !teacher) return <div className="p-10 text-center text-red-500 font-bold bg-red-50 rounded-2xl border border-red-100 max-w-4xl mx-auto mt-10 tracking-tight">Data retrieval failed. Please verify teacher ID.</div>;
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-5 mb-10">
             <button
                 onClick={() => router.push('/committee/all-teachers')}
-                className="p-3 hover:bg-white rounded-xl border border-gray-200 shadow-sm transition-all cursor-pointer bg-gray-50 group"
+                className="p-3 hover:bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm transition-all cursor-pointer bg-gray-50 dark:bg-gray-950 group"
             >
-                <ArrowLeft size={24} className="text-gray-600 group-hover:text-green-600" />
+                <ArrowLeft size={24} className="text-gray-600 dark:text-gray-300 group-hover:text-green-600" />
             </button>
             <div>
-                <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight flex items-center">
+                <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-50 tracking-tight flex items-center">
                     <FlaskConical className="mr-3 text-green-600" size={32} />
                     Cell Allocation
                 </h1>
@@ -73,7 +73,7 @@ const CommitteeAssignCellToTeacherPage = () => {
             </div>
         </div>
 
-        <div className="bg-white shadow-2xl rounded-3xl p-8 mb-10 border border-gray-100 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl p-8 mb-10 border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                 <User size={120} className="text-blue-500" />
             </div>
@@ -82,8 +82,8 @@ const CommitteeAssignCellToTeacherPage = () => {
                 {teacher.name.charAt(0)}
             </div>
             <div className="flex-1 text-center md:text-left">
-                <h2 className="text-2xl font-black text-gray-900 tracking-tight uppercase">{teacher.name}</h2>
-                <p className="text-sm text-gray-500 font-bold flex items-center justify-center md:justify-start gap-2 mt-1">
+                <h2 className="text-2xl font-black text-gray-900 dark:text-gray-50 tracking-tight uppercase">{teacher.name}</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-bold flex items-center justify-center md:justify-start gap-2 mt-1">
                     <ShieldCheck size={16} className="text-green-500" /> {teacher.email}
                 </p>
                 
@@ -105,10 +105,10 @@ const CommitteeAssignCellToTeacherPage = () => {
             </div>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-            <div className="px-10 py-6 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center flex-wrap gap-4">
+        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+            <div className="px-10 py-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950/50 flex justify-between items-center flex-wrap gap-4">
                 <div>
-                    <h3 className="font-black text-gray-800 text-sm uppercase tracking-widest">Available Domains</h3>
+                    <h3 className="font-black text-gray-800 dark:text-gray-100 text-sm uppercase tracking-widest">Available Domains</h3>
                     <p className="text-[10px] text-gray-400 font-bold">Select one or more cells to expand authority</p>
                 </div>
                 <button
@@ -123,9 +123,9 @@ const CommitteeAssignCellToTeacherPage = () => {
 
             <div className="overflow-x-auto">
                 {cellsNotAssigned && cellsNotAssigned.length > 0 ? (
-                    <table className="w-full text-left border-collapse bg-white">
+                    <table className="w-full text-left border-collapse bg-white dark:bg-gray-900">
                         <thead>
-                            <tr className="bg-gray-50/30 border-b border-gray-100">
+                            <tr className="bg-gray-50 dark:bg-gray-950/30 border-b border-gray-100 dark:border-gray-800">
                                 <th className="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest w-16 text-center">Opt</th>
                                 <th className="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center w-16">Seq</th>
                                 <th className="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Research Domain Title</th>
@@ -139,7 +139,7 @@ const CommitteeAssignCellToTeacherPage = () => {
                                     onClick={() => handleCheckboxChange(cell._id)}
                                 >
                                     <td className="px-10 py-6 text-center">
-                                        <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${selectedCellIds.includes(cell._id) ? 'bg-green-600 border-green-600 text-white shadow-lg' : 'border-gray-300 bg-white'}`}>
+                                        <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${selectedCellIds.includes(cell._id) ? 'bg-green-600 border-green-600 text-white shadow-lg' : 'border-gray-300 bg-white dark:bg-gray-900'}`}>
                                             {selectedCellIds.includes(cell._id) && <CheckCircle2 size={16} />}
                                         </div>
                                     </td>
@@ -147,7 +147,7 @@ const CommitteeAssignCellToTeacherPage = () => {
                                         <span className="text-sm font-black text-gray-300">{index + 1 < 10 ? `0${index + 1}` : index + 1}</span>
                                     </td>
                                     <td className="px-10 py-6">
-                                        <span className="text-sm font-black text-gray-800 uppercase tracking-wide group-hover:text-green-700 transition-all font-mono">{cell.title}</span>
+                                        <span className="text-sm font-black text-gray-800 dark:text-gray-100 uppercase tracking-wide group-hover:text-green-700 transition-all font-mono">{cell.title}</span>
                                     </td>
                                 </tr>
                             ))}

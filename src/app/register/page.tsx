@@ -2,37 +2,25 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useRegisterUserMutation, useGetPublicDepartmentsQuery } from '@/store/features/apiSlice';
+import { useRegisterUserMutation } from '@/store/features/apiSlice';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import GoogleButton from '@/components/GoogleButton';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [studentId, setStudentId] = useState('');
-  const [departmentId, setDepartmentId] = useState('');
-  const [currentCGPA, setCurrentCGPA] = useState('');
   const router = useRouter();
   const [registerUser, { isLoading }] = useRegisterUserMutation();
-  const { data: departments, isLoading: deptsLoading } = useGetPublicDepartmentsQuery();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!departmentId) {
-      toast.error('Please select a department');
-      return;
-    }
     try {
       await registerUser({
         name,
         email,
         password,
-        studentId,
-        departmentId,
-        currentCGPA,
-        role: 'student', 
-        profilePicture: '',
       }).unwrap();
       toast.success('Registration successful!');
       router.push('/login');
@@ -42,52 +30,32 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-100 to-gray-300">
-      {/* Header Section */}
-      <header className="bg-white shadow-sm sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            {/* Logo + ThesPro */}
-            <div className="flex items-center space-x-2 select-none">
-              <img
-                src="/system-logo.png"
-                alt="ThesPro Logo"
-                className="h-12 w-auto"
-              />
-              <span className="text-2xl sm:text-3xl font-bold text-[#50C878] tracking-wide">
-                ThesPro
-              </span>
-            </div>
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950">
+      <div className="flex-grow flex items-center justify-center py-20 px-4">
+        <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl p-10 border border-gray-100 dark:border-gray-800">
+          <div className="text-center mb-10">
+            <h2 className="text-4xl font-black text-gray-900 dark:text-gray-50 mb-2">Create Account</h2>
+            <p className="text-gray-400 font-bold">Start your thesis journey today.</p>
           </div>
-        </div>
-      </header>
 
-      {/* Register Form Section */}
-      <div className="flex-grow flex items-center justify-center py-10">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-10">
-          <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-8">
-            Student Registration
-          </h2>
-          <form onSubmit={handleRegister} className="space-y-5">
-            {/* Name */}
+          <form onSubmit={handleRegister} className="space-y-6">
             <div>
-              <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="name">
+              <label className="block text-gray-700 dark:text-gray-200 text-xs font-black uppercase tracking-widest mb-2" htmlFor="name">
                 Full Name
               </label>
               <input
                 id="name"
                 type="text"
-                placeholder="Enter your full name"
+                placeholder="Enter your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
+                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-[#0ea5b7] transition-all outline-none font-bold text-gray-900 dark:text-gray-50"
                 required
               />
             </div>
 
-            {/* Email */}
             <div>
-              <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="email">
+              <label className="block text-gray-700 dark:text-gray-200 text-xs font-black uppercase tracking-widest mb-2" htmlFor="email">
                 Email Address
               </label>
               <input
@@ -96,104 +64,50 @@ const RegisterPage = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
+                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-[#0ea5b7] transition-all outline-none font-bold text-gray-900 dark:text-gray-50"
                 required
               />
             </div>
 
-            {/* Password */}
             <div>
-              <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="password">
+              <label className="block text-gray-700 dark:text-gray-200 text-xs font-black uppercase tracking-widest mb-2" htmlFor="password">
                 Password
               </label>
               <input
                 id="password"
                 type="password"
-                placeholder="Create a strong password"
+                placeholder="Create password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
+                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-[#0ea5b7] transition-all outline-none font-bold text-gray-900 dark:text-gray-50"
                 required
               />
             </div>
 
-            {/* Student ID */}
-            <div>
-              <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="studentId">
-                Student ID
-              </label>
-              <input
-                id="studentId"
-                type="text"
-                placeholder="Enter your student ID"
-                value={studentId}
-                onChange={(e) => setStudentId(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
-                required
-              />
-            </div>
-
-            {/* Department */}
-            <div>
-              <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="department">
-                Department
-              </label>
-              <select
-                id="department"
-                value={departmentId}
-                onChange={(e) => setDepartmentId(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
-                disabled={deptsLoading}
-              >
-                <option value="">Select Department</option>
-                {departments?.map((dept: any) => (
-                  <option key={dept._id} value={dept._id}>
-                    {dept.name}
-                  </option>
-                ))}
-              </select>
-              {deptsLoading && <p className="text-xs text-gray-500 mt-1">Loading departments...</p>}
-            </div>
-
-            {/* Current CGPA */}
-            <div>
-              <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="currentCGPA">
-                Current CGPA
-              </label>
-              <input
-                id="currentCGPA"
-                type="number"
-                step="0.01"
-                placeholder="Enter your current CGPA"
-                value={currentCGPA}
-                onChange={(e) => setCurrentCGPA(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white shadow-sm"
-                required
-              />
-            </div>
-
-            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-green-400 to-green-600 text-white font-bold rounded-lg shadow-md hover:from-green-500 hover:to-green-700 transition-colors duration-200"
+              disabled={isLoading}
+              className="w-full py-5 bg-[#0ea5b7] text-white font-black rounded-2xl shadow-xl shadow-cyan-100 hover:bg-[#00838f] transition-all active:scale-95 disabled:opacity-50"
             >
-              Register
+              {isLoading ? 'Verifying...' : 'Sign Up'}
             </button>
           </form>
 
-          <div className="mt-6 flex justify-between text-sm">
-            <Link
-              href="/login"
-              className="text-green-600 hover:text-green-800 font-semibold"
-            >
-              Already have an account?
-            </Link>
-            <Link
-              href="/"
-              className="text-green-600 hover:text-green-800 font-semibold"
-            >
-              Back to Home
-            </Link>
+          <div className="mt-8">
+            <div className="relative flex items-center justify-center mb-8">
+              <div className="flex-grow h-px bg-gray-100"></div>
+              <span className="px-4 text-[10px] font-black text-gray-300 uppercase tracking-widest bg-white dark:bg-gray-900">Or continue with</span>
+              <div className="flex-grow h-px bg-gray-100"></div>
+            </div>
+            
+            <GoogleButton />
+          </div>
+
+          <div className="mt-10 text-center">
+            <p className="text-sm font-bold text-gray-400">
+              Already have an account?{' '}
+              <Link href="/login" className="text-[#0ea5b7] hover:underline">Log In</Link>
+            </p>
           </div>
         </div>
       </div>

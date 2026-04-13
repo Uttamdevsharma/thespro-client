@@ -55,18 +55,18 @@ const DepartmentPage = () => {
 
     return (
         <div className="space-y-8">
-            <h1 className="text-3xl font-bold text-gray-800">Department Management</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Department Management</h1>
 
             {/* Create Section */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold mb-4 text-gray-700">Add New Department</h2>
+            <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-200">Add New Department</h2>
                 <form onSubmit={handleCreate} className="flex gap-4">
                     <input 
                         type="text" 
                         value={newDeptName}
                         onChange={(e) => setNewDeptName(e.target.value)}
                         placeholder="Department Name (e.g., Computer Science)"
-                        className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 bg-white"
+                        className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900"
                         required
                     />
                     <button type="submit" className="bg-[#50C878] text-white px-6 py-2 rounded-lg font-medium hover:bg-green-600 transition-colors">
@@ -76,16 +76,16 @@ const DepartmentPage = () => {
             </div>
 
             {/* List Section */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="p-6 border-b border-gray-100">
-                    <h2 className="text-lg font-semibold text-gray-700">All Departments</h2>
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
+                <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+                    <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">All Departments</h2>
                 </div>
                 {isLoading ? (
                     <div className="p-6"><TableSkeleton rows={5} cols={2} /></div>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
-                            <thead className="bg-gray-50 uppercase text-xs font-semibold text-gray-500">
+                            <thead className="bg-gray-50 dark:bg-gray-950 uppercase text-xs font-semibold text-gray-500 dark:text-gray-400">
                                 <tr>
                                     <th className="px-6 py-4">Department Name</th>
                                     <th className="px-6 py-4 text-right">Actions</th>
@@ -93,7 +93,7 @@ const DepartmentPage = () => {
                             </thead>
                             <tbody className="divide-y divide-gray-100">
                                 {departments?.map((dept: any) => (
-                                    <tr key={dept._id} className="hover:bg-gray-50 transition-colors">
+                                    <tr key={dept._id} className="hover:bg-gray-50 dark:bg-gray-950 transition-colors">
                                         <td className="px-6 py-4">
                                             {editingDept?._id === dept._id ? (
                                                 <input 
@@ -103,7 +103,7 @@ const DepartmentPage = () => {
                                                     className="w-full px-2 py-1 border rounded"
                                                 />
                                             ) : (
-                                                <span className="font-medium text-gray-700">{dept.name}</span>
+                                                <span className="font-medium text-gray-700 dark:text-gray-200">{dept.name}</span>
                                             )}
                                         </td>
                                         <td className="px-6 py-4 text-right space-x-3">

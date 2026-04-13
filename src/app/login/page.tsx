@@ -7,6 +7,7 @@ import { useLoginUserMutation } from '@/store/features/apiSlice';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import GoogleButton from '@/components/GoogleButton';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -46,39 +47,18 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-100 to-gray-300">
-      {/* Header Section */}
-      <header className="bg-white shadow-sm sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            {/* Logo + ThesPro */}
-            <div className="flex items-center space-x-2 select-none">
-              <img
-                src="/system-logo.png"
-                alt="ThesPro Logo"
-                className="h-12 w-auto"
-              />
-              <span className="text-2xl sm:text-3xl font-bold text-[#50C878] tracking-wide">
-                ThesPro
-              </span>
-            </div>
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950">
+      <div className="flex-grow flex items-center justify-center py-20 px-4">
+        <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl p-10 border border-gray-100 dark:border-gray-800">
+          <div className="text-center mb-10">
+            <h2 className="text-4xl font-black text-gray-900 dark:text-gray-50 mb-2">Welcome Back</h2>
+            <p className="text-gray-400 font-bold">Manage your thesis journey efficiently.</p>
           </div>
-        </div>
-      </header>
 
-      {/* Login Form Section */}
-      <div className="flex-grow flex items-center justify-center py-10">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-10">
-          <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-8">
-            Welcome Back
-          </h2>
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label
-                className="block text-gray-700 text-sm font-semibold mb-2"
-                htmlFor="email"
-              >
-                Email
+              <label className="block text-gray-700 dark:text-gray-200 text-xs font-black uppercase tracking-widest mb-2" htmlFor="email">
+                Email Address
               </label>
               <input
                 id="email"
@@ -86,16 +66,13 @@ const LoginPage = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white"
+                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-[#0ea5b7] transition-all outline-none font-bold text-gray-900 dark:text-gray-50"
                 required
               />
             </div>
 
             <div>
-              <label
-                className="block text-gray-700 text-sm font-semibold mb-2"
-                htmlFor="password"
-              >
+              <label className="block text-gray-700 dark:text-gray-200 text-xs font-black uppercase tracking-widest mb-2" htmlFor="password">
                 Password
               </label>
               <input
@@ -104,32 +81,35 @@ const LoginPage = () => {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 text-gray-800 bg-white"
+                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-[#0ea5b7] transition-all outline-none font-bold text-gray-900 dark:text-gray-50"
                 required
               />
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-green-400 to-green-600 text-white font-bold rounded-lg shadow-md hover:from-green-500 hover:to-green-700 transition-colors duration-200"
+              disabled={isLoading}
+              className="w-full py-5 bg-[#0ea5b7] text-white font-black rounded-2xl shadow-xl shadow-cyan-100 hover:bg-[#00838f] transition-all active:scale-95 disabled:opacity-50"
             >
-              Sign In
+              {isLoading ? 'Authenticating...' : 'Sign In'}
             </button>
           </form>
 
-          <div className="mt-6 flex justify-between text-sm">
-            <Link
-              href="/register"
-              className="text-green-600 hover:text-green-800 font-semibold"
-            >
-              Create an Account
-            </Link>
-            <Link
-              href="/"
-              className="text-green-600 hover:text-green-800 font-semibold"
-            >
-              Back to Home
-            </Link>
+          <div className="mt-8">
+            <div className="relative flex items-center justify-center mb-8">
+              <div className="flex-grow h-px bg-gray-100"></div>
+              <span className="px-4 text-[10px] font-black text-gray-300 uppercase tracking-widest bg-white dark:bg-gray-900">Or continue with</span>
+              <div className="flex-grow h-px bg-gray-100"></div>
+            </div>
+            
+            <GoogleButton />
+          </div>
+
+          <div className="mt-10 text-center">
+            <p className="text-sm font-bold text-gray-400">
+              New to ThesPro?{' '}
+              <Link href="/register" className="text-[#0ea5b7] hover:underline">Create Account</Link>
+            </p>
           </div>
         </div>
       </div>

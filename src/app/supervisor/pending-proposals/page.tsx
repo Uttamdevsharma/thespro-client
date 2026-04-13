@@ -59,20 +59,20 @@ const SupervisorPendingProposalsPage = () => {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-              <p className="text-sm text-gray-500 uppercase font-semibold">Submitted By</p>
-              <p className="text-gray-800 font-medium">{proposal.createdBy.name || 'N/A'} ({proposal.createdBy.studentId})</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 uppercase font-semibold">Submitted By</p>
+              <p className="text-gray-800 dark:text-gray-100 font-medium">{proposal.createdBy.name || 'N/A'} ({proposal.createdBy.studentId})</p>
           </div>
           <div>
-              <p className="text-sm text-gray-500 uppercase font-semibold">Research Cell</p>
-              <p className="text-gray-800 font-medium">{proposal.researchCellId.title || 'N/A'}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 uppercase font-semibold">Research Cell</p>
+              <p className="text-gray-800 dark:text-gray-100 font-medium">{proposal.researchCellId.title || 'N/A'}</p>
           </div>
       </div>
       
       <div className="mb-6">
-          <p className="text-sm text-gray-500 uppercase font-semibold mb-2">Group Members</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 uppercase font-semibold mb-2">Group Members</p>
           <div className="flex flex-wrap gap-2">
               {proposal.members.map((member: any) => (
-                  <span key={member._id} className="inline-block bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm">
+                  <span key={member._id} className="inline-block bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 shadow-sm">
                       {member.name || 'Unknown'} - {member.studentId} (CGPA: {member.currentCGPA})
                   </span>
               ))}
@@ -80,7 +80,7 @@ const SupervisorPendingProposalsPage = () => {
       </div>
 
       {actionable && (
-        <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+        <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
           <button
             onClick={() => handleApproveClick(proposal._id)}
             className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg text-sm flex items-center shadow-md transition-colors"
@@ -97,15 +97,15 @@ const SupervisorPendingProposalsPage = () => {
       )}
 
       {showFeedbackInputFor === proposal._id && actionable && (
-        <div className="mt-6 p-4 bg-white rounded-lg border border-red-100 shadow-inner">
-          <label className="block text-sm text-gray-600 font-medium mb-2 flex items-center">
+        <div className="mt-6 p-4 bg-white dark:bg-gray-900 rounded-lg border border-red-100 shadow-inner">
+          <label className="block text-sm text-gray-600 dark:text-gray-300 font-medium mb-2 flex items-center">
               <MessageSquare size={16} className="mr-2" /> Denial Feedback:
           </label>
           <textarea
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             rows={3}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-400 focus:border-red-400 sm:text-sm text-gray-700"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-400 focus:border-red-400 sm:text-sm text-gray-700 dark:text-gray-200"
             placeholder="Provide feedback for denial..."
           ></textarea>
           <button
@@ -122,8 +122,8 @@ const SupervisorPendingProposalsPage = () => {
 
   if (isLoading) {
     return (
-      <div className="p-6 bg-gray-50 min-h-screen">
-        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+      <div className="p-6 bg-gray-50 dark:bg-gray-950 min-h-screen">
+        <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 p-6">
           <Skeleton className="h-8 w-48 mb-6" />
           <ProposalListSkeleton count={4} />
         </div>
@@ -133,13 +133,13 @@ const SupervisorPendingProposalsPage = () => {
 
   if (isError) {
     return (
-      <div className="p-6 bg-gray-50 min-h-screen">
-        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-red-100 p-8 text-center">
+      <div className="p-6 bg-gray-50 dark:bg-gray-950 min-h-screen">
+        <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-red-100 p-8 text-center">
             <div className="bg-red-50 text-red-600 p-4 rounded-lg inline-block mb-4">
                 <X size={48} />
             </div>
-          <h2 className="text-xl font-bold text-gray-800 mb-2">Failed to load proposals</h2>
-          <p className="text-gray-600 mb-6">{(error as any)?.data?.message || 'Something went wrong while fetching pending proposals.'}</p>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">Failed to load proposals</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-6">{(error as any)?.data?.message || 'Something went wrong while fetching pending proposals.'}</p>
           <button 
             onClick={() => window.location.reload()}
             className="bg-gray-800 hover:bg-gray-900 text-white px-6 py-2 rounded-lg transition-colors"
@@ -152,11 +152,11 @@ const SupervisorPendingProposalsPage = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6 border-b pb-3">Pending Proposals</h1>
+    <div className="p-6 bg-gray-50 dark:bg-gray-950 min-h-screen">
+      <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 p-6">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-6 border-b pb-3">Pending Proposals</h1>
         {!allProposals || allProposals.length === 0 ? (
-          <div className="p-10 text-center text-gray-500 bg-gray-50 rounded-lg border border-dashed">
+          <div className="p-10 text-center text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-950 rounded-lg border border-dashed">
             <p>No pending proposals found.</p>
           </div>
         ) : (
@@ -164,7 +164,7 @@ const SupervisorPendingProposalsPage = () => {
             {/* Actionable Proposals Section */}
             {actionableProposals.length > 0 && (
               <div>
-                <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center">
                   <Check size={20} className="mr-2 text-green-500" /> Action Required
                 </h2>
                 <div className="space-y-4">
@@ -175,7 +175,7 @@ const SupervisorPendingProposalsPage = () => {
                         onClick={() => setExpandedProposalId(expandedProposalId === proposal._id ? null : proposal._id)}
                       >
                         <div>
-                          <h2 className="text-lg font-bold text-gray-800">{proposal.title || 'Project title here'}</h2>
+                          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{proposal.title || 'Project title here'}</h2>
                           <div className="flex items-center gap-3 mt-1">
                             <span className="text-xs font-bold uppercase bg-green-100 text-green-700 px-2 py-0.5 rounded">Actionable</span>
                             <p className="text-green-600 text-sm font-medium">Research Cell: {proposal.researchCellId.title || 'N/A'}</p>
@@ -185,7 +185,7 @@ const SupervisorPendingProposalsPage = () => {
                       </div>
 
                       {expandedProposalId === proposal._id && (
-                        <div className="p-5 bg-white border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="p-5 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 animate-in fade-in slide-in-from-top-2 duration-200">
                           {renderProposalDetails(proposal, true)}
                         </div>
                       )}
@@ -198,28 +198,28 @@ const SupervisorPendingProposalsPage = () => {
             {/* Awaiting Committee Section */}
             {awaitingProposals.length > 0 && (
               <div>
-                <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center">
                   <Loader2 size={20} className="mr-2 text-blue-500 animate-spin" /> Awaiting Committee Forwarding
                 </h2>
                 <div className="space-y-4">
                   {awaitingProposals.map((proposal) => (
-                    <div key={proposal._id} className="border border-gray-200 rounded-xl overflow-hidden opacity-80 shadow-sm">
+                    <div key={proposal._id} className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden opacity-80 shadow-sm">
                       <div 
-                        className="cursor-pointer hover:bg-gray-50 transition-colors p-5 flex justify-between items-center" 
+                        className="cursor-pointer hover:bg-gray-50 dark:bg-gray-950 transition-colors p-5 flex justify-between items-center" 
                         onClick={() => setExpandedProposalId(expandedProposalId === proposal._id ? null : proposal._id)}
                       >
                         <div>
-                          <h2 className="text-lg font-bold text-gray-800">{proposal.title || 'Project title here'}</h2>
+                          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{proposal.title || 'Project title here'}</h2>
                           <div className="flex items-center gap-3 mt-1">
                             <span className="text-xs font-bold uppercase bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Pending Committee</span>
-                            <p className="text-gray-500 text-sm font-medium">Research Cell: {proposal.researchCellId.title || 'N/A'}</p>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Research Cell: {proposal.researchCellId.title || 'N/A'}</p>
                           </div>
                         </div>
                         {expandedProposalId === proposal._id ? <ChevronUp className="text-gray-400" /> : <ChevronDown className="text-gray-400" />}
                       </div>
 
                       {expandedProposalId === proposal._id && (
-                        <div className="p-5 bg-gray-50 border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="p-5 bg-gray-50 dark:bg-gray-950 border-t border-gray-100 dark:border-gray-800 animate-in fade-in slide-in-from-top-2 duration-200">
                           {renderProposalDetails(proposal, false)}
                         </div>
                       )}
@@ -234,14 +234,14 @@ const SupervisorPendingProposalsPage = () => {
 
       {showAcceptanceModalFor && (
         <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm overflow-y-auto h-full w-full flex items-center justify-center z-50 p-4">
-          <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-lg w-full transform transition-all animate-in zoom-in duration-300">
-            <h2 className="text-2xl font-extrabold text-gray-900 mb-6 flex items-center">
+          <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-2xl max-w-lg w-full transform transition-all animate-in zoom-in duration-300">
+            <h2 className="text-2xl font-extrabold text-gray-900 dark:text-gray-50 mb-6 flex items-center">
                 <span className="bg-green-100 text-green-600 p-2 rounded-lg mr-3"><Check size={24} /></span>
                 Acceptance Options
             </h2>
             <div className="space-y-4">
               <label 
-                className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all ${acceptanceOption === 'supervisor_only' ? 'border-green-500 bg-green-50' : 'border-gray-100 hover:border-gray-200 bg-gray-50'}`}
+                className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all ${acceptanceOption === 'supervisor_only' ? 'border-green-500 bg-green-50' : 'border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950'}`}
                 onClick={() => setAcceptanceOption('supervisor_only')}
               >
                 <input
@@ -253,10 +253,10 @@ const SupervisorPendingProposalsPage = () => {
                   onChange={() => setAcceptanceOption('supervisor_only')}
                   className="w-5 h-5 text-green-600 focus:ring-green-500"
                 />
-                <span className="ml-4 font-semibold text-gray-700">Under my supervision only</span>
+                <span className="ml-4 font-semibold text-gray-700 dark:text-gray-200">Under my supervision only</span>
               </label>
               <label 
-                className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all ${acceptanceOption === 'supervisor_and_course_supervisor' ? 'border-green-500 bg-green-50' : 'border-gray-100 hover:border-gray-200 bg-gray-50'}`}
+                className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all ${acceptanceOption === 'supervisor_and_course_supervisor' ? 'border-green-500 bg-green-50' : 'border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950'}`}
                 onClick={() => setAcceptanceOption('supervisor_and_course_supervisor')}
               >
                 <input
@@ -268,7 +268,7 @@ const SupervisorPendingProposalsPage = () => {
                   onChange={() => setAcceptanceOption('supervisor_and_course_supervisor')}
                   className="w-5 h-5 text-green-600 focus:ring-green-500"
                 />
-                <span className="ml-4 font-semibold text-gray-700">Under my supervision + assigned course supervisor</span>
+                <span className="ml-4 font-semibold text-gray-700 dark:text-gray-200">Under my supervision + assigned course supervisor</span>
               </label>
             </div>
             <div className="mt-8 flex gap-3">
@@ -281,7 +281,7 @@ const SupervisorPendingProposalsPage = () => {
               </button>
               <button
                 onClick={() => setShowAcceptanceModalFor(null)}
-                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-xl transition-all"
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 dark:text-gray-100 font-bold py-3 px-4 rounded-xl transition-all"
               >
                 Cancel
               </button>

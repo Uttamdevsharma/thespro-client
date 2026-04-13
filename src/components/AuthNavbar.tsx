@@ -6,7 +6,7 @@ import { logout } from '../store/features/userSlice';
 import { useRouter } from 'next/navigation';
 import { Menu, X, LogOut, User as UserIcon, LogIn, UserPlus, ChevronDown } from 'lucide-react';
 import NotificationBell from './NotificationBell';
-
+import { ThemeToggle } from './ThemeToggle';
 import { useUI } from '@/contexts/UIContext';
 
 const AuthNavbar = () => {
@@ -42,7 +42,7 @@ const AuthNavbar = () => {
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50 h-20 border-b border-gray-100 font-sans">
+    <nav className="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50 h-20 border-b border-gray-100 dark:border-gray-800 font-sans transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
         <div className="flex justify-between items-center h-full">
 
@@ -51,7 +51,7 @@ const AuthNavbar = () => {
             {user && (
               <button
                 onClick={toggleSidebar}
-                className="p-2 mr-2 rounded-xl text-gray-600 hover:bg-gray-100 focus:outline-none md:hidden transition-colors"
+                className="p-2 mr-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none md:hidden transition-colors"
                 title="Toggle Sidebar"
               >
                 <Menu size={24} />
@@ -77,7 +77,7 @@ const AuthNavbar = () => {
               <div className="hidden md:flex items-center space-x-4">
                 <Link 
                   href="/login" 
-                  className="px-4 py-2 text-sm font-bold text-gray-600 hover:text-[#50C878] transition-colors flex items-center gap-2"
+                  className="px-4 py-2 text-sm font-bold text-gray-600 dark:text-gray-300 hover:text-[#50C878] dark:hover:text-[#50C878] transition-colors flex items-center gap-2"
                 >
                   <LogIn size={18} />
                   Login
@@ -92,11 +92,12 @@ const AuthNavbar = () => {
               </div>
             ) : (
               <div className="flex items-center space-x-2 sm:space-x-4">
+                <ThemeToggle />
                 <NotificationBell />
                 <div className="relative" ref={dropdownRef}>
                   <button 
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="flex items-center space-x-2 focus:outline-none group hover:bg-gray-50 p-1 rounded-2xl transition-all border border-transparent hover:border-gray-100"
+                    className="flex items-center space-x-2 focus:outline-none group hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-800 p-1 rounded-2xl transition-all border border-transparent hover:border-gray-100 dark:border-gray-800 dark:hover:border-gray-700"
                   >
                     <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#50C878] to-[#45b66d] flex items-center justify-center text-white font-black text-base sm:text-lg shadow-md group-hover:shadow-lg transition-all border-2 border-white overflow-hidden">
                       {user.profilePicture ? (
@@ -106,25 +107,25 @@ const AuthNavbar = () => {
                       )}
                     </div>
                     <div className="hidden sm:flex flex-col text-left">
-                      <span className="text-sm font-bold text-gray-800 leading-tight">{user.name}</span>
-                      <span className="text-[10px] text-gray-400 uppercase tracking-widest font-black">{user.role}</span>
+                      <span className="text-sm font-bold text-gray-800 dark:text-gray-100 leading-tight">{user.name}</span>
+                      <span className="text-[10px] text-gray-400 dark:text-gray-500 dark:text-gray-400 uppercase tracking-widest font-black">{user.role}</span>
                     </div>
                     <ChevronDown 
-                      className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-400 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                      className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-400 dark:text-gray-500 dark:text-gray-400 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}
                     />
                   </button>
 
                   {isDropdownOpen && (
-                    <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50 animate-in fade-in zoom-in-95 duration-200">
-                      <div className="px-5 py-4 border-b border-gray-50 mb-1">
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">Signed in as</p>
-                        <p className="text-sm font-bold text-gray-800 truncate">{user.email}</p>
+                    <div className="absolute right-0 mt-3 w-64 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-800 py-2 z-50 animate-in fade-in zoom-in-95 duration-200">
+                      <div className="px-5 py-4 border-b border-gray-50 dark:border-gray-800 mb-1">
+                        <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 dark:text-gray-400 uppercase tracking-[0.2em] mb-1">Signed in as</p>
+                        <p className="text-sm font-bold text-gray-800 dark:text-gray-100 truncate">{user.email}</p>
                       </div>
                       
                       <Link 
                         href={`/${user.role}/profile`}
                         onClick={() => setIsDropdownOpen(false)}
-                        className="flex items-center px-5 py-3.5 text-sm font-bold text-gray-700 hover:bg-green-50 hover:text-[#50C878] transition-colors mx-2 rounded-xl"
+                        className="flex items-center px-5 py-3.5 text-sm font-bold text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-gray-800 hover:text-[#50C878] dark:hover:text-[#50C878] transition-colors mx-2 rounded-xl"
                       >
                         <UserIcon className="w-4 h-4 mr-3" />
                         My Profile
@@ -132,7 +133,7 @@ const AuthNavbar = () => {
                       
                       <button 
                         onClick={handleLogout}
-                        className="w-[calc(100%-1rem)] flex items-center px-5 py-3.5 text-sm font-bold text-red-600 hover:bg-red-50 transition-colors mx-2 rounded-xl"
+                        className="w-[calc(100%-1rem)] flex items-center px-5 py-3.5 text-sm font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 transition-colors mx-2 rounded-xl"
                       >
                         <LogOut className="w-4 h-4 mr-3" />
                         Logout
@@ -145,10 +146,11 @@ const AuthNavbar = () => {
 
             {/* Mobile (Un-authed only menu toggle) */}
             {!user && (
-              <div className="md:hidden flex items-center">
+              <div className="md:hidden flex items-center space-x-2">
+                <ThemeToggle />
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="p-2 rounded-xl text-gray-600 hover:bg-gray-100 focus:outline-none transition-colors"
+                  className="p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none transition-colors"
                 >
                   {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
                 </button>
@@ -161,13 +163,13 @@ const AuthNavbar = () => {
 
       {/* Mobile Menu Overlay (Guest only) */}
       {isMobileMenuOpen && !user && (
-        <div className="md:hidden absolute top-20 left-0 w-full bg-white border-b border-gray-100 shadow-2xl z-40 animate-in slide-in-from-top duration-300">
+        <div className="md:hidden absolute top-20 left-0 w-full bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-2xl z-40 animate-in slide-in-from-top duration-300">
           <div className="px-4 py-8 space-y-6">
             <div className="flex flex-col space-y-4">
               <Link 
                 href="/login" 
                 onClick={closeMobileMenu}
-                className="w-full py-4 text-center font-bold text-gray-700 hover:bg-gray-50 rounded-2xl transition-colors border-2 border-transparent"
+                className="w-full py-4 text-center font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:bg-gray-950 rounded-2xl transition-colors border-2 border-transparent"
               >
                 Login
               </Link>
