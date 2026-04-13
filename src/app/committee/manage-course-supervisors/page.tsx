@@ -97,7 +97,7 @@ const CommitteeManageCourseSupervisorsPage = () => {
                         required
                     >
                         <option value="">-- Choose a Faculty Member --</option>
-                        {supervisors.map(s => (
+                        {supervisors?.map((s: any) => (
                             <option key={s._id} value={s._id}>{s.name} ({s.email})</option>
                         ))}
                     </select>
@@ -134,8 +134,8 @@ const CommitteeManageCourseSupervisorsPage = () => {
                         >
                             <option value="">-- Assign to Main Supervisor --</option>
                             {mainSupervisors
-                                .filter(s => s._id !== selectedSupervisor)
-                                .map(s => (
+                                .filter((s: any) => s._id !== selectedSupervisorId)
+                                .map((s: any) => (
                                     <option key={s._id} value={s._id}>{s.name}</option>
                                 ))}
                         </select>
@@ -157,7 +157,7 @@ const CommitteeManageCourseSupervisorsPage = () => {
                 Current Hierarchy Mappings
             </h2>
             <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
-                {supervisors.filter(s => s.isCourseSupervisor).length > 0 ? (
+                {supervisors?.filter((s: any) => s.isCourseSupervisor).length > 0 ? (
                     <div className="overflow-x-auto">
                         <table className="min-w-full text-left">
                             <thead className="bg-gray-50 dark:bg-gray-950">
@@ -168,7 +168,7 @@ const CommitteeManageCourseSupervisorsPage = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
-                                {supervisors.filter(s => s.isCourseSupervisor).map(cs => (
+                                {supervisors?.filter((s: any) => s.isCourseSupervisor).map((cs: any) => (
                                     <tr key={cs._id} className="hover:bg-green-50/20 transition-all group">
                                         <td className="py-5 px-8">
                                             <div className="flex items-center">
@@ -185,7 +185,7 @@ const CommitteeManageCourseSupervisorsPage = () => {
                                             {cs.mainSupervisor ? (
                                                 <div className="flex items-center justify-end text-sm font-bold text-gray-500 dark:text-gray-400">
                                                     <span className="opacity-60 text-[9px] mr-2 uppercase">Main:</span>
-                                                    <span className="text-gray-900 dark:text-gray-50">{supervisors.find(s => s._id === cs.mainSupervisor)?.name || 'Unknown Reference'}</span>
+                                                    <span className="text-gray-900 dark:text-gray-50">{supervisors?.find((s: any) => s._id === cs.mainSupervisor)?.name || 'Unknown Reference'}</span>
                                                 </div>
                                             ) : (
                                                 <span className="text-[10px] font-black text-red-400 uppercase tracking-tighter italic">No Strategic Head Assigned</span>

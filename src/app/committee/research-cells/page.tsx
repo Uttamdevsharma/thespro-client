@@ -101,8 +101,8 @@ const CommitteeResearchCellsPage = () => {
 
         {/* Cells List */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {cells.map((cell) => {
-            const assignedSupervisors = supervisors.filter(supervisor => 
+            {cells.map((cell: any) => {
+            const assignedSupervisors = (supervisors || []).filter((supervisor: any) => 
                 supervisor.researchCells && supervisor.researchCells.some((c: any) => (c._id || c) === cell.id)
             );
 
@@ -119,7 +119,7 @@ const CommitteeResearchCellsPage = () => {
                         </h4>
                         {assignedSupervisors.length > 0 ? (
                             <div className="flex flex-wrap gap-2">
-                                {assignedSupervisors.map(supervisor => (
+                                {assignedSupervisors.map((supervisor: any) => (
                                     <span key={supervisor._id} className="inline-block bg-green-50 text-green-700 rounded-full px-3 py-1 text-xs font-bold border border-green-100">
                                         {supervisor.name}
                                     </span>

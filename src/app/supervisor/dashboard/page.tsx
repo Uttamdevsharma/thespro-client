@@ -119,7 +119,7 @@ const SupervisorDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {proposals.map(proposal => (
+                    {proposals.map((proposal: any) => (
                       <tr key={proposal._id}>
                         <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-sm">{proposal.title}</td>
                         <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-sm">{proposal.createdBy?.name || 'N/A'}</td>

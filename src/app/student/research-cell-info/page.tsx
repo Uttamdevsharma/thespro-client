@@ -29,7 +29,7 @@ const ResearchCellInfoPage = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {teachers.map((teacher) => (
+          {teachers.map((teacher: any) => (
             <div key={teacher._id} className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md border border-gray-100 dark:border-gray-800 hover:shadow-lg transition-shadow">
               <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">{teacher.name}</h2>
               <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{teacher.email}</p>

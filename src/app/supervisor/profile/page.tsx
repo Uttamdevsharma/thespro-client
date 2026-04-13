@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
-import { useUploadProfilePictureMutation, useUpdateSupervisorProfileMutation, useGetProfileQuery } from '@/store/features/apiSlice';
+import { useUpdateProfilePictureMutation, useUpdateSupervisorProfileMutation, useGetProfileQuery } from '@/store/features/apiSlice';
 import { login } from '@/store/features/userSlice';
 import toast from 'react-hot-toast';
 import { Camera, Save, User as UserIcon, Book, Briefcase, GraduationCap } from 'lucide-react';

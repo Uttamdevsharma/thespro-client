@@ -43,7 +43,7 @@ const CommitteeAllGroupsPage = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-100">
-                  {groups.map((group, index) => (
+                  {groups.map((group: any, index: number) => (
                     <tr key={group._id} className="hover:bg-green-50/20 transition-colors group">
                       <td className="px-6 py-5 whitespace-nowrap text-sm font-bold text-gray-400">{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
                       <td className="px-6 py-5">

@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📌 ThesPro - Thesis & Project Management System (Client)
 
-## Getting Started
+A comprehensive frontend application for the ThesPro platform, designed to streamline thesis and project management workflows for university students, supervisors, and administrative committees.
 
-First, run the development server:
+## 🚀 Live Links
+- **Client Live URL:** [https://thespro-client.vercel.app](https://thespro-client.vercel.app)
+- **Server Live URL:** [https://thespro-server.vercel.app](https://thespro-server.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Features
+
+- **Role-Based Access Control:** Secure and distinct dashboards for Students, Supervisors, and Committee Members.
+- **Student Dashboard:** Submit thesis proposals, track evaluation status, browse supervisors, and check results.
+- **Supervisor Dashboard:** Approve/Reject proposals, manage supervised groups, add evaluation comments, and access defense schedules.
+- **Committee/Admin Panel:** Manage departments, assign supervisors, coordinate defense schedules, send out notices, and oversee all system records.
+- **Real-time Notifications:** Automated alerts and notices for defense updates or system announcements.
+- **Responsive Aesthetics:** A vibrant, accessible, dark-mode ready UI featuring sleek gradients and modern typography.
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js (React)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **State Management:** Redux Toolkit 
+- **Icons:** Lucide React
+- **Deployment:** Vercel
+
+## 🔐 Environment Variables (.env.local)
+
+Create a `.env.local` file in the root of the client folder with the following variables:
+
+```env
+# API URL
+NEXT_PUBLIC_API_URL=https://thespro-server.vercel.app/api
+
+# Google OAuth
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id_here
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📂 Folder Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+src/
+├── app/                  # Next.js App Router pages and layouts
+│   ├── admin/            # Admin-specific routes
+│   ├── committee/        # Committee member routes
+│   ├── student/          # Student routes
+│   └── supervisor/       # Supervisor routes
+├── components/           # Reusable UI components (Buttons, Modals, Forms, etc.)
+├── store/                # Redux store slices and API service setup
+├── utils/                # Helper functions and utilities
+└── public/               # Static assets (images, icons, etc.)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚙️ Installation & Setup
 
-## Learn More
+1. **Clone the repository**
+   ```bash
+   git clone <repository_url>
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Navigate to the client directory**
+   ```bash
+   cd client
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Set up `.env.local`**
+   Copy the example variables from above and plug in your keys.
 
-## Deploy on Vercel
+5. **Run the development server**
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📦 Build & Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**To build for production:**
+```bash
+npm run build
+```
+
+**Deployment:**
+The client is automatically deployed to **Vercel**. Every push to the main branch triggers an optimized production build using the Vercel Edge Network.
+
+## 👨‍💻 Author
+
+**Name:** Uttam  
+**Role:** Full Stack Developer

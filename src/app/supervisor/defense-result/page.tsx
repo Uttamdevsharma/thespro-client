@@ -91,7 +91,7 @@ const SupervisorDefenseResultPage = () => {
                     </tr>
                     </thead>
                     <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200">
-                    {defenseResults.map((result, index) => (
+                    {defenseResults.map((result: any, index: number) => (
                         <tr key={result._id} className="hover:bg-gray-50 dark:bg-gray-950 transition-colors">
                         <td className="py-4 px-6 text-sm font-bold text-gray-900 dark:text-gray-50">{index + 1}</td>
                         <td className="py-4 px-6">

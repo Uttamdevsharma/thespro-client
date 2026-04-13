@@ -155,7 +155,7 @@ const StudentProposalPage = () => {
             required
           >
             <option value="">Select a cell</option>
-            {cells.map((cell) => (
+            {cells.map((cell: any) => (
               <option key={cell._id} value={cell._id}>{cell.title}</option>
             ))}
           </select>
@@ -172,13 +172,13 @@ const StudentProposalPage = () => {
             required
           >
             <option value="">Select a supervisor</option>
-            {supervisors.map((s) => (
+            {supervisors.map((s: any) => (
               <option key={s._id} value={s._id} disabled={s.remainingCapacity <= 0}>
                 {s.name} ({s.remainingCapacity} groups remaining)
               </option>
             ))}
           </select>
-          {supervisor && supervisors.find(s => s._id === supervisor)?.remainingCapacity <= 0 && (
+          {supervisor && supervisors.find((s: any) => s._id === supervisor)?.remainingCapacity <= 0 && (
             <p className="text-red-500 text-sm mt-1">Supervisor's seat capacity is full. Please choose another supervisor.</p>
           )}
           {submissionDeadlinePassed && (
@@ -201,7 +201,7 @@ const StudentProposalPage = () => {
         <div className="text-center">
           <button
             type="submit"
-            disabled={isSubmitting || submissionDeadlinePassed || (!!supervisor && supervisors.find(s => s._id === supervisor)?.remainingCapacity <= 0)}
+            disabled={isSubmitting || submissionDeadlinePassed || (!!supervisor && supervisors.find((s: any) => s._id === supervisor)?.remainingCapacity <= 0)}
             className="w-full py-3 px-6 bg-gradient-to-r from-green-400 to-green-600 text-white font-semibold rounded-lg shadow-md hover:from-green-500 hover:to-green-700 transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Submitting...' : 'Submit Proposal'}

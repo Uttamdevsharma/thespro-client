@@ -34,7 +34,7 @@ const CommitteeMembersPage = () => {
 
         {members.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {members.map((member) => (
+            {members.map((member: any) => (
                 <div key={member.id} className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 hover:shadow-2xl transition-all group overflow-hidden relative">
                     <div className="absolute top-0 right-0 w-16 h-16 bg-green-50 rounded-bl-3xl -mr-4 -mt-4 group-hover:bg-green-100 transition-colors"></div>
                     

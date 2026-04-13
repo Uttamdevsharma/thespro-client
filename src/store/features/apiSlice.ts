@@ -442,16 +442,7 @@ export const apiSlice = createApi({
       },
       providesTags: ['DefenseBoards'],
     }),
-    getSupervisorDefenseResults: builder.query<any, string | undefined>({
-      query: (defenseType) => {
-        let url = '/defenseboards/supervisor-results';
-        if (defenseType) {
-          url += `?defenseType=${defenseType}`;
-        }
-        return url;
-      },
-      providesTags: ['DefenseBoards'],
-    }),
+
     getStudentDefenseSchedule: builder.query<any, string | undefined>({
       query: (defenseType) => {
         let url = '/defenseboards/student-schedule';

@@ -35,7 +35,7 @@ const SupervisorChatPage = () => {
 
   useEffect(() => {
     if (proposals && proposals.length > 0) {
-      if (!selectedProposalId || !proposals.find(p => p._id === selectedProposalId)) {
+      if (!selectedProposalId || !proposals.find((p: any) => p._id === selectedProposalId)) {
         setSelectedProposalId(proposals[0]._id);
       }
     } else {
@@ -136,7 +136,7 @@ const SupervisorChatPage = () => {
             <option value="" disabled>
               Select Proposal
             </option>
-            {proposals.map((prop) => (
+            {proposals?.map((prop: any) => (
               <option key={prop._id} value={prop._id}>
                 {prop.title}
               </option>
