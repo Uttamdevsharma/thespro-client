@@ -14,7 +14,7 @@ const MainNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSupervisorsOpen, setIsSupervisorsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  
+
   const supervisorsRef = useRef<HTMLDivElement>(null);
   const { data: departments } = useGetPublicDepartmentsQuery();
   const router = useRouter();
@@ -45,106 +45,109 @@ const MainNavbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-sm py-4 transition-colors duration-300">
+    <nav className="sticky top-0 left-0 right-0 z-[100] bg-white/95 dark:bg-slate-900/95 border-b border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-[70px]">
           {/* Logo */}
-          <Link 
-            href="/"
-            className="flex items-center space-x-3 group"
-          >
-            <div className="w-10 h-10 bg-[#50C878] rounded-xl flex items-center justify-center shadow-md">
-               <img src="/system-logo.png" alt="Logo" className="w-6 h-6 object-contain brightness-0 invert" />
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="w-10 h-10 bg-indigo-600 dark:bg-indigo-500 rounded-lg flex items-center justify-center transition-transform group-hover:scale-105">
+              <img src="/system-logo.png" alt="Logo" className="w-6 h-6 object-contain brightness-0 invert" />
             </div>
-            <span className="text-2xl font-black tracking-tighter text-gray-900 dark:text-white">
-              Thes<span className="text-[#50C878]">Pro</span>
+            <span className="text-[1.2rem] font-bold tracking-tight text-slate-900 dark:text-white">
+              Thes<span className="text-indigo-600 dark:text-indigo-400">Pro</span>
             </span>
           </Link>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link 
-                href="/"
-                className={`flex items-center space-x-2 text-xs font-black uppercase tracking-widest transition-all ${pathname === '/' ? 'text-[#50C878]' : 'text-gray-600 dark:text-gray-300 hover:text-[#50C878] dark:hover:text-[#50C878]'}`}
+            <Link
+              href="/"
+              className={`text-[0.875rem] font-semibold tracking-wide transition-colors ${pathname === '/' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
             >
-                <Home size={16} />
-                <span>Home</span>
+              Home
             </Link>
 
-            {/* Browse Supervisors Dropdown */}
+            <Link
+              href="/#features"
+              className={`text-[0.875rem] font-semibold tracking-wide transition-colors ${pathname === '/#features' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
+            >
+              Features
+            </Link>
+
+            {/* Supervisors Dropdown */}
             <div className="relative" ref={supervisorsRef}>
-              <button 
+              <button
+                onClick={() => setIsSupervisorsOpen(!isSupervisorsOpen)}
                 onMouseEnter={() => setIsSupervisorsOpen(true)}
-                className={`flex items-center space-x-2 text-xs font-black uppercase tracking-widest transition-all ${pathname.includes('/supervisors') ? 'text-[#0ea5b7]' : 'text-gray-600 dark:text-gray-300 hover:text-[#0ea5b7] dark:hover:text-[#0ea5b7]'}`}
+                className={`flex items-center space-x-1 text-[0.875rem] font-semibold tracking-wide transition-colors ${pathname.includes('/supervisors') ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
               >
-                <Search size={16} />
-                <span>Browse Supervisors</span>
-                <ChevronDown size={14} className={`transition-transform duration-300 ${isSupervisorsOpen ? 'rotate-180' : ''}`} />
+                <span>Supervisors</span>
+                <ChevronDown size={14} className={`transition-transform duration-200 ${isSupervisorsOpen ? 'rotate-180' : ''}`} />
               </button>
 
-              <div 
+              <div
                 onMouseLeave={() => setIsSupervisorsOpen(false)}
-                className={`absolute top-full left-0 mt-4 w-72 bg-white dark:bg-gray-900 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-100 dark:border-gray-800 py-4 transition-all duration-300 origin-top-left ${isSupervisorsOpen ? 'opacity-100 scale-100 translate-y-0 visible' : 'opacity-0 scale-95 -translate-y-2 invisible'}`}
+                className={`absolute top-full left-0 mt-2 w-64 bg-white dark:bg-slate-900 rounded-lg shadow-lg border border-slate-200/80 dark:border-slate-805 py-2 transition-all duration-200 origin-top-left ${isSupervisorsOpen ? 'opacity-100 scale-100 translate-y-0 visible' : 'opacity-0 scale-95 -translate-y-2 invisible'}`}
               >
-                <div className="px-5 py-3 border-b border-gray-50 dark:border-gray-800 mb-3">
-                  <p className="text-[10px] font-black text-[#0ea5b7] uppercase tracking-[0.2em]">Find Supervisors</p>
+                <div className="px-4 py-2 border-b border-slate-100 dark:border-slate-800">
+                  <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Browse by Department</p>
                 </div>
-                <div className="max-h-80 overflow-y-auto custom-scrollbar px-2">
+                <div className="max-h-60 overflow-y-auto custom-scrollbar">
                   {departments?.map((dept: any) => (
                     <button
                       key={dept._id}
                       onClick={() => handleSupervisorDeptClick(dept._id)}
-                      className="w-full text-left px-4 py-3.5 text-sm font-bold text-gray-700 dark:text-gray-200 hover:bg-[#0ea5b7]/5 dark:hover:bg-[#0ea5b7]/10 hover:text-[#0ea5b7] transition-all flex items-center justify-between group rounded-2xl mb-1"
+                      className="w-full text-left px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-305 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
                     >
-                      <span>{dept.name}</span>
-                      <div className="w-2 h-2 bg-[#0ea5b7] rounded-full scale-0 group-hover:scale-100 transition-transform" />
+                      {dept.name}
                     </button>
                   ))}
                 </div>
               </div>
             </div>
 
-            <Link 
-               href="/about"
-               className={`flex items-center space-x-2 text-xs font-black uppercase tracking-widest transition-all ${pathname === '/about' ? 'text-[#50C878]' : 'text-gray-600 dark:text-gray-300 hover:text-[#50C878] dark:hover:text-[#50C878]'}`}
+            <Link
+              href="/about"
+              className={`text-[0.875rem] font-semibold tracking-wide transition-colors ${pathname === '/about' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
             >
-               <Info size={16} />
-               <span>About</span>
+              About
             </Link>
 
-            <Link 
-               href="/contact"
-               className={`flex items-center space-x-2 text-xs font-black uppercase tracking-widest transition-all ${pathname === '/contact' ? 'text-[#50C878]' : 'text-gray-600 dark:text-gray-300 hover:text-[#50C878] dark:hover:text-[#50C878]'}`}
+            <Link
+              href="/contact"
+              className={`text-[0.875rem] font-semibold tracking-wide transition-colors ${pathname === '/contact' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
             >
-               <Mail size={16} />
-               <span>Contact</span>
+              Contact
             </Link>
+
+            <div className="h-5 w-[1px] bg-slate-200 dark:bg-slate-800" />
 
             <ThemeToggle />
-            <Link 
+
+            <Link
               href={user ? `/${user.role}/dashboard` : "/login"}
-              className="ml-4 px-6 py-2.5 bg-[#50C878] text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-lg shadow-green-100 hover:bg-[#45b66d] hover:-translate-y-0.5 transition-all active:scale-95 flex items-center gap-2"
+              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white text-sm font-semibold rounded-md transition-all active:scale-98 flex items-center gap-2 shadow-sm"
             >
               {user ? (
                 <>
-                  <LayoutDashboard size={14} />
-                  Dashboard
+                  <LayoutDashboard size={15} />
+                  <span>Dashboard</span>
                 </>
               ) : (
                 <>
-                  <LogIn size={14} />
-                  Portal Login
+                  <LogIn size={15} />
+                  <span>Login</span>
                 </>
               )}
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-3">
+          <div className="md:hidden flex items-center space-x-2">
             <ThemeToggle />
-            <button 
+            <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2.5 rounded-xl transition-all text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700"
+              className="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors"
             >
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -153,83 +156,78 @@ const MainNavbar = () => {
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 bg-white dark:bg-gray-900 z-[110] transition-transform duration-500 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="p-8 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-[#50C878] rounded-2xl flex items-center justify-center">
-                 <img src="/system-logo.png" alt="Logo" className="w-6 h-6 object-contain brightness-0 invert" />
-              </div>
-              <span className="text-2xl font-black text-gray-900 dark:text-gray-50 tracking-tight">ThesPro</span>
+      <div
+        className={`fixed inset-x-0 top-[71px] bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-md md:hidden transition-all duration-300 ease-in-out z-[90] ${isMobileMenuOpen ? 'opacity-100 translate-y-0 visible' : 'opacity-0 -translate-y-4 invisible'
+          }`}
+      >
+        <div className="px-4 pt-2 pb-6 space-y-4">
+          <Link
+            href="/"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`block py-2 text-sm font-semibold border-b border-slate-100 dark:border-slate-850 ${pathname === '/' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300'}`}
+          >
+            Home
+          </Link>
+
+          <Link
+            href="/#features"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`block py-2 text-sm font-semibold border-b border-slate-100 dark:border-slate-850 ${pathname === '/#features' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300'}`}
+          >
+            Features
+          </Link>
+
+          {/* Mobile Supervisors Section */}
+          <div className="space-y-1">
+            <span className="block py-2 text-sm font-semibold text-slate-500 dark:text-slate-400">
+              Supervisors
+            </span>
+            <div className="pl-4 border-l border-slate-200 dark:border-slate-850 space-y-2 max-h-40 overflow-y-auto">
+              {departments?.map((dept: any) => (
+                <button
+                  key={dept._id}
+                  onClick={() => handleSupervisorDeptClick(dept._id)}
+                  className="block w-full text-left py-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-indigo-600 cursor-pointer"
+                >
+                  {dept.name}
+                </button>
+              ))}
             </div>
-            <button onClick={() => setIsMobileMenuOpen(false)} className="p-3 text-gray-400 bg-gray-50 dark:bg-gray-950 rounded-2xl">
-              <X size={28} />
-            </button>
           </div>
 
-          <div className="space-y-8 flex-grow overflow-y-auto">
-             <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center space-x-5 text-2xl font-black text-gray-900 dark:text-gray-50 py-2 group">
-                <div className="w-12 h-12 bg-gray-50 dark:bg-gray-950 rounded-2xl flex items-center justify-center group-hover:bg-[#50C878]/10 transition-colors">
-                  <Home className="text-[#50C878]" size={24} />
-                </div>
-                <span>Home</span>
-             </Link>
+          <Link
+            href="/about"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`block py-2 text-sm font-semibold border-b border-slate-100 dark:border-slate-850 ${pathname === '/about' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300'}`}
+          >
+            About
+          </Link>
 
-             {/* Browse Supervisors Mobile */}
-             <div className="space-y-6">
-                <div className="flex items-center space-x-5 text-2xl font-black text-gray-900 dark:text-gray-50 py-2">
-                   <div className="w-12 h-12 bg-gray-50 dark:bg-gray-950 rounded-2xl flex items-center justify-center">
-                    <Search className="text-[#0ea5b7]" size={24} />
-                   </div>
-                   <span>Browse Supervisors</span>
-                </div>
-                <div className="pl-16 grid grid-cols-1 gap-4 border-l-2 border-gray-50 dark:border-gray-800/50 ml-6">
-                  {departments?.map((dept: any) => (
-                    <button 
-                      key={dept._id} 
-                      onClick={() => handleSupervisorDeptClick(dept._id)}
-                      className="text-left text-gray-500 dark:text-gray-400 font-bold text-lg hover:text-[#0ea5b7] transition-colors"
-                    >
-                      {dept.name}
-                    </button>
-                  ))}
-                </div>
-             </div>
+          <Link
+            href="/contact"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`block py-2 text-sm font-semibold border-b border-slate-100 dark:border-slate-850 ${pathname === '/contact' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600 dark:text-slate-300'}`}
+          >
+            Contact
+          </Link>
 
-             <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center space-x-5 text-2xl font-black text-gray-900 dark:text-gray-50 py-2 group">
-                <div className="w-12 h-12 bg-gray-50 dark:bg-gray-950 rounded-2xl flex items-center justify-center group-hover:bg-[#50C878]/10 transition-colors">
-                   <Info className="text-[#50C878]" size={24} />
-                </div>
-                <span>About Us</span>
-             </Link>
-
-             <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center space-x-5 text-2xl font-black text-gray-900 dark:text-gray-50 py-2 group">
-                <div className="w-12 h-12 bg-gray-50 dark:bg-gray-950 rounded-2xl flex items-center justify-center group-hover:bg-[#50C878]/10 transition-colors">
-                   <Mail className="text-[#50C878]" size={24} />
-                </div>
-                <span>Contact</span>
-             </Link>
-          </div>
-
-          <div className="mt-auto pb-12 pt-8">
-            <Link 
-               href={user ? `/${user.role}/dashboard` : "/login"}
-               onClick={() => setIsMobileMenuOpen(false)}
-               className="w-full py-5 bg-[#50C878] text-white text-lg font-black rounded-3xl shadow-2xl shadow-green-100 flex items-center justify-center gap-3"
-            >
-              {user ? (
-                <>
-                  <LayoutDashboard size={20} />
-                  Go to Dashboard
-                </>
-              ) : (
-                <>
-                  <LogIn size={20} />
-                  Portal Login
-                </>
-              )}
-            </Link>
-          </div>
+          <Link
+            href={user ? `/${user.role}/dashboard` : "/login"}
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white text-xs font-bold rounded-md flex items-center justify-center gap-2"
+          >
+            {user ? (
+              <>
+                <LayoutDashboard size={14} />
+                <span>Go to Dashboard</span>
+              </>
+            ) : (
+              <>
+                <LogIn size={14} />
+                <span>Login</span>
+              </>
+            )}
+          </Link>
         </div>
       </div>
     </nav>

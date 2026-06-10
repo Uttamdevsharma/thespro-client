@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useChatWithAIMutation } from '@/store/features/apiSlice';
 import { Send, X, RotateCcw, Sparkles, User } from 'lucide-react';
-import toast from 'react-hot-toast';
 
 const AIChatBot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -42,13 +41,21 @@ const AIChatBot: React.FC = () => {
             
             setChatHistory(prev => [...prev, { role: 'assistant', content: result.response }]);
         } catch (error: any) {
-            toast.error(error.data?.message || 'Failed to get response from AI');
+            // Show a friendly inline message instead of a raw API error toast
+            const friendlyMsg =
+                error?.data?.message?.includes('endpoint') ||
+                error?.data?.message?.includes('model') ||
+                error?.status === 404
+                    ? "I'm temporarily unavailable. Please try again in a moment or contact support."
+                    : error?.data?.message
+                    ? `Sorry, I encountered an issue: ${error.data.message}`
+                    : "I couldn't connect right now. Please check your connection and try again.";
+            setChatHistory(prev => [...prev, { role: 'assistant', content: friendlyMsg }]);
         }
     };
 
     const resetChat = () => {
         setChatHistory([]);
-        toast.success('Conversation reset');
     };
 
     return (

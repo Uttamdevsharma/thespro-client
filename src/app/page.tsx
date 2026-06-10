@@ -78,86 +78,125 @@ const LandingPage = () => {
       {/* Navigation - Handled by RootLayout */}
 
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Background Image with Fixed/Parallax-like feel */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/home-back.jpg')" }}
-        />
-        
-        {/* Dark Professional Overlay */}
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] z-10" />
+      <section className="relative bg-white dark:bg-slate-900 pt-6 pb-10 lg:pt-10 lg:pb-16 border-b border-slate-200/60 dark:border-slate-800/60 transition-colors duration-300 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 text-center z-20">
-          <div className={`space-y-10 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} transition-all duration-1000 ease-out`}>
-            {/* Tagline */}
-            <div className="inline-flex items-center px-4 py-2 bg-[#50C878]/20 border border-[#50C878]/30 rounded-full text-[#50C878] text-xs font-black uppercase tracking-[0.2em]">
-              The Ultimate Academic Management Suite
+            {/* ── LEFT: Academic Workflow Content ──────────────── */}
+            <div
+              className={`lg:col-span-5 space-y-5 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              } transition-all duration-700 ease-out`}
+            >
+              {/* Compact heading */}
+              <div className="space-y-2">
+                <h1 className="text-3xl sm:text-[2.1rem] lg:text-[2.4rem] font-bold tracking-tight leading-[1.15] text-slate-900 dark:text-white">
+                  Thesis &amp; Research Management{' '}
+                  <span className="text-indigo-600 dark:text-indigo-400">for University Departments</span>
+                </h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-md">
+                  A platform where students, supervisors, and committees manage the full thesis lifecycle — from proposal to final defense.
+                </p>
+              </div>
+
+              {/* Thesis Lifecycle Pipeline — compact */}
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2">
+                  Thesis Lifecycle
+                </p>
+                <div className="flex flex-col">
+                  {[
+                    { step: '01', label: 'Proposal Submission',  note: 'Student drafts & uploads research proposal' },
+                    { step: '02', label: 'Supervisor Review',     note: 'Faculty supervisor evaluates & endorses' },
+                    { step: '03', label: 'Committee Approval',    note: 'Academic council grants final authorization' },
+                    { step: '04', label: 'Defense Scheduling',    note: 'Defense board date & panel coordinated' },
+                    { step: '05', label: 'Final Evaluation',      note: 'Grading, results published & archived' },
+                  ].map((item, idx, arr) => (
+                    <div key={item.step} className="flex items-start gap-3">
+                      <div className="flex flex-col items-center">
+                        <div className="w-5 h-5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 flex items-center justify-center shrink-0">
+                          <span className="text-[8px] font-bold text-indigo-600 dark:text-indigo-400">{item.step}</span>
+                        </div>
+                        {idx < arr.length - 1 && (
+                          <div className="w-px h-4 bg-slate-200 dark:bg-slate-800" />
+                        )}
+                      </div>
+                      <div className="pb-1.5">
+                        <p className="text-[11.5px] font-semibold text-slate-800 dark:text-slate-200 leading-tight">{item.label}</p>
+                        <p className="text-[10.5px] text-slate-400 dark:text-slate-500 leading-snug">{item.note}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Live Stats Bar — compact */}
+              <div className="flex items-center gap-5 py-2.5 border-t border-b border-slate-200/60 dark:border-slate-800/60">
+                <div>
+                  <p className="text-base font-bold text-slate-900 dark:text-white leading-none">{stats?.studentCount ?? '—'}</p>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mt-0.5">Students</p>
+                </div>
+                <div className="w-px h-7 bg-slate-200 dark:bg-slate-800" />
+                <div>
+                  <p className="text-base font-bold text-slate-900 dark:text-white leading-none">{stats?.supervisorCount ?? '—'}</p>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mt-0.5">Supervisors</p>
+                </div>
+                <div className="w-px h-7 bg-slate-200 dark:bg-slate-800" />
+                <div>
+                  <p className="text-base font-bold text-slate-900 dark:text-white leading-none">{stats?.deptCount ?? '—'}</p>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mt-0.5">Departments</p>
+                </div>
+              </div>
+
+              {/* CTA buttons */}
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/register"
+                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white text-sm font-semibold rounded-md shadow-sm transition-all active:scale-[0.98]"
+                >
+                  Get Started
+                </Link>
+                <Link
+                  href="/about"
+                  className="px-5 py-2.5 bg-transparent border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold rounded-md hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-[0.98]"
+                >
+                  Learn More
+                </Link>
+              </div>
             </div>
 
-            {/* Main Heading */}
-            <div className="space-y-6">
-              <h1 className="text-5xl lg:text-8xl font-black text-white leading-[1.1] tracking-tighter">
-                Manage Your Thesis <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#50C878] to-[#a8e6cf]">
-                  Journey Efficiently
-                </span>
-              </h1>
-
-              <p className="text-lg lg:text-2xl text-gray-300 max-w-3xl mx-auto font-medium leading-relaxed">
-                A comprehensive ecosystem for students, supervisors, and research committees 
-                to collaborate, track, and excel in academic research projects.
-              </p>
+            {/* ── RIGHT: Floating image ────────────────────────── */}
+            <div
+              className={`lg:col-span-7 flex items-center justify-center lg:justify-end lg:-mt-14 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              } transition-all duration-700 delay-150 ease-out`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/hero-right-final.png"
+                alt="Academic thesis workspace flat-lay with proposal documents, supervisor comments, defense calendar, and research notes"
+                className="hero-image w-full max-w-[600px] lg:max-w-[112%] xl:max-w-[118%] h-auto object-contain select-none pointer-events-none lg:-mr-16 xl:-mr-20"
+                draggable={false}
+              />
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-6">
-              <Link 
-                href="/register" 
-                className="group px-10 py-5 bg-[#50C878] text-white text-lg font-black rounded-full shadow-2xl shadow-green-900/20 hover:bg-[#45b66d] hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-3"
-              >
-                <span>Get Started Now</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-5 h-5 group-hover:translate-x-1 transition-transform">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
-              </Link>
-
-              <Link 
-                href="/about" 
-                className="px-10 py-5 bg-white/10 backdrop-blur-md border border-white/20 text-white text-lg font-black rounded-full hover:bg-white/20 transition-all flex items-center justify-center min-w-[200px]"
-              >
-                Explore System
-              </Link>
-            </div>
-
-            {/* Helper Text */}
-            <p className="text-gray-400 text-sm font-bold uppercase tracking-widest pt-4">
-              Join <span className="text-white">500+</span> active researchers today
-            </p>
           </div>
         </div>
-
-        {/* Decorative elements */}
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#50C878]/10 rounded-full blur-[120px] z-0" />
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#50C878]/5 rounded-full blur-[120px] z-0" />
       </section>
 
       {/* Explore by Department Section */}
       <ScrollReveal>
-        <section className="py-24 bg-gray-50 dark:bg-gray-950 relative overflow-hidden">
-          {/* Decorative background elements */}
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-white/50 to-transparent pointer-events-none" />
-          
+        <section className="py-24 bg-slate-50/50 dark:bg-slate-950/20 relative overflow-hidden border-b border-slate-200/60 dark:border-slate-800/60">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-cyan-50 border border-cyan-100 rounded-full text-[#0ea5b7] text-xs font-black uppercase tracking-widest mb-4">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100/60 dark:border-indigo-900/40 rounded-full text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider mb-4">
                 <GraduationCap size={14} />
                 <span>Academic Departments</span>
               </div>
-              <h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-gray-50 mb-6">
-                Explore by <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0ea5b7] to-cyan-400">Department</span>
+              <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-6">
+                Explore by <span className="text-indigo-600 dark:text-indigo-400">Department</span>
               </h2>
-              <p className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto font-medium">
+              <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-normal">
                 Discover top supervisors and researchers from our diverse academic departments, 
                 each bringing unique expertise to your project.
               </p>
@@ -168,7 +207,7 @@ const LandingPage = () => {
               {deptsLoading ? (
                 <div className="flex gap-3">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="h-12 w-32 bg-gray-200 animate-pulse rounded-full" />
+                    <div key={i} className="h-12 w-32 bg-slate-200 dark:bg-slate-800 animate-pulse rounded-full" />
                   ))}
                 </div>
               ) : (
@@ -176,10 +215,10 @@ const LandingPage = () => {
                   <button
                     key={dept._id}
                     onClick={() => setSelectedDeptId(dept._id)}
-                    className={`px-8 py-3.5 rounded-full text-sm font-black transition-all duration-300 border-2 ${
+                    className={`px-8 py-3.5 rounded-full text-sm font-bold transition-all duration-300 border-2 ${
                       selectedDeptId === dept._id
-                        ? 'bg-[#0ea5b7] border-[#0ea5b7] text-white shadow-xl shadow-cyan-200 scale-105'
-                        : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 text-gray-400 hover:border-[#0ea5b7] hover:text-[#0ea5b7] hover:bg-cyan-50'
+                        ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/10 scale-105'
+                        : 'bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/80 text-slate-500 dark:text-slate-400 hover:border-indigo-600 hover:text-indigo-600 hover:bg-indigo-50/30 dark:hover:bg-slate-900'
                     }`}
                   >
                     {dept.name}
@@ -193,7 +232,7 @@ const LandingPage = () => {
               {facultyLoading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="h-[380px] bg-white dark:bg-gray-900 rounded-2xl animate-pulse shadow-sm border border-gray-100 dark:border-gray-800" />
+                    <div key={i} className="h-[380px] bg-white dark:bg-slate-900 rounded-xl animate-pulse shadow-sm border border-slate-100 dark:border-slate-800" />
                   ))}
                 </div>
               ) : faculty && faculty.length > 0 ? (
@@ -209,7 +248,7 @@ const LandingPage = () => {
                   <div className="flex justify-center">
                     <Link
                       href={`/supervisors/${selectedDeptId}`}
-                      className="group flex items-center space-x-3 px-8 py-4 bg-gray-900 text-white rounded-2xl font-black text-sm hover:bg-[#0ea5b7] hover:shadow-2xl hover:shadow-cyan-200 transition-all duration-300 active:scale-95"
+                      className="group flex items-center space-x-3 px-8 py-4 bg-slate-900 dark:bg-indigo-600 text-white rounded-md font-semibold text-sm hover:bg-indigo-600 dark:hover:bg-indigo-700 transition-all duration-300 active:scale-95 shadow-sm"
                     >
                       <span>View All Supervisors</span>
                       <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -217,8 +256,8 @@ const LandingPage = () => {
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-20 bg-white dark:bg-gray-900 rounded-[3rem] border-2 border-dashed border-gray-100 dark:border-gray-800">
-                  <p className="text-gray-400 font-bold text-lg">No supervisors found in this department yet.</p>
+                <div className="text-center py-20 bg-white dark:bg-slate-950 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
+                  <p className="text-slate-400 dark:text-slate-500 font-bold text-lg">No supervisors found in this department yet.</p>
                 </div>
               )}
             </div>
@@ -228,17 +267,17 @@ const LandingPage = () => {
 
       {/* Explore by Research Cells Section */}
       <ScrollReveal>
-        <section className="py-24 bg-white dark:bg-gray-900 relative overflow-hidden">
+        <section className="py-24 bg-white dark:bg-slate-900 relative overflow-hidden border-b border-slate-200/60 dark:border-slate-800/60">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-green-50 border border-green-100 rounded-full text-[#50C878] text-xs font-black uppercase tracking-widest mb-4">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100/60 dark:border-indigo-900/40 rounded-full text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider mb-4">
                 <Search size={14} />
                 <span>Specialized Interests</span>
               </div>
-              <h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-gray-50 mb-6">
-                Explore by <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#50C878] to-[#a8e6cf]">Research Cells</span>
+              <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-6">
+                Explore by <span className="text-indigo-600 dark:text-indigo-400">Research Cells</span>
               </h2>
-              <p className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto font-medium">
+              <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-normal">
                 Find your perfect match by exploring specific research areas across all academic departments.
               </p>
             </div>
@@ -246,16 +285,16 @@ const LandingPage = () => {
             {/* Department Tabs */}
             <div className="flex flex-wrap justify-center gap-2 mb-12">
               {deptsLoading ? (
-                <div className="h-10 w-48 bg-gray-100 animate-pulse rounded-full" />
+                <div className="h-10 w-48 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-full" />
               ) : (
                 departments?.map((dept: any) => (
                   <button
                     key={dept._id}
                     onClick={() => setSelectedDeptId(dept._id)}
-                    className={`px-6 py-2.5 rounded-full text-xs font-black transition-all duration-300 border ${
+                    className={`px-6 py-2.5 rounded-full text-xs font-semibold transition-all duration-300 border ${
                       selectedDeptId === dept._id
-                        ? 'bg-[#1a2b3c] border-[#1a2b3c] text-white shadow-lg'
-                        : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 text-gray-400 hover:border-[#50C878] hover:text-[#50C878]'
+                        ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm'
+                        : 'bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/80 text-slate-500 dark:text-slate-400 hover:border-indigo-600 hover:text-indigo-600 hover:bg-indigo-50/20'
                     }`}
                   >
                     {dept.name}
@@ -264,12 +303,12 @@ const LandingPage = () => {
               )}
             </div>
 
-            {/* Cells Carousel/Grid */}
+            {/* Cells Grid */}
             <div className="min-h-[200px]">
               {cellsLoading ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                   {[1, 2, 3, 4, 5, 6].map((i) => (
-                    <div key={i} className="h-24 bg-gray-50 dark:bg-gray-950 animate-pulse rounded-2xl" />
+                    <div key={i} className="h-24 bg-slate-50 dark:bg-slate-950 animate-pulse rounded-xl" />
                   ))}
                 </div>
               ) : (
@@ -284,7 +323,7 @@ const LandingPage = () => {
                   ))}
                   
                   {allCells?.filter((cell: any) => cell.department === selectedDeptId).length === 0 && (
-                    <div className="col-span-full py-12 text-center text-gray-400 font-bold">
+                    <div className="col-span-full py-12 text-center text-slate-400 dark:text-slate-500 font-semibold">
                       No research cells registered for this department yet.
                     </div>
                   )}
@@ -297,30 +336,26 @@ const LandingPage = () => {
 
       {/* Latest Notices Section */}
       <ScrollReveal>
-        <section className="py-24 bg-gray-50 dark:bg-gray-950 relative overflow-hidden">
-          {/* Subtle background texture */}
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-               style={{ backgroundImage: 'radial-gradient(#1e40af 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-          
+        <section className="py-24 bg-slate-50/50 dark:bg-slate-950/20 relative overflow-hidden border-b border-slate-200/60 dark:border-slate-800/60">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 px-4">
               <div className="max-w-2xl">
-                <div className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-black uppercase tracking-widest mb-4">
+                <div className="inline-flex items-center space-x-2 px-3 py-1 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100/60 dark:border-indigo-900/40 rounded-full text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider mb-4">
                     <Bell size={14} />
                     <span>Announcements</span>
                 </div>
-                <h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-gray-50 mb-6">
-                    Stay Updated with <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">Latest Notices</span>
+                <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-6">
+                    Stay Updated with <span className="text-indigo-600 dark:text-indigo-400">Latest Notices</span>
                 </h2>
-                <p className="text-lg text-gray-500 dark:text-gray-400 font-medium">
+                <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-normal">
                     Important updates, academic schedule changes, and official announcements from the Committee.
                 </p>
               </div>
               
               <div className="hidden md:flex space-x-2">
-                <div className="h-1.5 w-12 bg-blue-600 rounded-full" />
-                <div className="h-1.5 w-4 bg-gray-200 rounded-full" />
-                <div className="h-1.5 w-4 bg-gray-200 rounded-full" />
+                <div className="h-1.5 w-12 bg-indigo-600 rounded-full" />
+                <div className="h-1.5 w-4 bg-slate-200 dark:bg-slate-800 rounded-full" />
+                <div className="h-1.5 w-4 bg-slate-200 dark:bg-slate-800 rounded-full" />
               </div>
             </div>
 
@@ -328,7 +363,7 @@ const LandingPage = () => {
               {noticesLoading ? (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="h-80 bg-white dark:bg-gray-900 rounded-[2rem] animate-pulse border border-gray-100 dark:border-gray-800" />
+                    <div key={i} className="h-80 bg-white dark:bg-slate-950 rounded-xl animate-pulse border border-slate-100 dark:border-slate-900" />
                   ))}
                 </div>
               ) : (
@@ -341,36 +376,36 @@ const LandingPage = () => {
 
       {/* How It Works Section */}
       <ScrollReveal>
-        <section className="py-24 bg-white dark:bg-gray-900 relative overflow-hidden">
+        <section id="features" className="py-24 bg-white dark:bg-slate-900 relative overflow-hidden border-b border-slate-200/60 dark:border-slate-800/60">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-orange-50 border border-orange-100 rounded-full text-orange-600 text-xs font-black uppercase tracking-widest mb-4">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100/60 dark:border-indigo-900/40 rounded-full text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider mb-4">
                 <Settings size={14} />
                 <span>Process Overview</span>
               </div>
-              <h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-gray-50 mb-6">
-                How It <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-500">Works</span>
+              <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-6">
+                How It <span className="text-indigo-600 dark:text-indigo-400">Works</span>
               </h2>
-              <p className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto font-medium">
+              <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-normal">
                 A seamless step-by-step journey designed to streamline your academic research and approval process.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
-                { title: 'Register / Login', desc: 'Join the platform as a student or faculty member and securely access your dashboard.', icon: <UserCheck className="text-orange-600" size={24} /> },
-                { title: 'Complete Profile', desc: 'Fill in your academic details and research interests to get personalized recommendations.', icon: <ClipboardList className="text-orange-600" size={24} /> },
-                { title: 'Submit Proposal', desc: 'Draft and upload your thesis or project proposal for formal review.', icon: <FileText className="text-orange-600" size={24} /> },
-                { title: 'Supervisor Review', desc: 'Assigned supervisors will provide feedback and guide your initial proposal.', icon: <Users className="text-orange-600" size={24} /> },
-                { title: 'Committee Approval', desc: 'The academic committee reviews and provides final authorization for your work.', icon: <GraduationCap className="text-orange-600" size={24} /> },
-                { title: 'Defense', desc: 'Present your completed research to the defense board for final evaluation and grading.', icon: <ShieldCheck className="text-orange-600" size={24} /> }
+                { title: 'Register / Login', desc: 'Join the platform as a student or faculty member and securely access your dashboard.', icon: <UserCheck className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> },
+                { title: 'Complete Profile', desc: 'Fill in your academic details and research interests to get personalized recommendations.', icon: <ClipboardList className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> },
+                { title: 'Submit Proposal', desc: 'Draft and upload your thesis or project proposal for formal review.', icon: <FileText className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> },
+                { title: 'Supervisor Review', desc: 'Assigned supervisors will provide feedback and guide your initial proposal.', icon: <Users className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> },
+                { title: 'Committee Approval', desc: 'The academic committee reviews and provides final authorization for your work.', icon: <GraduationCap className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> },
+                { title: 'Defense', desc: 'Present your completed research to the defense board for final evaluation and grading.', icon: <ShieldCheck className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> }
               ].map((step, idx) => (
-                <div key={idx} className="bg-white dark:bg-gray-900 p-8 rounded-[2.5rem] border-2 border-gray-50 dark:border-gray-800/50 hover:border-orange-200 transition-all duration-300 shadow-sm hover:shadow-xl group">
-                  <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-orange-600 group-hover:text-white transition-all duration-300">
+                <div key={idx} className="bg-white dark:bg-slate-950 p-8 rounded-xl border border-slate-200/60 dark:border-slate-800/80 hover:border-indigo-500 dark:hover:border-indigo-500 transition-all duration-300 shadow-sm hover:shadow-md group">
+                  <div className="w-14 h-14 bg-indigo-50 dark:bg-indigo-950/60 rounded-lg flex items-center justify-center mb-6 group-hover:bg-indigo-600 transition-all duration-300">
                     {step.icon}
                   </div>
-                  <h3 className="text-xl font-black text-gray-900 dark:text-gray-50 mb-3">{idx + 1}. {step.title}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{idx + 1}. {step.title}</h3>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-normal">
                     {step.desc}
                   </p>
                 </div>
@@ -382,14 +417,10 @@ const LandingPage = () => {
 
       {/* System Statistics Section */}
       <ScrollReveal>
-        <section className="py-24 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-transparent relative overflow-hidden">
-          {/* Decorative glowing circles */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600/10 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2" />
-          
+        <section className="py-24 bg-slate-50/50 dark:bg-slate-950/20 border-b border-slate-200/60 dark:border-slate-800/60 relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-16">
-              Our Growth in <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 dark:from-purple-400 dark:to-pink-400">Numbers</span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-16">
+              Our Growth in <span className="text-indigo-600 dark:text-indigo-400">Numbers</span>
             </h2>
             
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
@@ -399,10 +430,10 @@ const LandingPage = () => {
                 { label: 'Departments', value: stats?.deptCount || 0, icon: <LayoutGrid size={24} /> },
                 { label: 'Proposals', value: stats?.proposalCount || 0, icon: <FileText size={24} /> }
               ].map((stat, idx) => (
-                <div key={idx} className="p-8 bg-gray-50 dark:bg-white/5 backdrop-blur-sm border border-gray-100 dark:border-white/10 rounded-3xl hover:bg-gray-100 dark:hover:bg-white/10 transition-colors group">
-                  <div className="text-purple-600 dark:text-purple-400 mb-4 flex justify-center group-hover:scale-110 transition-transform">{stat.icon}</div>
-                  <div className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2">{stat.value}</div>
-                  <div className="text-xs font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{stat.label}</div>
+                <div key={idx} className="p-8 bg-white dark:bg-slate-950 border border-slate-200/60 dark:border-slate-800/80 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors group shadow-sm">
+                  <div className="text-indigo-600 dark:text-indigo-400 mb-4 flex justify-center group-hover:scale-110 transition-transform">{stat.icon}</div>
+                  <div className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-2">{stat.value}</div>
+                  <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -412,15 +443,15 @@ const LandingPage = () => {
 
       {/* FAQ Section */}
       <ScrollReveal>
-        <section className="py-24 bg-white dark:bg-gray-900">
+        <section className="py-24 bg-white dark:bg-slate-900 border-b border-slate-200/60 dark:border-slate-800/60">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-black uppercase tracking-widest mb-4">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100/60 dark:border-indigo-900/40 rounded-full text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider mb-4">
                 <HelpCircle size={14} />
                 <span>Common Inquiries</span>
               </div>
-              <h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-gray-50 mb-6 font-sans">
-                Curious? <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">FAQs</span>
+              <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-6">
+                Curious? <span className="text-indigo-600 dark:text-indigo-400">FAQs</span>
               </h2>
             </div>
 
@@ -433,16 +464,16 @@ const LandingPage = () => {
               ].map((faq, idx) => {
                 const [isOpen, setIsOpen] = useState(false);
                 return (
-                  <div key={idx} className="border-2 border-gray-50 dark:border-gray-800/50 rounded-2xl overflow-hidden">
+                  <div key={idx} className="border border-slate-200/60 dark:border-slate-800/80 rounded-xl overflow-hidden">
                     <button 
                       onClick={() => setIsOpen(!isOpen)}
-                      className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 dark:bg-gray-950 transition-colors"
+                      className="w-full flex items-center justify-between p-6 text-left hover:bg-slate-50 dark:hover:bg-slate-950/40 transition-colors bg-white dark:bg-slate-950"
                     >
-                      <span className="text-lg font-black text-gray-900 dark:text-gray-50">{faq.q}</span>
-                      {isOpen ? <Minus size={20} className="text-blue-600" /> : <Plus size={20} className="text-gray-400" />}
+                      <span className="text-base font-bold text-slate-900 dark:text-slate-200">{faq.q}</span>
+                      {isOpen ? <Minus size={18} className="text-indigo-600 dark:text-indigo-400" /> : <Plus size={18} className="text-slate-400" />}
                     </button>
                     {isOpen && (
-                      <div className="px-6 pb-6 text-gray-500 dark:text-gray-400 font-medium leading-relaxed animate-in slide-in-from-top-2 duration-300">
+                      <div className="px-6 pb-6 text-slate-500 dark:text-slate-400 font-normal leading-relaxed animate-in slide-in-from-top-2 duration-300 bg-white dark:bg-slate-950">
                         {faq.a}
                       </div>
                     )}
@@ -456,21 +487,19 @@ const LandingPage = () => {
 
       {/* Final CTA Section */}
       <ScrollReveal threshold={0.5}>
-        <section className="py-24 bg-blue-50 dark:bg-gradient-to-br dark:from-[#1a2b3c] dark:to-[#04080f] relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 dark:opacity-20" />
-          
+        <section className="py-24 bg-slate-50 dark:bg-slate-950 border-b border-slate-200/60 dark:border-slate-800/60 relative overflow-hidden">
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="space-y-8">
-              <h2 className="text-4xl lg:text-6xl font-black text-gray-900 dark:text-white leading-tight">
-                Start Your <span className="text-[#50C878]">Thesis Journey</span> Today
+              <h2 className="text-4xl lg:text-6xl font-bold text-slate-900 dark:text-white leading-tight">
+                Start Your <span className="text-indigo-600 dark:text-indigo-400">Thesis Journey</span> Today
               </h2>
-              <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-medium leading-relaxed">
+              <p className="text-base sm:text-lg lg:text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-normal leading-relaxed">
                 Join a community of scholars and streamline your academic research with ThesPro's automated management system.
               </p>
               <div className="pt-8">
                 <Link 
                   href="/register" 
-                  className="px-12 py-5 bg-[#50C878] text-white rounded-2xl font-black text-lg hover:bg-green-600 hover:shadow-[0_20px_40px_rgba(80,200,120,0.3)] hover:-translate-y-1 transition-all duration-300 inline-flex items-center space-x-3 active:scale-95"
+                  className="px-12 py-5 bg-indigo-600 text-white rounded-md font-semibold text-lg hover:bg-indigo-700 transition-all duration-300 inline-flex items-center space-x-3 active:scale-95 shadow-sm"
                 >
                   <span>Get Started Now</span>
                   <ArrowRight size={22} />
@@ -482,43 +511,43 @@ const LandingPage = () => {
       </ScrollReveal>
 
       {/* Footer */}
-      <footer className="bg-white dark:bg-gray-950 border-t border-gray-100 dark:border-gray-900">
+      <footer className="bg-white dark:bg-slate-950 border-t border-slate-200/60 dark:border-slate-800/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-[#50C878] rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-white">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.172L21 21l-9.875-9.875M11.42 15.172a2.5 2.5 0 11-4.005-3.32A2.5 2.5 0 0111.42 15.172z" />
                   </svg>
                 </div>
-                <span className="text-xl font-bold text-gray-900 dark:text-white">ThesPro</span>
+                <span className="text-xl font-bold text-slate-900 dark:text-white">ThesPro</span>
               </div>
-              <p className="text-gray-500 dark:text-gray-400">
+              <p className="text-slate-550 dark:text-slate-400">
                 Empowering academic excellence through innovative thesis and project management.
               </p>
             </div>
             
             <div className="space-y-4">
-              <h4 className="font-semibold text-gray-900 dark:text-white">Quick Links</h4>
-              <ul className="space-y-2 text-gray-500 dark:text-gray-400">
-                <li><Link href="/about" className="hover:text-[#50C878] dark:hover:text-white transition-colors">About Us</Link></li>
-                <li><Link href="/features" className="hover:text-[#50C878] dark:hover:text-white transition-colors">Features</Link></li>
-                <li><Link href="/support" className="hover:text-[#50C878] dark:hover:text-white transition-colors">Support</Link></li>
+              <h4 className="font-semibold text-slate-900 dark:text-white">Quick Links</h4>
+              <ul className="space-y-2 text-slate-500 dark:text-slate-400">
+                <li><Link href="/about" className="hover:text-indigo-650 dark:hover:text-indigo-400 transition-colors">About Us</Link></li>
+                <li><Link href="/features" className="hover:text-indigo-650 dark:hover:text-indigo-400 transition-colors">Features</Link></li>
+                <li><Link href="/support" className="hover:text-indigo-650 dark:hover:text-indigo-400 transition-colors">Support</Link></li>
               </ul>
             </div>
             
             <div className="space-y-4">
-              <h4 className="font-semibold text-gray-900 dark:text-white">Legal</h4>
-              <ul className="space-y-2 text-gray-500 dark:text-gray-400">
-                <li><Link href="/privacy" className="hover:text-[#50C878] dark:hover:text-white transition-colors">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="hover:text-[#50C878] dark:hover:text-white transition-colors">Terms of Service</Link></li>
-                <li><Link href="/cookies" className="hover:text-[#50C878] dark:hover:text-white transition-colors">Cookie Policy</Link></li>
+              <h4 className="font-semibold text-slate-900 dark:text-white">Legal</h4>
+              <ul className="space-y-2 text-slate-500 dark:text-slate-400">
+                <li><Link href="/privacy" className="hover:text-indigo-650 dark:hover:text-indigo-400 transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-indigo-650 dark:hover:text-indigo-400 transition-colors">Terms of Service</Link></li>
+                <li><Link href="/cookies" className="hover:text-indigo-650 dark:hover:text-indigo-400 transition-colors">Cookie Policy</Link></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-gray-100 dark:border-gray-900 pt-8 mt-8 text-center text-gray-400 dark:text-gray-500">
+          <div className="border-t border-slate-200/60 dark:border-slate-800/80 pt-8 mt-8 text-center text-slate-400 dark:text-slate-500">
             <p>&copy; 2025 ThesPro. All rights reserved.</p>
           </div>
         </div>

@@ -1,7 +1,6 @@
 'use client';
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { ReduxProvider } from "@/components/ReduxProvider";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -15,8 +14,6 @@ import { UIProvider } from "@/contexts/UIContext";
 import AIChatBot from "@/components/AIChatBot";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,7 +26,14 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <head>
+        <title>ThesPro — Thesis &amp; Project Management System</title>
+        <meta name="description" content="ThesPro is an institutional thesis and research project management portal for university departments, students, supervisors, and academic committees." />
+        <link rel="icon" type="image/png" href="/system-logo-2.png" />
+        <link rel="shortcut icon" href="/system-logo-2.png" />
+        <link rel="apple-touch-icon" href="/system-logo-2.png" />
+      </head>
+      <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ReduxProvider>
             <SocketProvider>
