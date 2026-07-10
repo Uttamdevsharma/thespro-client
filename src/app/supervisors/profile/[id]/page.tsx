@@ -138,7 +138,7 @@ const SupervisorProfilePage = () => {
                                         <div className="w-10 h-10 bg-gray-50 dark:bg-gray-950 rounded-xl flex items-center justify-center text-gray-400">
                                             <GraduationCap size={18} />
                                         </div>
-                                        <span className="font-bold text-sm">{member.department?.name}</span>
+                                        <span className="font-bold text-sm">{member.department?.abbreviation || member.department?.name}</span>
                                     </div>
                                 </div>
 

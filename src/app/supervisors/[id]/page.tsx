@@ -26,6 +26,7 @@ const SupervisorsListPage = () => {
     const { data: cells } = useGetPublicResearchCellsQuery();
 
     const currentDept = departments?.find((d: any) => d._id === id);
+    const deptLabel = currentDept?.abbreviation || currentDept?.name || 'Department';
     
     // Filter cells that belong to the current department
     const deptCells = cells?.filter((cell: any) => cell.department === id);
@@ -49,7 +50,7 @@ const SupervisorsListPage = () => {
                             <div className="flex items-center space-x-2 text-xs font-black text-gray-400 uppercase tracking-widest mb-3">
                                 <Link href="/" className="hover:text-[#0ea5b7] transition-colors">Home</Link>
                                 <ChevronRight size={12} />
-                                <span className="text-gray-900 dark:text-gray-50">{currentDept?.name || 'Department'}</span>
+                                <span className="text-gray-900 dark:text-gray-50">{deptLabel}</span>
                             </div>
                             <h1 className="text-4xl font-black text-gray-900 dark:text-gray-50 leading-tight">
                                 Browse <span className="text-[#0ea5b7]">Supervisors</span>

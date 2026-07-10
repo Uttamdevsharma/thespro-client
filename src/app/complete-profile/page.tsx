@@ -83,7 +83,7 @@ const CompleteProfilePage = () => {
                 >
                   <option value="">Select your department</option>
                   {departments?.map((dept: any) => (
-                    <option key={dept._id} value={dept._id}>{dept.name}</option>
+                    <option key={dept._id} value={dept._id}>{dept.abbreviation || dept.name}</option>
                   ))}
                 </select>
               </div>

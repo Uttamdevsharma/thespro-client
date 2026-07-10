@@ -17,15 +17,18 @@ const DepartmentPage = () => {
     const [deleteDepartment] = useDeleteDepartmentMutation();
 
     const [newDeptName, setNewDeptName] = useState('');
+    const [newDeptAbbr, setNewDeptAbbr] = useState('');
     const [editingDept, setEditingDept] = useState<any>(null);
     const [editName, setEditName] = useState('');
+    const [editAbbr, setEditAbbr] = useState('');
 
     const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await createDepartment({ name: newDeptName }).unwrap();
+            await createDepartment({ name: newDeptName, abbreviation: newDeptAbbr || undefined }).unwrap();
             toast.success('Department created');
             setNewDeptName('');
+            setNewDeptAbbr('');
         } catch (err: any) {
             toast.error(err.data?.message || 'Failed to create');
         }
@@ -34,7 +37,7 @@ const DepartmentPage = () => {
     const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await updateDepartment({ id: editingDept._id, name: editName }).unwrap();
+            await updateDepartment({ id: editingDept._id, name: editName, abbreviation: editAbbr || undefined }).unwrap();
             toast.success('Department updated');
             setEditingDept(null);
         } catch (err: any) {
@@ -69,6 +72,13 @@ const DepartmentPage = () => {
                         className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900"
                         required
                     />
+                    <input 
+                        type="text" 
+                        value={newDeptAbbr}
+                        onChange={(e) => setNewDeptAbbr(e.target.value)}
+                        placeholder="Abbreviation (e.g., CSE)"
+                        className="w-40 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900"
+                    />
                     <button type="submit" className="bg-[#50C878] text-white px-6 py-2 rounded-lg font-medium hover:bg-green-600 transition-colors">
                         Add Department
                     </button>
@@ -88,6 +98,7 @@ const DepartmentPage = () => {
                             <thead className="bg-gray-50 dark:bg-gray-950 uppercase text-xs font-semibold text-gray-500 dark:text-gray-400">
                                 <tr>
                                     <th className="px-6 py-4">Department Name</th>
+                                    <th className="px-6 py-4">Abbreviation</th>
                                     <th className="px-6 py-4 text-right">Actions</th>
                                 </tr>
                             </thead>
@@ -106,6 +117,18 @@ const DepartmentPage = () => {
                                                 <span className="font-medium text-gray-700 dark:text-gray-200">{dept.name}</span>
                                             )}
                                         </td>
+                                        <td className="px-6 py-4">
+                                            {editingDept?._id === dept._id ? (
+                                                <input 
+                                                    type="text" 
+                                                    value={editAbbr}
+                                                    onChange={(e) => setEditAbbr(e.target.value)}
+                                                    className="w-24 px-2 py-1 border rounded"
+                                                />
+                                            ) : (
+                                                <span className="text-gray-500 dark:text-gray-400 text-sm font-mono">{dept.abbreviation || '—'}</span>
+                                            )}
+                                        </td>
                                         <td className="px-6 py-4 text-right space-x-3">
                                             {editingDept?._id === dept._id ? (
                                                 <>
@@ -114,7 +137,7 @@ const DepartmentPage = () => {
                                                 </>
                                             ) : (
                                                 <>
-                                                    <button onClick={() => { setEditingDept(dept); setEditName(dept.name); }} className="text-blue-600 font-medium text-sm">Edit</button>
+                                                    <button onClick={() => { setEditingDept(dept); setEditName(dept.name); setEditAbbr(dept.abbreviation || ''); }} className="text-blue-600 font-medium text-sm">Edit</button>
                                                     <button onClick={() => handleDelete(dept._id)} className="text-red-600 font-medium text-sm">Delete</button>
                                                 </>
                                             )}

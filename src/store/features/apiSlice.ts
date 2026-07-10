@@ -80,11 +80,15 @@ export const apiSlice = createApi({
       query: () => '/public/notices',
       providesTags: ['Notices'],
     }),
+    getPublicNoticeById: builder.query<any, string>({
+      query: (id) => `/public/notices/${id}`,
+      providesTags: (result, error, id) => [{ type: 'Notices' as const, id }],
+    }),
     getPublicStats: builder.query<any, void>({
       query: () => '/public/stats',
       providesTags: ['Students', 'Teachers', 'Departments', 'Proposals'],
     }),
-    createDepartment: builder.mutation<any, { name: string }>({
+    createDepartment: builder.mutation<any, { name: string; abbreviation?: string }>({
       query: (data) => ({
         url: '/admin/departments',
         method: 'POST',
@@ -92,7 +96,7 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['Departments'],
     }),
-    updateDepartment: builder.mutation<any, { id: string; name: string }>({
+    updateDepartment: builder.mutation<any, { id: string; name: string; abbreviation?: string }>({
       query: ({ id, ...data }) => ({
         url: `/admin/departments/${id}`,
         method: 'PUT',
@@ -684,6 +688,7 @@ export const {
   useGetPublicDepartmentsQuery,
   useGetPublicResearchCellsQuery,
   useGetPublicNoticesQuery,
+  useGetPublicNoticeByIdQuery,
   useGetPublicStatsQuery,
   useGetPublicFacultyByDepartmentQuery,
   useGetPublicFacultyProfileQuery,

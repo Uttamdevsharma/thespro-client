@@ -99,7 +99,7 @@ const MainNavbar = () => {
                       onClick={() => handleSupervisorDeptClick(dept._id)}
                       className="w-full text-left px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-305 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
                     >
-                      {dept.name}
+                      {dept.abbreviation || dept.name}
                     </button>
                   ))}
                 </div>
@@ -189,7 +189,7 @@ const MainNavbar = () => {
                   onClick={() => handleSupervisorDeptClick(dept._id)}
                   className="block w-full text-left py-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-indigo-600 cursor-pointer"
                 >
-                  {dept.name}
+                  {dept.abbreviation || dept.name}
                 </button>
               ))}
             </div>

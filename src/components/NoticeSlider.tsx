@@ -6,9 +6,10 @@ import { ChevronLeft, ChevronRight, Info } from 'lucide-react';
 
 interface NoticeSliderProps {
   notices: any[];
+  onNoticeClick?: (notice: any) => void;
 }
 
-const NoticeSlider: React.FC<NoticeSliderProps> = ({ notices }) => {
+const NoticeSlider: React.FC<NoticeSliderProps> = ({ notices, onNoticeClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleItems, setVisibleItems] = useState(3);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -73,7 +74,7 @@ const NoticeSlider: React.FC<NoticeSliderProps> = ({ notices }) => {
               className="px-4"
               style={{ width: `${100 / notices.length}%` }}
             >
-              <NoticeCard notice={notice} />
+              <NoticeCard notice={notice} onReadMore={onNoticeClick} />
             </div>
           ))}
         </div>

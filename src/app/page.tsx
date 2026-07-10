@@ -10,6 +10,7 @@ import Loader from '@/components/Loader';
 import ScrollReveal from '@/components/ScrollReveal';
 import ResearchCellCard from '@/components/ResearchCellCard';
 import NoticeSlider from '@/components/NoticeSlider';
+import NoticeDetailModal from '@/components/NoticeDetailModal';
 
 const LandingPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -19,6 +20,7 @@ const LandingPage = () => {
   }, []);
 
   const [selectedDeptId, setSelectedDeptId] = useState<string | null>(null);
+  const [selectedNotice, setSelectedNotice] = useState<any | null>(null);
 
   const { data: departments, isLoading: deptsLoading } = useGetPublicDepartmentsQuery();
   const { data: allCells, isLoading: cellsLoading } = useGetPublicResearchCellsQuery();
@@ -202,29 +204,40 @@ const LandingPage = () => {
               </p>
             </div>
 
-            {/* Department Selection Pills */}
-            <div className="flex flex-wrap justify-center gap-3 mb-16">
-              {deptsLoading ? (
+            {/* Department Selection Tabs — Horizontal Scroll */}
+            <div className="max-w-5xl mx-auto mb-16">
+              <div className="bg-white dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800/60 rounded-2xl p-2.5 shadow-sm overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
                 <div className="flex gap-3">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="h-12 w-32 bg-slate-200 dark:bg-slate-800 animate-pulse rounded-full" />
-                  ))}
+                  {deptsLoading ? (
+                    <>
+                      {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="h-[52px] w-32 bg-slate-200 dark:bg-slate-800 animate-pulse rounded-xl flex-shrink-0" />
+                      ))}
+                    </>
+                  ) : (
+                    departments?.map((dept: any) => (
+                      <button
+                        key={dept._id}
+                        onClick={() => setSelectedDeptId(dept._id)}
+                        className={`flex items-center gap-3 px-6 py-3 rounded-xl text-sm font-bold border-2 whitespace-nowrap flex-shrink-0 cursor-pointer transition-all duration-200 ${
+                          selectedDeptId === dept._id
+                            ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                            : 'bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:border-indigo-300 dark:hover:border-indigo-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-slate-900'
+                        }`}
+                      >
+                        <span>{dept.abbreviation || dept.name}</span>
+                        <span className={`inline-flex items-center justify-center min-w-[26px] h-6 px-2 rounded-full text-[11px] font-bold leading-none tabular-nums ${
+                          selectedDeptId === dept._id
+                            ? 'bg-white/20 text-white'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                        }`}>
+                          {dept.supervisorCount}
+                        </span>
+                      </button>
+                    ))
+                  )}
                 </div>
-              ) : (
-                departments?.map((dept: any) => (
-                  <button
-                    key={dept._id}
-                    onClick={() => setSelectedDeptId(dept._id)}
-                    className={`px-8 py-3.5 rounded-full text-sm font-bold transition-all duration-300 border-2 ${
-                      selectedDeptId === dept._id
-                        ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/10 scale-105'
-                        : 'bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/80 text-slate-500 dark:text-slate-400 hover:border-indigo-600 hover:text-indigo-600 hover:bg-indigo-50/30 dark:hover:bg-slate-900'
-                    }`}
-                  >
-                    {dept.name}
-                  </button>
-                ))
-              )}
+              </div>
             </div>
 
             {/* Supervisor Grid */}
@@ -282,25 +295,29 @@ const LandingPage = () => {
               </p>
             </div>
 
-            {/* Department Tabs */}
-            <div className="flex flex-wrap justify-center gap-2 mb-12">
-              {deptsLoading ? (
-                <div className="h-10 w-48 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-full" />
-              ) : (
-                departments?.map((dept: any) => (
-                  <button
-                    key={dept._id}
-                    onClick={() => setSelectedDeptId(dept._id)}
-                    className={`px-6 py-2.5 rounded-full text-xs font-semibold transition-all duration-300 border ${
-                      selectedDeptId === dept._id
-                        ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20 ring-2 ring-indigo-600/10'
-                        : 'bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/80 text-slate-500 dark:text-slate-400 hover:border-indigo-300 dark:hover:border-indigo-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50/30 dark:hover:bg-indigo-950/20'
-                    }`}
-                  >
-                    {dept.name}
-                  </button>
-                ))
-              )}
+            {/* Department Tabs — Horizontal Scroll */}
+            <div className="max-w-5xl mx-auto mb-12">
+              <div className="bg-white dark:bg-slate-900/50 border border-slate-200/60 dark:border-slate-800/60 rounded-2xl p-2 shadow-sm overflow-x-auto scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
+                <div className="flex gap-2">
+                  {deptsLoading ? (
+                    <div className="h-[42px] w-36 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-xl flex-shrink-0" />
+                  ) : (
+                    departments?.map((dept: any) => (
+                      <button
+                        key={dept._id}
+                        onClick={() => setSelectedDeptId(dept._id)}
+                        className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold border-2 whitespace-nowrap flex-shrink-0 cursor-pointer transition-all duration-200 ${
+                          selectedDeptId === dept._id
+                            ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm shadow-indigo-600/20'
+                            : 'bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/80 text-slate-500 dark:text-slate-400 hover:border-indigo-300 dark:hover:border-indigo-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50/30 dark:hover:bg-indigo-950/20'
+                        }`}
+                      >
+                        <span className="font-bold">{dept.abbreviation || dept.name}</span>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* Cells Grid */}
@@ -317,7 +334,10 @@ const LandingPage = () => {
                     <ResearchCellCard 
                       key={cell._id} 
                       cell={cell} 
-                      departmentName={departments?.find((d: any) => d._id === selectedDeptId)?.name}
+                      departmentName={(() => {
+                        const d = departments?.find((d: any) => d._id === selectedDeptId);
+                        return d?.abbreviation || d?.name || '';
+                      })()}
                       selectedDeptId={selectedDeptId}
                     />
                   ))}
@@ -352,11 +372,13 @@ const LandingPage = () => {
                 </p>
               </div>
               
-              <div className="hidden md:flex space-x-2">
-                <div className="h-1.5 w-12 bg-indigo-600 rounded-full" />
-                <div className="h-1.5 w-4 bg-slate-200 dark:bg-slate-800 rounded-full" />
-                <div className="h-1.5 w-4 bg-slate-200 dark:bg-slate-800 rounded-full" />
-              </div>
+              <Link
+                href="/notices"
+                className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white text-sm font-semibold rounded-lg transition-all active:scale-[0.98] shadow-sm"
+              >
+                <span>View All Notices</span>
+                <ArrowRight size={16} />
+              </Link>
             </div>
 
             <div className="min-h-[400px]">
@@ -367,9 +389,15 @@ const LandingPage = () => {
                   ))}
                 </div>
               ) : (
-                <NoticeSlider notices={notices || []} />
+                <NoticeSlider notices={notices || []} onNoticeClick={setSelectedNotice} />
               )}
             </div>
+
+            <NoticeDetailModal
+              showModal={!!selectedNotice}
+              onClose={() => setSelectedNotice(null)}
+              notice={selectedNotice}
+            />
           </div>
         </section>
       </ScrollReveal>
