@@ -3,7 +3,7 @@
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useGetDefenseBoardByIdQuery } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
+import DetailPageSkeleton from '@/components/DetailPageSkeleton';
 import { format } from 'date-fns';
 import { ArrowLeft, FileText, Info, Users, MapPin, Calendar, Clock } from 'lucide-react';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ const CommitteeDefenseBoardDetailPage = () => {
 
   const { data: boardDetails, isLoading, isError, error } = useGetDefenseBoardByIdQuery(boardId);
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <DetailPageSkeleton />;
   if (isError) return <div className="p-10 text-center text-red-500 font-bold bg-red-50 rounded-2xl border border-red-100 max-w-6xl mx-auto mt-10">Error: {(error as any)?.data?.message || (error as any)?.error}</div>;
   if (!boardDetails) return <div className="p-20 text-center bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 max-w-6xl mx-auto mt-10 text-gray-400 font-bold italic">No board details found.</div>;
 

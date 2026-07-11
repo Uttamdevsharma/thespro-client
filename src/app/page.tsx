@@ -6,7 +6,6 @@ import AuthNavbar from '@/components/AuthNavbar';
 import { useGetPublicDepartmentsQuery, useGetPublicFacultyByDepartmentQuery, useGetPublicResearchCellsQuery, useGetPublicNoticesQuery, useGetPublicStatsQuery } from '@/store/features/apiSlice';
 import SupervisorCard from '@/components/SupervisorCard';
 import { ArrowRight, ChevronRight, GraduationCap, Search, ShieldCheck, Bell, UserCheck, ClipboardList, Settings, Users, FileText, LayoutGrid, Plus, Minus, MessageCircle, HelpCircle } from 'lucide-react';
-import Loader from '@/components/Loader';
 import ScrollReveal from '@/components/ScrollReveal';
 import ResearchCellCard from '@/components/ResearchCellCard';
 import NoticeSlider from '@/components/NoticeSlider';

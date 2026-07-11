@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useGetMySupervisionsQuery } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
+import ListPageSkeleton from '@/components/ListPageSkeleton';
 import Link from 'next/link';
 import { Eye } from 'lucide-react';
 
@@ -20,7 +20,7 @@ const SupervisorGroupsOverviewPage = () => {
         }
     }, [refetchProposals, user]);
 
-    if (isLoading) return <Loader />;
+    if (isLoading) return <ListPageSkeleton />;
     if (isError) {
         return (
             <div className="p-6 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-6xl mx-auto mt-10">

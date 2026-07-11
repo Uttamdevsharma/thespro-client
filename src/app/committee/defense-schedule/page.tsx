@@ -11,7 +11,7 @@ import {
   useUpdateScheduleSlotMutation,
   useDeleteScheduleSlotMutation,
 } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 import { Plus, Edit2, Trash2, MapPin, Clock, Calendar, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -111,7 +111,7 @@ export const RoomManager = () => {
       <div className="overflow-x-auto">
         {isLoading ? (
           <div className="p-20 flex flex-col items-center justify-center">
-            <Loader />
+            <PageSkeleton />
             <p className="text-gray-400 font-bold mt-4">Syncing rooms...</p>
           </div>
         ) : (

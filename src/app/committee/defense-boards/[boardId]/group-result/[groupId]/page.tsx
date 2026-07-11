@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useGetEvaluationsByProposalQuery } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
+import DetailPageSkeleton from '@/components/DetailPageSkeleton';
 import { ArrowLeft, FileText, User, UserCheck, ShieldCheck, TrendingUp } from 'lucide-react';
 
 const CommitteeGroupResultSummaryPage = () => {
@@ -53,7 +53,7 @@ const CommitteeGroupResultSummaryPage = () => {
     });
   }, [evaluations]);
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <DetailPageSkeleton />;
   if (isError) return (
     <div className="p-10 text-center text-red-500 font-bold bg-red-50 rounded-2xl border border-red-100 max-w-6xl mx-auto mt-10">
         Error: {(error as any)?.data?.message || (error as any)?.error}

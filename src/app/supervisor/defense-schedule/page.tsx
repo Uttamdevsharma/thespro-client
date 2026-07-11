@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useGetSupervisorDefenseScheduleQuery, useAddOrUpdateCommentMutation } from '@/store/features/apiSlice';
 import toast from 'react-hot-toast';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 import { Save, Filter, Users, Calendar, MapPin, Clock } from 'lucide-react';
 
 const SupervisorDefenseSchedulePage = () => {
@@ -64,7 +64,7 @@ const SupervisorDefenseSchedulePage = () => {
         </div>
 
         {isLoading ? (
-          <Loader />
+          <PageSkeleton />
         ) : isError ? (
           <div className="p-6 bg-red-50 border border-red-200 text-red-700 rounded-xl font-medium">
             Error: {(error as any)?.data?.message || 'An unexpected error occurred'}

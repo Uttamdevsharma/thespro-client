@@ -47,3 +47,13 @@ body {
   filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.45))
           drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
 }
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}

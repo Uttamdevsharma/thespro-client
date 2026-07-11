@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
-import Loader from '@/components/Loader';
+import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { Trophy, Filter, ShieldCheck, UserCheck } from 'lucide-react';
 import { useGetSupervisorDefenseResultsQuery } from '@/store/features/apiSlice';
 
@@ -22,7 +22,7 @@ const SupervisorDefenseResultPage = () => {
 
   const error = queryError ? ((queryError as any).data?.message || (queryError as any).message) : null;
 
-  if (loading) return <Loader />;
+  if (loading) return <ListPageSkeleton />;
 
   return (
     <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">

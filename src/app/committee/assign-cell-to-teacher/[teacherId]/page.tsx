@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 import toast from 'react-hot-toast';
 import { ArrowLeft, PlusCircle, ShieldCheck, User, FlaskConical, CheckCircle2 } from 'lucide-react';
 import {
@@ -51,7 +51,7 @@ const CommitteeAssignCellToTeacherPage = () => {
     }
   };
 
-  if (loadingTeacher || loadingCells) return <Loader />;
+  if (loadingTeacher || loadingCells) return <PageSkeleton />;
   if (teacherError || cellsError || !teacher) return <div className="p-10 text-center text-red-500 font-bold bg-red-50 rounded-2xl border border-red-100 max-w-4xl mx-auto mt-10 tracking-tight">Data retrieval failed. Please verify teacher ID.</div>;
 
   return (

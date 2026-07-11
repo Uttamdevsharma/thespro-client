@@ -4,7 +4,7 @@ import React, { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { login } from '@/store/features/userSlice';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 import toast from 'react-hot-toast';
 
 const GoogleSuccessHandler = () => {
@@ -63,7 +63,7 @@ const GoogleSuccessHandler = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
             <div className="text-center">
-                <Loader />
+                <PageSkeleton />
                 <p className="mt-4 text-gray-500 dark:text-gray-400 font-bold animate-pulse">Syncing your profile...</p>
             </div>
         </div>
@@ -72,7 +72,7 @@ const GoogleSuccessHandler = () => {
 
 const GoogleSuccessPage = () => {
     return (
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<PageSkeleton />}>
             <GoogleSuccessHandler />
         </Suspense>
     );

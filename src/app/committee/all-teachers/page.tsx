@@ -3,13 +3,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { useGetTeachersQuery } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
+import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { User, Mail, GraduationCap, ArrowRight, UserCog, FlaskConical, Filter } from 'lucide-react';
 
 const CommitteeAllTeachersPage = () => {
   const { data: teachers, isLoading, isError, error } = useGetTeachersQuery();
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <ListPageSkeleton />;
   if (isError) return (
     <div className="p-10 text-center text-red-500 font-bold bg-red-50 rounded-2xl border border-red-100 max-w-6xl mx-auto mt-10">
         Error: {(error as any)?.message || 'Failed to fetch faculty directory'}

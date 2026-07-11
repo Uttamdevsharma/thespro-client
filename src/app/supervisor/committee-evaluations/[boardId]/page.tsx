@@ -3,7 +3,7 @@
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useGetDefenseBoardByIdQuery } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
+import DetailPageSkeleton from '@/components/DetailPageSkeleton';
 import { format } from 'date-fns';
 import { ArrowLeft, Eye } from 'lucide-react';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ const SupervisorBoardGroupsPage = () => {
 
   const { data: boardDetails, isLoading, isError, error } = useGetDefenseBoardByIdQuery(boardId);
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <DetailPageSkeleton />;
   if (isError) return <div className="p-6 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-6xl mx-auto mt-10">Error: {(error as any)?.data?.message || (error as any)?.error}</div>;
   if (!boardDetails) return <div className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md text-center text-gray-500 dark:text-gray-400 max-w-6xl mx-auto mt-10">No board details found.</div>;
 

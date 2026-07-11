@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
-import Loader from '@/components/Loader';
+import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { RoomManager, ScheduleManager } from '@/app/committee/defense-schedule/page';
 import { ShieldCheck, UserPlus, Settings, Layout, Users, ChevronRight } from 'lucide-react';
 import { useGetAllSupervisorsQuery, useAssignCourseSupervisorMutation } from '@/store/features/apiSlice';
@@ -60,7 +60,7 @@ const CommitteeManageCourseSupervisorsPage = () => {
     }
   };
 
-  if (loading) return <Loader />;
+  if (loading) return <ListPageSkeleton />;
 
   return (
     <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">

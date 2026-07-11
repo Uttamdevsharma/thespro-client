@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
 import { setBoardDraft } from '@/store/features/boardDraftSlice';
 import toast from 'react-hot-toast';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 import { ArrowLeft, CheckCircle2, User, Mail, FlaskConical, CheckCircle } from 'lucide-react';
 
 const CommitteeSelectMembersPage = () => {
@@ -36,7 +36,7 @@ const CommitteeSelectMembersPage = () => {
     router.push('/committee/defense-schedule/create');
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <PageSkeleton />;
 
   return (
     <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">

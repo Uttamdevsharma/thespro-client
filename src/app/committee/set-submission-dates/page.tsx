@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 import { Calendar, Save, AlertCircle, Clock } from 'lucide-react';
 import { useGetSubmissionDatesQuery, useSetSubmissionDatesMutation } from '@/store/features/apiSlice';
 
@@ -34,7 +34,7 @@ const CommitteeSetSubmissionDatesPage = () => {
     }
   };
 
-  if (loading) return <Loader />;
+  if (loading) return <PageSkeleton />;
 
   return (
     <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useGetStudentDefenseScheduleQuery } from '@/store/features/apiSlice';
 import { useSocket } from '@/contexts/SocketContext';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 
 const StudentDefenseSchedulePage = () => {
   const [defenseTypeFilter, setDefenseTypeFilter] = useState('Pre-Defense'); 
@@ -42,7 +42,7 @@ const StudentDefenseSchedulePage = () => {
       </div>
 
       {isLoading ? (
-        <Loader />
+        <PageSkeleton />
       ) : isError ? (
         <p className="text-red-500">Error: {(error as any)?.data?.message || 'An unexpected error occurred'}</p>
       ) : (

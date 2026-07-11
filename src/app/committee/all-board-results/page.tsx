@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useGetBoardResultsQuery, usePublishAllResultsMutation } from '@/store/features/apiSlice';
 import toast from 'react-hot-toast';
-import Loader from '@/components/Loader';
+import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { ArrowLeft, Send, Users, FileText, Trophy, BarChart3, Filter, CheckCircle2, FlaskConical } from 'lucide-react';
 
 const CommitteeAllBoardResultsPage = () => {
@@ -29,7 +29,7 @@ const CommitteeAllBoardResultsPage = () => {
     }
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <ListPageSkeleton />;
   if (isError) return (
     <div className="flex items-center justify-center min-h-[400px]">
        <p className="text-red-500 bg-red-50 px-4 py-2 rounded-md border border-red-100 font-medium">

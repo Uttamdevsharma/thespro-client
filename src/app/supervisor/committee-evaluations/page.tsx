@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useGetMyCommitteeEvaluationsQuery } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
+import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { format } from 'date-fns';
 import { Eye } from 'lucide-react';
 
@@ -23,7 +23,7 @@ const SupervisorBoardOverviewPage = () => {
         refetchBoards();
     }, [defenseTypeFilter, refetchBoards]);
 
-    if (isLoading) return <Loader />;
+    if (isLoading) return <ListPageSkeleton />;
     if (isError) return <div className="p-6 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-6xl mx-auto mt-10">Error: {(error as any)?.message || 'Failed to load boards.'}</div>;
 
     return (

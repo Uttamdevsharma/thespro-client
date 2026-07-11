@@ -66,7 +66,7 @@ const LoginPage = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-[#0ea5b7] transition-all outline-none font-bold text-gray-900 dark:text-gray-50"
+                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-indigo-500 transition-all outline-none font-bold text-gray-900 dark:text-gray-50"
                 required
               />
             </div>
@@ -81,7 +81,7 @@ const LoginPage = () => {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-[#0ea5b7] transition-all outline-none font-bold text-gray-900 dark:text-gray-50"
+                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-indigo-500 transition-all outline-none font-bold text-gray-900 dark:text-gray-50"
                 required
               />
             </div>
@@ -89,7 +89,7 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-5 bg-[#0ea5b7] text-white font-black rounded-2xl shadow-xl shadow-cyan-100 hover:bg-[#00838f] transition-all active:scale-95 disabled:opacity-50"
+              className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-100 dark:shadow-none transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Authenticating...' : 'Sign In'}
             </button>
@@ -108,7 +108,7 @@ const LoginPage = () => {
           <div className="mt-10 text-center">
             <p className="text-sm font-bold text-gray-400">
               New to ThesPro?{' '}
-              <Link href="/register" className="text-[#0ea5b7] hover:underline">Create Account</Link>
+              <Link href="/register" className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold">Create Account</Link>
             </p>
           </div>
         </div>

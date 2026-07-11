@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useGetAllDefenseBoardsQuery, useDeleteDefenseBoardMutation } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
+import ListPageSkeleton from '@/components/ListPageSkeleton';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 import { Eye, Trash2, Calendar, Clock, MapPin, Layers } from 'lucide-react';
@@ -25,7 +25,7 @@ const CommitteeAllDefenseBoardsPage = () => {
     }
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <ListPageSkeleton />;
   if (isError) return <div className="p-10 text-center text-red-500 font-bold bg-red-50 rounded-2xl border border-red-100 max-w-6xl mx-auto mt-10">Error: {(error as any)?.data?.message || (error as any)?.error}</div>;
 
   return (

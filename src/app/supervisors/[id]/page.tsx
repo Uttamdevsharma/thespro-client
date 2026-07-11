@@ -7,7 +7,7 @@ import {
     useGetPublicDepartmentsQuery,
     useGetPublicResearchCellsQuery
 } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
+import CardGridSkeleton from '@/components/CardGridSkeleton';
 import Link from 'next/link';
 import { Search, Filter, ShieldCheck, ChevronRight, X } from 'lucide-react';
 import SupervisorCard from '@/components/SupervisorCard';
@@ -38,7 +38,7 @@ const SupervisorsListPage = () => {
         return matchesName && matchesCell;
     });
 
-    if (facultyLoading) return <Loader />;
+    if (facultyLoading) return <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-8"><CardGridSkeleton columns={4} rows={2} /></div>;
 
     return (
         <div className="min-h-screen bg-white dark:bg-gray-900 pt-24 pb-20 font-sans">

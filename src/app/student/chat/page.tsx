@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useSocket } from '@/contexts/SocketContext';
 import toast from 'react-hot-toast';
+import PageSkeleton from '@/components/PageSkeleton';
 import { useGetStudentProposalsQuery } from '@/store/features/apiSlice';
 
 const StudentChatPage = () => {
@@ -114,11 +115,7 @@ const StudentChatPage = () => {
   };
 
   if (proposalsLoading || loadingChat) {
-    return (
-      <div className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md text-center text-gray-500 dark:text-gray-400">
-        Loading chat...
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   if (!proposalId) {

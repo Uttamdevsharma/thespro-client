@@ -6,7 +6,7 @@ import { useGetPublicDepartmentsQuery, useUpdateProfileMutation } from '@/store/
 import { useDispatch, useSelector } from 'react-redux';
 import { login, selectUser } from '@/store/features/userSlice';
 import toast from 'react-hot-toast';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 import { BookOpen, Hash, TrendingUp, ShieldCheck } from 'lucide-react';
 
 const CompleteProfilePage = () => {
@@ -49,16 +49,16 @@ const CompleteProfilePage = () => {
     }
   };
 
-  if (deptsLoading) return <Loader />;
+  if (deptsLoading) return <PageSkeleton withHeader={false} />;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-2xl bg-white dark:bg-gray-900 rounded-[3rem] shadow-2xl p-12 border border-gray-100 dark:border-gray-800 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-50 rounded-full -mr-32 -mt-32 -z-0" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full -mr-32 -mt-32 -z-0" />
         
         <div className="relative z-10">
           <div className="flex items-center space-x-4 mb-8">
-            <div className="w-16 h-16 bg-[#0ea5b7] text-white rounded-3xl flex items-center justify-center shadow-lg shadow-cyan-100">
+            <div className="w-16 h-16 bg-indigo-600 text-white rounded-3xl flex items-center justify-center shadow-lg shadow-indigo-100">
                <ShieldCheck size={32} />
             </div>
             <div>
@@ -72,13 +72,13 @@ const CompleteProfilePage = () => {
               {/* Department Dropdown */}
               <div className="md:col-span-2">
                 <label className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 text-xs font-black uppercase tracking-widest mb-3">
-                  <BookOpen size={14} className="text-[#0ea5b7]" />
+                  <BookOpen size={14} className="text-indigo-500" />
                   <span>Academic Department</span>
                 </label>
                 <select
                   value={formData.departmentId}
                   onChange={(e) => setFormData({ ...formData, departmentId: e.target.value })}
-                  className="w-full px-6 py-5 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-[1.5rem] focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-[#0ea5b7] transition-all outline-none font-bold text-gray-900 dark:text-gray-50 appearance-none shadow-sm"
+                  className="w-full px-6 py-5 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-[1.5rem] focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-indigo-500 transition-all outline-none font-bold text-gray-900 dark:text-gray-50 appearance-none shadow-sm"
                   required
                 >
                   <option value="">Select your department</option>
@@ -91,7 +91,7 @@ const CompleteProfilePage = () => {
               {/* Student ID */}
               <div>
                 <label className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 text-xs font-black uppercase tracking-widest mb-3">
-                  <Hash size={14} className="text-[#0ea5b7]" />
+                  <Hash size={14} className="text-indigo-500" />
                   <span>Student ID</span>
                 </label>
                 <input
@@ -99,7 +99,7 @@ const CompleteProfilePage = () => {
                   placeholder="e.g. 21-44789-1"
                   value={formData.studentId}
                   onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
-                  className="w-full px-6 py-5 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-[1.5rem] focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-[#0ea5b7] transition-all outline-none font-bold text-gray-900 dark:text-gray-50 shadow-sm"
+                  className="w-full px-6 py-5 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-[1.5rem] focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-indigo-500 transition-all outline-none font-bold text-gray-900 dark:text-gray-50 shadow-sm"
                   required
                 />
               </div>
@@ -107,7 +107,7 @@ const CompleteProfilePage = () => {
               {/* CGPA */}
               <div>
                 <label className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 text-xs font-black uppercase tracking-widest mb-3">
-                  <TrendingUp size={14} className="text-[#0ea5b7]" />
+                  <TrendingUp size={14} className="text-indigo-500" />
                   <span>Current CGPA</span>
                 </label>
                 <input
@@ -118,7 +118,7 @@ const CompleteProfilePage = () => {
                   placeholder="e.g. 3.75"
                   value={formData.currentCGPA}
                   onChange={(e) => setFormData({ ...formData, currentCGPA: e.target.value })}
-                  className="w-full px-6 py-5 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-[1.5rem] focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-[#0ea5b7] transition-all outline-none font-bold text-gray-900 dark:text-gray-50 shadow-sm"
+                  className="w-full px-6 py-5 bg-gray-50 dark:bg-gray-950 border-2 border-transparent rounded-[1.5rem] focus:bg-white dark:focus:bg-gray-900 dark:bg-gray-900 focus:border-indigo-500 transition-all outline-none font-bold text-gray-900 dark:text-gray-50 shadow-sm"
                   required
                 />
               </div>
@@ -127,7 +127,7 @@ const CompleteProfilePage = () => {
             <button
               type="submit"
               disabled={updating}
-              className="w-full py-6 bg-[#1a2b3c] text-white font-black rounded-3xl shadow-2xl hover:bg-[#0ea5b7] transition-all transform hover:-translate-y-1 active:scale-95 disabled:opacity-50"
+              className="w-full py-6 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-black rounded-3xl shadow-2xl transition-all transform hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {updating ? 'Saving Profile...' : 'Complete & Enter Portal'}
             </button>

@@ -6,13 +6,13 @@ import Link from 'next/link';
 import { useGetPublicNoticeByIdQuery } from '@/store/features/apiSlice';
 import { format } from 'date-fns';
 import { Calendar, User, Building2, FileText, ArrowLeft, Bell, ExternalLink } from 'lucide-react';
-import Loader from '@/components/Loader';
+import DetailPageSkeleton from '@/components/DetailPageSkeleton';
 
 const NoticeDetailPage = () => {
   const { id } = useParams();
   const { data: notice, isLoading, error } = useGetPublicNoticeByIdQuery(id as string);
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <DetailPageSkeleton />;
 
   if (error || !notice) {
     return (

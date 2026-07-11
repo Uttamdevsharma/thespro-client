@@ -5,14 +5,14 @@ import Link from 'next/link';
 import { useGetPublicNoticesQuery } from '@/store/features/apiSlice';
 import { format } from 'date-fns';
 import { Bell, Calendar, User, Building2, ChevronRight, ArrowRight, FileText, Info } from 'lucide-react';
-import Loader from '@/components/Loader';
+import { NoticeListSkeleton } from '@/components/NoticeSkeleton';
 import NoticeDetailModal from '@/components/NoticeDetailModal';
 
 const NoticesPage = () => {
   const { data: notices, isLoading } = useGetPublicNoticesQuery();
   const [selectedNotice, setSelectedNotice] = useState<any | null>(null);
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <NoticeListSkeleton count={6} />;
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 pt-28 pb-20 font-sans">

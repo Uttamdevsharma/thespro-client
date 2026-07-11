@@ -3,7 +3,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 import { useGetTeachersQuery } from '@/store/features/apiSlice';
 
 const ResearchCellInfoPage = () => {
@@ -17,7 +17,7 @@ const ResearchCellInfoPage = () => {
   }, [rawTeachers]);
 
   if (loading) {
-    return <Loader />;
+    return <PageSkeleton />;
   }
 
   return (

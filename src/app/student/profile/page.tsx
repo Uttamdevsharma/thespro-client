@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
-import Loader from '@/components/Loader';
+import ProfileSkeleton from '@/components/ProfileSkeleton';
 import { useGetProfileQuery, useUpdateProfileMutation, useUpdateProfilePictureMutation, useUpdatePasswordMutation } from '@/store/features/apiSlice';
 
 const ProfilePage = () => {
@@ -76,7 +76,7 @@ const ProfilePage = () => {
   const loading = fetchLoading || updateLoading || passwordLoading || pictureLoading;
 
   if (fetchLoading && !name) {
-    return <Loader />;
+    return <ProfileSkeleton />;
   }
 
   return (

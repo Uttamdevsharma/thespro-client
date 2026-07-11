@@ -3,7 +3,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import Loader from '@/components/Loader';
+import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { ShieldCheck, Mail, User } from 'lucide-react';
 import { useGetCommitteeMembersQuery } from '@/store/features/apiSlice';
 
@@ -22,7 +22,7 @@ const CommitteeMembersPage = () => {
     }));
   }, [rawMembers]);
 
-  if (loading) return <Loader />;
+  if (loading) return <ListPageSkeleton />;
 
   return (
     <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">

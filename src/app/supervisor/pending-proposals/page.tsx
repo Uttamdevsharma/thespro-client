@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
 import { useUpdateProposalStatusMutation, useGetSupervisorPendingProposalsQuery } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
 import Skeleton from '@/components/Skeleton';
 import { ProposalListSkeleton } from '@/components/ProposalSkeleton';
 import { ChevronDown, ChevronUp, Check, X, MessageSquare, Loader2 } from 'lucide-react';

@@ -7,7 +7,7 @@ import {
   useDeleteNoticeMutation,
 } from '@/store/features/apiSlice';
 import toast from 'react-hot-toast';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 import { Megaphone, Trash2, Send, Users, UserCheck } from 'lucide-react';
 
 const CommitteeNoticeManagementPage = () => {
@@ -45,7 +45,7 @@ const CommitteeNoticeManagementPage = () => {
     }
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <PageSkeleton />;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-10 px-4">

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useGetMyResultsQuery } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 
 interface Comment {
   evaluator: string;
@@ -76,7 +76,7 @@ const AssessmentTable: React.FC<AssessmentTableProps> = ({ title, comments }) =>
 const MyResultsPage = () => {
   const { data: results, isLoading, isError, error } = useGetMyResultsQuery();
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <PageSkeleton />;
 
   if (isError) {
     return (

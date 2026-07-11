@@ -3,7 +3,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import Loader from '@/components/Loader';
+import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { useGetSupervisorAllGroupsQuery } from '@/store/features/apiSlice';
 
 const SupervisorAllGroupsPage = () => {
@@ -68,7 +68,7 @@ const SupervisorAllGroupsPage = () => {
     );
   
     if (loading) {
-      return <Loader />;
+      return <ListPageSkeleton />;
     }
   
     return (

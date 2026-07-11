@@ -8,7 +8,7 @@ import {
     useGetProposalByIdQuery
 } from '@/store/features/apiSlice';
 import { RootState } from '@/store';
-import Loader from '@/components/Loader';
+import DetailPageSkeleton from '@/components/DetailPageSkeleton';
 import { CheckCircle, ArrowLeft } from 'lucide-react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -135,7 +135,7 @@ const EvaluateGroupPage = () => {
     };
 
     if (isLoadingProposal || isLoadingEvaluations || !proposal) {
-        return <Loader />;
+        return <DetailPageSkeleton />;
     }
 
     return (

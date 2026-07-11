@@ -8,7 +8,6 @@ import { RootState } from '@/store';
 import { setBoardDraft, clearBoardDraft } from '@/store/features/boardDraftSlice';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import Loader from '@/components/Loader';
 import { ArrowLeft, Save, Users, Layers, MapPin, Clock } from 'lucide-react';
 
 const CommitteeCreateDefenseBoardPage = () => {

@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 import toast from 'react-hot-toast';
 import { ArrowLeft, PlusCircle, CheckCircle2 } from 'lucide-react';
 import { useGetTeachersQuery, useGetResearchCellsQuery, useAssignCellMutation } from '@/store/features/apiSlice';
@@ -51,7 +51,7 @@ const CommitteeAddMembersToCellPage = () => {
     }
   };
 
-  if (loadingAllTeachers || loadingCells) return <Loader />;
+  if (loadingAllTeachers || loadingCells) return <PageSkeleton />;
   if (allTeachersError || cellsError || !researchCell) return <div className="p-10 text-center text-red-500 font-bold max-w-6xl mx-auto mt-10 bg-red-50 rounded-xl border border-red-100">Error: Could not load data.</div>;
 
   return (

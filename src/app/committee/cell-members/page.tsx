@@ -3,14 +3,14 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useGetResearchCellsQuery } from '@/store/features/apiSlice';
-import Loader from '@/components/Loader';
+import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { Layers, ChevronRight } from 'lucide-react';
 
 const CommitteeCellMembersOverviewPage = () => {
   const router = useRouter();
   const { data: researchCells, isLoading, isError, error } = useGetResearchCellsQuery();
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <ListPageSkeleton />;
   if (isError) return <div className="p-6 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-6xl mx-auto mt-10">Error: {(error as any)?.data?.message || (error as any)?.error}</div>;
 
   return (

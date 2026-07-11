@@ -7,6 +7,7 @@ import { RootState } from "@/store";
 import { useSocket } from "@/contexts/SocketContext";
 import toast from "react-hot-toast";
 import { useGetProposalsBySupervisorQuery } from "@/store/features/apiSlice";
+import PageSkeleton from '@/components/PageSkeleton';
 
 const SupervisorChatPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -106,11 +107,7 @@ const SupervisorChatPage = () => {
   };
 
   if (loading) {
-    return (
-      <div className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md text-center text-gray-500 dark:text-gray-400">
-        Loading chat...
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   return (

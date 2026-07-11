@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
-import Loader from '@/components/Loader';
+import PageSkeleton from '@/components/PageSkeleton';
 import { PlusCircle, Layers, Users } from 'lucide-react';
 import { useGetResearchCellsQuery, useGetTeachersQuery, useAddResearchCellMutation } from '@/store/features/apiSlice';
 
@@ -49,7 +49,7 @@ const CommitteeResearchCellsPage = () => {
     }
   };
 
-  if (cellsLoading || supervisorsLoading) return <Loader />;
+  if (cellsLoading || supervisorsLoading) return <PageSkeleton />;
 
   return (
     <div className="p-8 bg-gray-50 dark:bg-gray-950 min-h-screen">

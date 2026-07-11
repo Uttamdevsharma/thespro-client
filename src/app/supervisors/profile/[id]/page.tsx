@@ -15,7 +15,7 @@ import {
     Award,
     Dna
 } from 'lucide-react';
-import Loader from '@/components/Loader';
+import ProfileSkeleton from '@/components/ProfileSkeleton';
 
 const SupervisorProfilePage = () => {
     const { id } = useParams();
@@ -23,7 +23,7 @@ const SupervisorProfilePage = () => {
     const { data: member, isLoading } = useGetPublicFacultyProfileQuery(id as string);
     const [activeTab, setActiveTab] = useState('education');
 
-    if (isLoading) return <Loader />;
+    if (isLoading) return <ProfileSkeleton />;
     if (!member) return (
         <div className="min-h-screen flex items-center justify-center">
             <div className="text-center">

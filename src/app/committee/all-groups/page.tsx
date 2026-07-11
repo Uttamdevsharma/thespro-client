@@ -3,7 +3,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import Loader from '@/components/Loader';
+import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { Users, BookOpen, UserCheck, Tag } from 'lucide-react';
 import { useGetApprovedProposalsQuery } from '@/store/features/apiSlice';
 
@@ -14,7 +14,7 @@ const CommitteeAllGroupsPage = () => {
   });
 
   if (loading) {
-    return <Loader />;
+    return <ListPageSkeleton />;
   }
 
   return (
