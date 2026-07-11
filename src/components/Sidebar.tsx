@@ -83,7 +83,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
   const links = linksMap[role] || [];
 
   const renderLink = (link: LinkItem, isSubLink = false) => {
-    const baseClasses = `block px-4 py-3 rounded-xl transition-all duration-200 font-bold mb-1`;
+    const baseClasses = 'block px-4 py-3 rounded-xl transition-all duration-200 font-bold mb-1 cursor-pointer';
     const subLinkClass = isSubLink ? 'pl-8 text-sm' : 'text-sm';
 
     if (link.subLinks) {
@@ -92,11 +92,11 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
           <button
             onClick={() => handleDropdownToggle(link.label)}
             className={`${baseClasses} w-full text-left flex justify-between items-center ${
-              openDropdown === link.label ? 'bg-gray-100 dark:bg-gray-800 text-[#50C878]' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-800'
+              openDropdown === link.label ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
             }`}
           >
             <span>{link.label}</span>
-            <span className={`transform transition-transform ${openDropdown === link.label ? 'rotate-180' : ''}`}>▼</span>
+            <span className={`text-xs transform transition-transform ${openDropdown === link.label ? 'rotate-180' : ''}`}>▼</span>
           </button>
           {openDropdown === link.label && (
             <ul className="mt-1">
@@ -119,10 +119,15 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
       <Link
         href={link.to}
         onClick={handleLinkClick}
-        className={`${baseClasses} ${subLinkClass} ${
-          isActive ? 'bg-[#50C878] text-white shadow-lg shadow-green-100/50' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-800 hover:text-[#50C878] dark:hover:text-[#50C878]'
+        className={`${baseClasses} ${subLinkClass} relative ${
+          isActive
+            ? 'bg-indigo-600 dark:bg-indigo-500 text-white shadow-lg shadow-indigo-200/50 dark:shadow-indigo-900/30'
+            : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400'
         }`}
       >
+        {isActive && (
+          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-full" />
+        )}
         {link.label}
       </Link>
     );
@@ -147,7 +152,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
         <div className="flex flex-col h-full">
             {/* Mobile Header in Sidebar */}
             <div className="flex items-center justify-between p-6 md:hidden border-b border-gray-50 dark:border-gray-800">
-                <span className="text-xl font-black text-[#50C878]">Navigation</span>
+                <span className="text-xl font-black text-indigo-600 dark:text-indigo-400">Navigation</span>
                 <button onClick={closeSidebar} className="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-200">
                     <X size={24} />
                 </button>
