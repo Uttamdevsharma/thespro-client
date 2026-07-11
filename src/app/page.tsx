@@ -5,8 +5,9 @@ import Link from 'next/link';
 import AuthNavbar from '@/components/AuthNavbar';
 import { useGetPublicDepartmentsQuery, useGetPublicFacultyByDepartmentQuery, useGetPublicResearchCellsQuery, useGetPublicNoticesQuery, useGetPublicStatsQuery } from '@/store/features/apiSlice';
 import SupervisorCard from '@/components/SupervisorCard';
-import { ArrowRight, ChevronRight, GraduationCap, Search, ShieldCheck, Bell, UserCheck, ClipboardList, Settings, Users, FileText, LayoutGrid, Plus, Minus, MessageCircle, HelpCircle } from 'lucide-react';
+import { ArrowRight, GraduationCap, Search, Bell, Users, FileText, LayoutGrid, Plus, Minus, HelpCircle } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
+import HowItWorks from '@/components/HowItWorks';
 import ResearchCellCard from '@/components/ResearchCellCard';
 import NoticeSlider from '@/components/NoticeSlider';
 import NoticeDetailModal from '@/components/NoticeDetailModal';
@@ -401,46 +402,7 @@ const LandingPage = () => {
         </section>
       </ScrollReveal>
 
-      {/* How It Works Section */}
-      <ScrollReveal>
-        <section id="features" className="py-24 bg-white dark:bg-slate-900 relative overflow-hidden border-b border-slate-200/60 dark:border-slate-800/60">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100/60 dark:border-indigo-900/40 rounded-full text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-wider mb-4">
-                <Settings size={14} />
-                <span>Process Overview</span>
-              </div>
-              <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-6">
-                How It <span className="text-indigo-600 dark:text-indigo-400">Works</span>
-              </h2>
-              <p className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-normal">
-                A seamless step-by-step journey designed to streamline your academic research and approval process.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                { title: 'Register / Login', desc: 'Join the platform as a student or faculty member and securely access your dashboard.', icon: <UserCheck className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> },
-                { title: 'Complete Profile', desc: 'Fill in your academic details and research interests to get personalized recommendations.', icon: <ClipboardList className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> },
-                { title: 'Submit Proposal', desc: 'Draft and upload your thesis or project proposal for formal review.', icon: <FileText className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> },
-                { title: 'Supervisor Review', desc: 'Assigned supervisors will provide feedback and guide your initial proposal.', icon: <Users className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> },
-                { title: 'Committee Approval', desc: 'The academic committee reviews and provides final authorization for your work.', icon: <GraduationCap className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> },
-                { title: 'Defense', desc: 'Present your completed research to the defense board for final evaluation and grading.', icon: <ShieldCheck className="text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors" size={24} /> }
-              ].map((step, idx) => (
-                <div key={idx} className="bg-white dark:bg-slate-950 p-8 rounded-xl border border-slate-200/60 dark:border-slate-800/80 hover:border-indigo-500 dark:hover:border-indigo-500 transition-all duration-300 shadow-sm hover:shadow-md group">
-                  <div className="w-14 h-14 bg-indigo-50 dark:bg-indigo-950/60 rounded-lg flex items-center justify-center mb-6 group-hover:bg-indigo-600 transition-all duration-300">
-                    {step.icon}
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{idx + 1}. {step.title}</h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-normal">
-                    {step.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </ScrollReveal>
+      <HowItWorks />
 
       {/* System Statistics Section */}
       <ScrollReveal>
