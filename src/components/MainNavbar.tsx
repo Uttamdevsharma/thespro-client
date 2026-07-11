@@ -87,19 +87,44 @@ const MainNavbar = () => {
 
               <div
                 onMouseLeave={() => setIsSupervisorsOpen(false)}
-                className={`absolute top-full left-0 mt-2 w-64 bg-white dark:bg-slate-900 rounded-lg shadow-lg border border-slate-200/80 dark:border-slate-805 py-2 transition-all duration-200 origin-top-left ${isSupervisorsOpen ? 'opacity-100 scale-100 translate-y-0 visible' : 'opacity-0 scale-95 -translate-y-2 invisible'}`}
+                className={`absolute top-full left-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200/80 dark:border-slate-700/80 py-1.5 transition-all duration-200 origin-top-left ${
+                  isSupervisorsOpen
+                    ? 'opacity-100 scale-100 translate-y-0 visible'
+                    : 'opacity-0 scale-95 -translate-y-2 invisible'
+                }`}
               >
-                <div className="px-4 py-2 border-b border-slate-100 dark:border-slate-800">
-                  <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Browse by Department</p>
+                <div className="px-5 py-3 border-b border-slate-100 dark:border-slate-800">
+                  <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Browse by Department</p>
                 </div>
-                <div className="max-h-60 overflow-y-auto custom-scrollbar">
+                <div className="max-h-72 overflow-y-auto custom-scrollbar">
                   {departments?.map((dept: any) => (
                     <button
                       key={dept._id}
                       onClick={() => handleSupervisorDeptClick(dept._id)}
-                      className="w-full text-left px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-305 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
+                      className="group/dept w-full text-left px-5 py-3 flex items-center justify-between hover:bg-indigo-50/60 dark:hover:bg-indigo-900/20 border-l-2 border-transparent hover:border-indigo-500 dark:hover:border-indigo-400 transition-all duration-150 cursor-pointer"
                     >
-                      {dept.abbreviation || dept.name}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover/dept:text-indigo-700 dark:group-hover/dept:text-indigo-300 transition-colors leading-snug">
+                          {dept.name}
+                        </p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                            {dept.abbreviation}
+                          </span>
+                          <span className="flex items-center gap-1 text-[11px] text-slate-400 dark:text-slate-500">
+                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            {dept.supervisorCount ?? 0}
+                          </span>
+                        </div>
+                      </div>
+                      <svg
+                        className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover/dept:text-indigo-500 dark:group-hover/dept:text-indigo-400 group-hover/dept:translate-x-0.5 transition-all"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
                     </button>
                   ))}
                 </div>
@@ -179,17 +204,20 @@ const MainNavbar = () => {
 
           {/* Mobile Supervisors Section */}
           <div className="space-y-1">
-            <span className="block py-2 text-sm font-semibold text-slate-500 dark:text-slate-400">
-              Supervisors
+            <span className="block py-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+              Browse by Department
             </span>
-            <div className="pl-4 border-l border-slate-200 dark:border-slate-850 space-y-2 max-h-40 overflow-y-auto">
+            <div className="pl-3 border-l-2 border-indigo-200 dark:border-indigo-800 space-y-1 max-h-56 overflow-y-auto custom-scrollbar">
               {departments?.map((dept: any) => (
                 <button
                   key={dept._id}
                   onClick={() => handleSupervisorDeptClick(dept._id)}
-                  className="block w-full text-left py-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-indigo-600 cursor-pointer"
+                  className="block w-full text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-700 dark:hover:text-indigo-300 transition-all duration-150 cursor-pointer"
                 >
-                  {dept.abbreviation || dept.name}
+                  <span className="block leading-snug">{dept.name}</span>
+                  <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                    {dept.abbreviation}
+                  </span>
                 </button>
               ))}
             </div>
