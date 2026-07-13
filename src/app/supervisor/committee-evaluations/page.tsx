@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetMyCommitteeEvaluationsQuery } from '@/store/features/apiSlice';
 import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { format } from 'date-fns';
@@ -9,6 +10,7 @@ import { Eye } from 'lucide-react';
 
 const SupervisorBoardOverviewPage = () => {
     const router = useRouter();
+    const { cycleId } = useCycle();
     const [defenseTypeFilter, setDefenseTypeFilter] = useState('Pre-Defense');
 
     const {
@@ -17,7 +19,7 @@ const SupervisorBoardOverviewPage = () => {
         isError,
         error,
         refetch: refetchBoards
-    } = useGetMyCommitteeEvaluationsQuery(defenseTypeFilter);
+    } = useGetMyCommitteeEvaluationsQuery({ defenseType: defenseTypeFilter, thesisCycleId: cycleId || undefined });
 
     useEffect(() => {
         refetchBoards();

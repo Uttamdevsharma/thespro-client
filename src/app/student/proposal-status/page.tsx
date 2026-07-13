@@ -45,6 +45,7 @@ const StudentProposalStatusPage = () => {
             <div key={proposal._id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm">
               <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">{proposal.title}</h2>
               <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Type: {proposal.type}</p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Thesis Cycle: {proposal.thesisCycle?.name || 'N/A'}</p>
               <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Research Cell: {proposal.researchCellId?.title || 'N/A'}</p>
               <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">Supervisor: {proposal.supervisorId?.name || 'N/A'}</p>
               <div className="text-gray-600 dark:text-gray-300 text-sm mb-2">

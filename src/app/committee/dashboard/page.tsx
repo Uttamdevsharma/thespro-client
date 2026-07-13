@@ -3,14 +3,16 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { FaUserGraduate, FaChalkboardTeacher, FaFileAlt, FaCheckCircle, FaHourglassHalf, FaFlask, FaUsers } from 'react-icons/fa';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetResearchCellsQuery, useGetProposalsQuery, useGetStudentsQuery, useGetTeachersQuery } from '@/store/features/apiSlice';
 import Skeleton from '@/components/Skeleton';
 import TableSkeleton from '@/components/TableSkeleton';
 
 const CommitteeDashboard = () => {
   const router = useRouter();
+  const { cycleId } = useCycle();
   const { data: researchCells, isLoading: loadingCells, error: cellsError } = useGetResearchCellsQuery();
-  const { data: proposals, isLoading: loadingProposals, error: proposalsError } = useGetProposalsQuery();
+  const { data: proposals, isLoading: loadingProposals, error: proposalsError } = useGetProposalsQuery({ thesisCycleId: cycleId || undefined });
   const { data: students, isLoading: loadingStudents, error: studentsError } = useGetStudentsQuery();
   const { data: teachers, isLoading: loadingTeachers, error: teachersError } = useGetTeachersQuery();
 

@@ -48,6 +48,8 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
 
   const adminLinks: LinkItem[] = [
     { to: '/admin/dashboard', label: 'Admin Dashboard' },
+    { to: '/admin/thesis-cycles', label: 'Thesis Cycles' },
+    { to: '/admin/analytics', label: 'Cycle Analytics' },
     { to: '/admin/departments', label: 'Department Management' },
     { to: '/admin/teachers', label: 'Teacher Management' },
     { to: '/admin/students', label: 'Student Management' },

@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { Menu, X, LogOut, User as UserIcon, ChevronDown, LayoutDashboard } from 'lucide-react';
 import NotificationBell from './NotificationBell';
 import { ThemeToggle } from './ThemeToggle';
+import CycleSelector from './CycleSelector';
 import { useUI } from '@/contexts/UIContext';
 
 const AuthNavbar = () => {
@@ -70,6 +71,7 @@ const AuthNavbar = () => {
 
           {/* Right: auth tools */}
           <div className="flex items-center gap-3">
+            <CycleSelector />
             <ThemeToggle />
 
             {user && <NotificationBell />}

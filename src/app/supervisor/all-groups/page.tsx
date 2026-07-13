@@ -4,12 +4,14 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import ListPageSkeleton from '@/components/ListPageSkeleton';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetSupervisorAllGroupsQuery } from '@/store/features/apiSlice';
 
 const SupervisorAllGroupsPage = () => {
     const user = useSelector((state: RootState) => state.user.user);
+    const { cycleId } = useCycle();
   
-    const { data, isLoading: loading } = useGetSupervisorAllGroupsQuery(undefined, {
+    const { data, isLoading: loading } = useGetSupervisorAllGroupsQuery({ thesisCycleId: cycleId || undefined }, {
       skip: !user
     });
 

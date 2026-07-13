@@ -5,11 +5,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { Users, BookOpen, UserCheck, Tag } from 'lucide-react';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetApprovedProposalsQuery } from '@/store/features/apiSlice';
 
 const CommitteeAllGroupsPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
-  const { data: groups = [], isLoading: loading } = useGetApprovedProposalsQuery(undefined, {
+  const { cycleId } = useCycle();
+  const { data: groups = [], isLoading: loading } = useGetApprovedProposalsQuery({ thesisCycleId: cycleId || undefined }, {
     skip: !user
   });
 

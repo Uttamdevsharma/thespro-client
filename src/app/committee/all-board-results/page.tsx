@@ -1,17 +1,19 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetBoardResultsQuery, usePublishAllResultsMutation } from '@/store/features/apiSlice';
 import toast from 'react-hot-toast';
 import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { ArrowLeft, Send, Users, FileText, Trophy, BarChart3, Filter, CheckCircle2, FlaskConical } from 'lucide-react';
 
 const CommitteeAllBoardResultsPage = () => {
+  const { cycleId } = useCycle();
   const [defenseType, setDefenseType] = useState('Pre-Defense');
   const [selectedBoard, setSelectedBoard] = useState<any>(null);
   const [selectedGroup, setSelectedGroup] = useState<any>(null);
 
-  const { data: boardResults, isLoading, isError, error, refetch } = useGetBoardResultsQuery(defenseType);
+  const { data: boardResults, isLoading, isError, error, refetch } = useGetBoardResultsQuery({ defenseType, thesisCycleId: cycleId || undefined });
   const [publishAllResults, { isLoading: isPublishing }] = usePublishAllResultsMutation();
 
   useEffect(() => {

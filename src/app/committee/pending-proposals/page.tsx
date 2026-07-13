@@ -1,13 +1,15 @@
 'use client';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetPendingProposalsByCellQuery, useForwardProposalMutation, useRejectProposalMutation } from '@/store/features/apiSlice';
 import Skeleton from '@/components/Skeleton';
 import { ProposalListSkeleton } from '@/components/ProposalSkeleton';
 import { ChevronRight, ArrowLeft, Send, XCircle, Info, Users, Layers, AlertCircle } from 'lucide-react';
 
 const CommitteePendingProposalsPage = () => {
-  const { data: proposalsByCell, isLoading, isError, error } = useGetPendingProposalsByCellQuery();
+  const { cycleId } = useCycle();
+  const { data: proposalsByCell, isLoading, isError, error } = useGetPendingProposalsByCellQuery({ thesisCycleId: cycleId || undefined });
   const [forwardProposal, { isLoading: isForwarding }] = useForwardProposalMutation();
   const [rejectProposal, { isLoading: isRejecting }] = useRejectProposalMutation();
   const [selectedCell, setSelectedCell] = useState<any>(null);
@@ -137,6 +139,10 @@ const CommitteePendingProposalsPage = () => {
                                 <div className="flex justify-between items-center text-sm">
                                     <span className="text-gray-500 dark:text-gray-400 font-medium">Student ID:</span>
                                     <span className="font-bold text-gray-800 dark:text-gray-100">{proposal.createdBy.studentId}</span>
+                                </div>
+                                <div className="flex justify-between items-center text-sm">
+                                    <span className="text-gray-500 dark:text-gray-400 font-medium">Thesis Cycle:</span>
+                                    <span className="font-bold text-gray-800 dark:text-gray-100">{proposal.thesisCycle?.name || 'N/A'}</span>
                                 </div>
                             </div>
                         </div>

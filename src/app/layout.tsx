@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import MainNavbar from "@/components/MainNavbar";
 import { usePathname } from "next/navigation";
 import { UIProvider } from "@/contexts/UIContext";
+import { CycleProvider } from "@/contexts/CycleContext";
 import AIChatBot from "@/components/AIChatBot";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
@@ -41,6 +42,7 @@ export default function RootLayout({
             <SocketProvider>
               <AuthProvider>
                 <UIProvider>
+                  <CycleProvider>
                   {isPublicWithNav && <MainNavbar />}
                   <main className={`min-h-screen ${isPublicRoute ? "" : ""} transition-colors duration-300 dark:bg-slate-900 dark:text-white`}>
                     {children}
@@ -48,6 +50,7 @@ export default function RootLayout({
                   <Toaster position="top-right" />
                   <ToastContainer />
                   <AIChatBot />
+                  </CycleProvider>
                 </UIProvider>
               </AuthProvider>
             </SocketProvider>

@@ -33,7 +33,7 @@ const baseQueryWithAuth: typeof baseQuery = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithAuth,
-  tagTypes: ['Students', 'Teachers', 'Cells', 'Notices', 'Proposals', 'DefenseBoards', 'Rooms', 'ScheduleSlots', 'Evaluations', 'User', 'Departments', 'Committee'],
+  tagTypes: ['Students', 'Teachers', 'Cells', 'Notices', 'Proposals', 'DefenseBoards', 'Rooms', 'ScheduleSlots', 'Evaluations', 'User', 'Departments', 'Committee', 'ThesisCycles'],
   endpoints: (builder) => ({
     // Auth
     loginUser: builder.mutation<any, any>({
@@ -55,6 +55,10 @@ export const apiSlice = createApi({
     getAdminStats: builder.query<any, void>({
       query: () => '/admin/stats',
       providesTags: ['Students', 'Teachers', 'Departments', 'Committee'],
+    }),
+    getCycleAnalytics: builder.query<any, string | void>({
+      query: (cycleId) => cycleId ? `/admin/cycle-stats/${cycleId}` : '/admin/cycle-stats',
+      providesTags: ['ThesisCycles'],
     }),
     getAdminDepartments: builder.query<any, void>({
       query: () => '/admin/departments',
@@ -176,6 +180,43 @@ export const apiSlice = createApi({
       invalidatesTags: ['Committee'],
     }),
 
+    // Thesis Cycles
+    getThesisCycles: builder.query<any, void>({
+      query: () => '/thesis-cycles',
+      providesTags: ['ThesisCycles'],
+    }),
+    getPublicThesisCycles: builder.query<any, void>({
+      query: () => '/public/thesis-cycles',
+      providesTags: ['ThesisCycles'],
+    }),
+    getThesisCycleById: builder.query<any, string>({
+      query: (id) => `/thesis-cycles/${id}`,
+      providesTags: (result, error, id) => [{ type: 'ThesisCycles' as const, id }],
+    }),
+    createThesisCycle: builder.mutation<any, { name: string; startSemester: string; endSemester: string }>({
+      query: (data) => ({
+        url: '/thesis-cycles',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['ThesisCycles'],
+    }),
+    updateThesisCycle: builder.mutation<any, { id: string; [key: string]: any }>({
+      query: ({ id, ...data }) => ({
+        url: `/thesis-cycles/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['ThesisCycles'],
+    }),
+    archiveThesisCycle: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `/thesis-cycles/${id}/archive`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: ['ThesisCycles'],
+    }),
+
     getStudents: builder.query<any, void>({
       query: () => '/users/students',
       providesTags: ['Students'],
@@ -293,8 +334,12 @@ export const apiSlice = createApi({
       },
       providesTags: ['Proposals'],
     }),
-    getSupervisorPendingProposals: builder.query<any, void>({
-      query: () => '/proposals/supervisor-pending-proposals',
+    getSupervisorPendingProposals: builder.query<any, { thesisCycleId?: string } | void>({
+      query: (params) => {
+        let url = '/proposals/supervisor-pending-proposals';
+        if (params?.thesisCycleId) url += `?thesisCycleId=${params.thesisCycleId}`;
+        return url;
+      },
       providesTags: ['Proposals'],
     }),
     updateProposalStatus: builder.mutation<any, { id: string; [key: string]: any }>({
@@ -316,8 +361,12 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['Proposals'],
     }),
-    getPendingProposalsByCell: builder.query<any, void>({
-      query: () => '/proposals/pending-by-cell',
+    getPendingProposalsByCell: builder.query<any, { thesisCycleId?: string } | void>({
+      query: (params) => {
+        let url = '/proposals/pending-by-cell';
+        if (params?.thesisCycleId) url += `?thesisCycleId=${params.thesisCycleId}`;
+        return url;
+      },
       providesTags: ['Proposals'],
     }),
     rejectProposal: builder.mutation<any, { id: string; feedback: string }>({
@@ -350,8 +399,12 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['DefenseBoards'],
     }),
-    getAllDefenseBoards: builder.query<any, void>({
-      query: () => '/defenseboards',
+    getAllDefenseBoards: builder.query<any, { thesisCycleId?: string } | void>({
+      query: (params) => {
+        let url = '/defenseboards';
+        if (params?.thesisCycleId) url += `?thesisCycleId=${params.thesisCycleId}`;
+        return url;
+      },
       providesTags: ['DefenseBoards'],
     }),
     updateDefenseBoard: builder.mutation<any, { id: string; [key: string]: any }>({
@@ -436,12 +489,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['Notices'],
     }),
-    getSupervisorDefenseSchedule: builder.query<any, string | undefined>({
-      query: (defenseType) => {
+    getSupervisorDefenseSchedule: builder.query<any, { defenseType?: string; thesisCycleId?: string } | void>({
+      query: (params) => {
         let url = '/defenseboards/supervisor-schedule';
-        if (defenseType) {
-          url += `?defenseType=${defenseType}`;
-        }
+        const qp = new URLSearchParams();
+        if (params?.defenseType) qp.set('defenseType', params.defenseType);
+        if (params?.thesisCycleId) qp.set('thesisCycleId', params.thesisCycleId);
+        const qs = qp.toString();
+        if (qs) url += `?${qs}`;
         return url;
       },
       providesTags: ['DefenseBoards'],
@@ -511,31 +566,45 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['ScheduleSlots'],
     }),
-    getProposals: builder.query<any, void>({
-      query: () => '/proposals',
+    getProposals: builder.query<any, { thesisCycleId?: string } | void>({
+      query: (params) => {
+        let url = '/proposals';
+        if (params?.thesisCycleId) url += `?thesisCycleId=${params.thesisCycleId}`;
+        return url;
+      },
       providesTags: ['Proposals'],
     }),
-    getApprovedProposals: builder.query<any, void>({
-      query: () => '/proposals/approved-proposals',
+    getApprovedProposals: builder.query<any, { thesisCycleId?: string } | void>({
+      query: (params) => {
+        let url = '/proposals/approved-proposals';
+        if (params?.thesisCycleId) url += `?thesisCycleId=${params.thesisCycleId}`;
+        return url;
+      },
       providesTags: ['Proposals'],
     }),
-    getSupervisorAllGroups: builder.query<any, void>({
-      query: () => '/proposals/supervisor-all-groups',
+    getSupervisorAllGroups: builder.query<any, { thesisCycleId?: string } | void>({
+      query: (params) => {
+        let url = '/proposals/supervisor-all-groups';
+        if (params?.thesisCycleId) url += `?thesisCycleId=${params.thesisCycleId}`;
+        return url;
+      },
       providesTags: ['Proposals'],
     }),
-    getSupervisorDefenseResults: builder.query<any, { filter: string, defenseType: string }>({
+    getSupervisorDefenseResults: builder.query<any, { filter: string; defenseType: string; thesisCycleId?: string }>({
       query: (params) => ({
         url: '/defense-results/supervisor',
         params,
       }),
       providesTags: ['Evaluations'],
     }),
-    getAvailableProposals: builder.query<any, string | undefined>({
-      query: (defenseType) => {
+    getAvailableProposals: builder.query<any, { defenseType?: string; thesisCycleId?: string } | void>({
+      query: (params) => {
         let url = '/proposals/available-proposals';
-        if (defenseType) {
-          url += `?defenseType=${defenseType}`;
-        }
+        const qp = new URLSearchParams();
+        if (params?.defenseType) qp.set('defenseType', params.defenseType);
+        if (params?.thesisCycleId) qp.set('thesisCycleId', params.thesisCycleId);
+        const qs = qp.toString();
+        if (qs) url += `?${qs}`;
         return url;
       },
       providesTags: ['Proposals'],
@@ -562,16 +631,36 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['Evaluations'],
     }),
-    getMySupervisions: builder.query<any, void>({
-      query: () => '/proposals/my-supervisions',
+    getMySupervisions: builder.query<any, { thesisCycleId?: string } | void>({
+      query: (params) => {
+        let url = '/proposals/my-supervisions';
+        if (params?.thesisCycleId) url += `?thesisCycleId=${params.thesisCycleId}`;
+        return url;
+      },
       providesTags: ['Proposals'],
     }),
-    getMyCommitteeEvaluations: builder.query<any, string>({
-      query: (defenseType) => `/defenseboards/my-committee-evaluations?defenseType=${defenseType}`,
+    getMyCommitteeEvaluations: builder.query<any, { defenseType?: string; thesisCycleId?: string } | void>({
+      query: (params) => {
+        let url = '/defenseboards/my-committee-evaluations';
+        const qp = new URLSearchParams();
+        if (params?.defenseType) qp.set('defenseType', params.defenseType);
+        if (params?.thesisCycleId) qp.set('thesisCycleId', params.thesisCycleId);
+        const qs = qp.toString();
+        if (qs) url += `?${qs}`;
+        return url;
+      },
       providesTags: ['DefenseBoards'],
     }),
-    getBoardResults: builder.query<any, string>({
-      query: (defenseType) => `/evaluations/board-results?defenseType=${defenseType}`,
+    getBoardResults: builder.query<any, { defenseType?: string; thesisCycleId?: string } | void>({
+      query: (params) => {
+        let url = '/evaluations/board-results';
+        const qp = new URLSearchParams();
+        if (params?.defenseType) qp.set('defenseType', params.defenseType);
+        if (params?.thesisCycleId) qp.set('thesisCycleId', params.thesisCycleId);
+        const qs = qp.toString();
+        if (qs) url += `?${qs}`;
+        return url;
+      },
       providesTags: ['Evaluations', 'DefenseBoards', 'Proposals'],
     }),
     getPublishStatus: builder.query<any, void>({
@@ -683,7 +772,8 @@ export const {
   useUpdatePasswordMutation,
   useGetSubmissionDatesQuery,
   useSetSubmissionDatesMutation,
-  useGetAdminStatsQuery,
+   useGetAdminStatsQuery,
+   useGetCycleAnalyticsQuery,
   useGetAdminDepartmentsQuery,
   useGetPublicDepartmentsQuery,
   useGetPublicResearchCellsQuery,
@@ -703,7 +793,12 @@ export const {
   useGetAdminCommitteeQuery,
   useAssignAdminCommitteeMutation,
   useRemoveAdminCommitteeMutation,
-  useUpdateSupervisorProfileMutation,
-  useChatWithAIMutation,
-  useGenerateProposalDescriptionMutation,
+   useUpdateSupervisorProfileMutation,
+   useChatWithAIMutation,
+   useGenerateProposalDescriptionMutation,
+   useGetThesisCyclesQuery,
+   useGetThesisCycleByIdQuery,
+   useCreateThesisCycleMutation,
+   useUpdateThesisCycleMutation,
+   useArchiveThesisCycleMutation,
 } = apiSlice;

@@ -6,16 +6,19 @@ import { RootState } from '@/store';
 import toast from 'react-hot-toast';
 import ListPageSkeleton from '@/components/ListPageSkeleton';
 import { Trophy, Filter, ShieldCheck, UserCheck } from 'lucide-react';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetSupervisorDefenseResultsQuery } from '@/store/features/apiSlice';
 
 const SupervisorDefenseResultPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
+  const { cycleId } = useCycle();
   const [supervisionFilter, setSupervisionFilter] = useState('all');
   const [defenseTypeFilter, setDefenseTypeFilter] = useState('Pre-Defense');
 
   const { data: defenseResults = [], isLoading: loading, error: queryError } = useGetSupervisorDefenseResultsQuery({ 
     filter: supervisionFilter, 
-    defenseType: defenseTypeFilter 
+    defenseType: defenseTypeFilter,
+    thesisCycleId: cycleId || undefined,
   }, {
     skip: !user
   });

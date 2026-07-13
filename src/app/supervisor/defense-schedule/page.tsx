@@ -1,14 +1,16 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetSupervisorDefenseScheduleQuery, useAddOrUpdateCommentMutation } from '@/store/features/apiSlice';
 import toast from 'react-hot-toast';
 import PageSkeleton from '@/components/PageSkeleton';
 import { Save, Filter, Users, Calendar, MapPin, Clock } from 'lucide-react';
 
 const SupervisorDefenseSchedulePage = () => {
+  const { cycleId } = useCycle();
   const [defenseTypeFilter, setDefenseTypeFilter] = useState('Pre-Defense');
-  const { data: defenseBoards, isLoading, isError, error, refetch } = useGetSupervisorDefenseScheduleQuery(defenseTypeFilter);
+  const { data: defenseBoards, isLoading, isError, error, refetch } = useGetSupervisorDefenseScheduleQuery({ defenseType: defenseTypeFilter, thesisCycleId: cycleId || undefined });
   const [addOrUpdateComment] = useAddOrUpdateCommentMutation();
   const [comments, setComments] = useState<Record<string, string>>({});
 

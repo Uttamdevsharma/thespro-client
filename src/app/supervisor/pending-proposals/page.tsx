@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import toast from 'react-hot-toast';
+import { useCycle } from '@/contexts/CycleContext';
 import { useUpdateProposalStatusMutation, useGetSupervisorPendingProposalsQuery } from '@/store/features/apiSlice';
 import Skeleton from '@/components/Skeleton';
 import { ProposalListSkeleton } from '@/components/ProposalSkeleton';
@@ -11,7 +12,8 @@ import { ChevronDown, ChevronUp, Check, X, MessageSquare, Loader2 } from 'lucide
 
 const SupervisorPendingProposalsPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
-  const { data: proposals, isLoading, isError, error } = useGetSupervisorPendingProposalsQuery(undefined, {
+  const { cycleId } = useCycle();
+  const { data: proposals, isLoading, isError, error } = useGetSupervisorPendingProposalsQuery({ thesisCycleId: cycleId || undefined }, {
       skip: !user
   });
   const [expandedProposalId, setExpandedProposalId] = useState<string | null>(null);
@@ -56,10 +58,14 @@ const SupervisorPendingProposalsPage = () => {
 
   const renderProposalDetails = (proposal: any, actionable: boolean) => (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div>
               <p className="text-sm text-gray-500 dark:text-gray-400 uppercase font-semibold">Submitted By</p>
               <p className="text-gray-800 dark:text-gray-100 font-medium">{proposal.createdBy.name || 'N/A'} ({proposal.createdBy.studentId})</p>
+          </div>
+          <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400 uppercase font-semibold">Thesis Cycle</p>
+              <p className="text-gray-800 dark:text-gray-100 font-medium">{proposal.thesisCycle?.name || 'N/A'}</p>
           </div>
           <div>
               <p className="text-sm text-gray-500 dark:text-gray-400 uppercase font-semibold">Research Cell</p>

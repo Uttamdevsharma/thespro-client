@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetAllDefenseBoardsQuery, useDeleteDefenseBoardMutation } from '@/store/features/apiSlice';
 import ListPageSkeleton from '@/components/ListPageSkeleton';
 import toast from 'react-hot-toast';
@@ -10,7 +11,8 @@ import { Eye, Trash2, Calendar, Clock, MapPin, Layers } from 'lucide-react';
 
 const CommitteeAllDefenseBoardsPage = () => {
   const router = useRouter();
-  const { data: defenseBoards, isLoading, isError, error, refetch } = useGetAllDefenseBoardsQuery();
+  const { cycleId } = useCycle();
+  const { data: defenseBoards, isLoading, isError, error, refetch } = useGetAllDefenseBoardsQuery({ thesisCycleId: cycleId || undefined });
   const [deleteDefenseBoard] = useDeleteDefenseBoardMutation();
 
   const handleDelete = async (boardId: string) => {

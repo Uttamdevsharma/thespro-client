@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetMySupervisionsQuery } from '@/store/features/apiSlice';
 import ListPageSkeleton from '@/components/ListPageSkeleton';
 import Link from 'next/link';
@@ -10,7 +11,8 @@ import { Eye } from 'lucide-react';
 
 const SupervisorGroupsOverviewPage = () => {
     const user = useSelector((state: RootState) => state.user.user);
-    const { data: proposals, isLoading, isError, error, refetch: refetchProposals } = useGetMySupervisionsQuery(undefined, {
+    const { cycleId } = useCycle();
+    const { data: proposals, isLoading, isError, error, refetch: refetchProposals } = useGetMySupervisionsQuery({ thesisCycleId: cycleId || undefined }, {
         skip: !user
     });
 

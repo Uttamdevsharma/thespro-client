@@ -11,6 +11,7 @@ import {
   useGetStudentsQuery, 
   useGetSubmissionDatesQuery,
   useGetSupervisorsCapacityQuery,
+  useGetPublicThesisCyclesQuery,
   useGenerateProposalDescriptionMutation
 } from '@/store/features/apiSlice';
 import { Bot, Sparkles, Loader2 } from 'lucide-react';
@@ -22,6 +23,7 @@ const StudentProposalPage = () => {
   const [type, setType] = useState('Thesis');
   const [researchCell, setResearchCell] = useState('');
   const [supervisor, setSupervisor] = useState('');
+  const [thesisCycle, setThesisCycle] = useState('');
   const [members, setMembers] = useState<any[]>([]);
   const [proposalSubmitted, setProposalSubmitted] = useState(false);
 
@@ -31,9 +33,19 @@ const StudentProposalPage = () => {
   const { data: supervisors = [] } = useGetSupervisorsCapacityQuery(researchCell, { 
     skip: !researchCell || !user 
   });
-
+  const { data: cycles = [], isLoading: cyclesLoading } = useGetPublicThesisCyclesQuery(undefined, { skip: !user });
+ 
   const [createProposal, { isLoading: isSubmitting }] = useCreateProposalMutation();
   const [generateAI, { isLoading: isGenerating }] = useGenerateProposalDescriptionMutation();
+
+  // Auto-select the only eligible cycle, or clear if none available
+  useEffect(() => {
+    if (!cyclesLoading && cycles.length === 1) {
+      setThesisCycle(cycles[0]._id);
+    }
+  }, [cycles, cyclesLoading]);
+ 
+  const noEligibleCycle = !cyclesLoading && cycles.length === 0;
 
   const handleGenerateAI = async () => {
     if (!title.trim()) return toast.error('Please enter a title first.');
@@ -69,13 +81,14 @@ const StudentProposalPage = () => {
       type,
       researchCellId: researchCell,
       supervisorId: supervisor,
+      thesisCycleId: thesisCycle || undefined,
       members: members.map((m) => m._id),
     };
 
     try {
       await createProposal(proposalData).unwrap();
       toast.success('Proposal submitted successfully!');
-      setTitle(''); setAbstract(''); setType('Thesis'); setResearchCell(''); setSupervisor(''); setMembers([]);
+      setTitle(''); setAbstract(''); setType('Thesis'); setResearchCell(''); setSupervisor(''); setThesisCycle(''); setMembers([]);
       setProposalSubmitted(prev => !prev);
     } catch (error: any) {
       toast.error(`Failed to submit proposal: ${error.data?.message || error.message}`);
@@ -189,6 +202,28 @@ const StudentProposalPage = () => {
           )}
         </div>
 
+        {/* Thesis Cycle */}
+        <div>
+          <label className="block text-gray-700 dark:text-gray-200 text-xs font-black uppercase tracking-widest mb-2">Thesis Cycle</label>
+          {noEligibleCycle ? (
+            <div className="w-full px-5 py-4 bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-200 dark:border-amber-700 rounded-2xl text-amber-700 dark:text-amber-300 font-bold text-sm">
+              Proposal submission is currently unavailable because no thesis cycle is accepting proposals.
+            </div>
+          ) : (
+            <select
+              value={thesisCycle}
+              onChange={(e) => setThesisCycle(e.target.value)}
+              disabled={cyclesLoading}
+              className="w-full px-5 py-4 bg-gray-50/80 dark:bg-gray-950/80 border-2 border-gray-200 dark:border-gray-700 rounded-2xl focus:bg-white dark:focus:bg-gray-900 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none font-bold text-gray-900 dark:text-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <option value="">Select a cycle (optional)</option>
+              {cycles.map((cycle: any) => (
+                <option key={cycle._id} value={cycle._id}>{cycle.name}</option>
+              ))}
+            </select>
+          )}
+        </div>
+
         {/* Members */}
         <div>
           <label className="block text-gray-700 dark:text-gray-200 text-xs font-black uppercase tracking-widest mb-2">Team Members</label>
@@ -204,7 +239,7 @@ const StudentProposalPage = () => {
         <div className="pt-2">
           <button
             type="submit"
-            disabled={isSubmitting || submissionDeadlinePassed || (!!supervisor && supervisors.find((s: any) => s._id === supervisor)?.remainingCapacity <= 0)}
+            disabled={isSubmitting || submissionDeadlinePassed || noEligibleCycle || (!!supervisor && supervisors.find((s: any) => s._id === supervisor)?.remainingCapacity <= 0)}
             className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-200/50 dark:shadow-indigo-900/30 transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 hover:shadow-2xl hover:shadow-indigo-200/60 dark:hover:shadow-indigo-900/40 flex items-center justify-center gap-2 cursor-pointer"
           >
             {isSubmitting ? (

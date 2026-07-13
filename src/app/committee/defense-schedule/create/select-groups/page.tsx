@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetAvailableProposalsQuery } from '@/store/features/apiSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
@@ -13,10 +14,11 @@ import { ArrowLeft, CheckCircle2, Users, BookOpen, UserCheck, CheckCircle } from
 const CommitteeSelectGroupsPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { cycleId } = useCycle();
   const boardDraft = useSelector((state: RootState) => state.boardDraft);
   const defenseType = boardDraft?.defenseType;
 
-  const { data: availableProposals, isLoading } = useGetAvailableProposalsQuery(defenseType);
+  const { data: availableProposals, isLoading } = useGetAvailableProposalsQuery({ defenseType, thesisCycleId: cycleId || undefined });
   const [selectedGroups, setSelectedGroups] = useState<string[]>(boardDraft?.groups || []);
 
   const handleCheckboxChange = (groupId: string) => {
