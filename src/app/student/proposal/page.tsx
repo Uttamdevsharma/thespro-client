@@ -11,7 +11,7 @@ import {
   useGetStudentsQuery, 
   useGetSubmissionDatesQuery,
   useGetSupervisorsCapacityQuery,
-  useGetPublicThesisCyclesQuery,
+  useGetThesisCyclesQuery,
   useGenerateProposalDescriptionMutation
 } from '@/store/features/apiSlice';
 import { Bot, Sparkles, Loader2 } from 'lucide-react';
@@ -33,7 +33,7 @@ const StudentProposalPage = () => {
   const { data: supervisors = [] } = useGetSupervisorsCapacityQuery(researchCell, { 
     skip: !researchCell || !user 
   });
-  const { data: cycles = [], isLoading: cyclesLoading } = useGetPublicThesisCyclesQuery(undefined, { skip: !user });
+  const { data: cycles = [], isLoading: cyclesLoading } = useGetThesisCyclesQuery(undefined, { skip: !user });
  
   const [createProposal, { isLoading: isSubmitting }] = useCreateProposalMutation();
   const [generateAI, { isLoading: isGenerating }] = useGenerateProposalDescriptionMutation();
