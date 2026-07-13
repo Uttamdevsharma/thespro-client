@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import GoogleButton from '@/components/GoogleButton';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Shield, ClipboardList, GraduationCap, User, Zap } from 'lucide-react';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -18,6 +18,27 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [loginUser, { isLoading }] = useLoginUserMutation();
+
+  const demoAccounts = [
+    { role: 'Admin', email: 'admin@gmail.com', password: 'admin1234', icon: Shield, color: 'from-red-500 to-rose-600', bg: 'bg-red-50 dark:bg-red-950/30', border: 'border-red-200 dark:border-red-800/50', text: 'text-red-600 dark:text-red-400' },
+    { role: 'Committee', email: 'fatema@cse.green.edu.bd', password: 'committee', icon: ClipboardList, color: 'from-amber-500 to-orange-600', bg: 'bg-amber-50 dark:bg-amber-950/30', border: 'border-amber-200 dark:border-amber-800/50', text: 'text-amber-600 dark:text-amber-400' },
+    { role: 'Supervisor', email: 'tanpia@cse.green.edu.bd', password: 'supervisor', icon: GraduationCap, color: 'from-emerald-500 to-teal-600', bg: 'bg-emerald-50 dark:bg-emerald-950/30', border: 'border-emerald-200 dark:border-emerald-800/50', text: 'text-emerald-600 dark:text-emerald-400' },
+    { role: 'Student', email: '221902234@student.green.edu.bd', password: 'uttam1234', icon: User, color: 'from-blue-500 to-indigo-600', bg: 'bg-blue-50 dark:bg-blue-950/30', border: 'border-blue-200 dark:border-blue-800/50', text: 'text-blue-600 dark:text-blue-400' },
+  ];
+
+  const handleDemoFill = (demo: typeof demoAccounts[0]) => {
+    setEmail(demo.email);
+    setPassword(demo.password);
+    toast.success(`✱ ${demo.role} credentials filled! Click "Sign In" to continue.`, { duration: 2000 });
+  };
+
+  const handleDemoLogin = async (demo: typeof demoAccounts[0]) => {
+    setEmail(demo.email);
+    setPassword(demo.password);
+    await new Promise(r => setTimeout(r, 50));
+    const syntheticEvent = { preventDefault: () => {} } as React.FormEvent;
+    await handleLogin(syntheticEvent);
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,6 +155,60 @@ const LoginPage = () => {
               )}
             </button>
           </form>
+
+          {/* Demo Accounts Section */}
+          <div className="mt-10">
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 text-[10px] font-black text-gray-400 uppercase tracking-widest bg-white/80 dark:bg-gray-900/80 flex items-center gap-1.5">
+                  <Zap size={12} className="text-amber-500" />
+                  Try ThesPro Instantly
+                </span>
+              </div>
+            </div>
+            <p className="text-center text-xs font-bold text-gray-400 dark:text-gray-500 mb-4">
+              Experience every role in seconds — no registration required.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {demoAccounts.map((demo) => {
+                const Icon = demo.icon;
+                return (
+                  <div key={demo.role} className="group relative">
+                    <button
+                      type="button"
+                      onClick={() => handleDemoFill(demo)}
+                      className={`w-full p-3 rounded-xl border-2 ${demo.border} ${demo.bg} hover:bg-white dark:hover:bg-gray-800/80 transition-all duration-200 active:scale-[0.97] cursor-pointer`}
+                      title={`Fill ${demo.role} credentials`}
+                    >
+                      <div className="flex flex-col items-center gap-1.5">
+                        <div className={`p-2 rounded-lg ${demo.bg} group-hover:scale-110 transition-transform duration-200`}>
+                          <Icon className={`w-5 h-5 ${demo.text}`} />
+                        </div>
+                        <span className={`text-[11px] font-black uppercase tracking-wider ${demo.text}`}>
+                          {demo.role}
+                        </span>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDemoLogin(demo)}
+                      disabled={isLoading}
+                      className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-all duration-200 p-1 rounded-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white shadow-lg shadow-indigo-200/50 dark:shadow-indigo-900/30 hover:scale-110 active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      title={`Instant login as ${demo.role}`}
+                    >
+                      <Zap size={12} />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-center mt-4 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+              Click any role to auto-fill credentials
+            </p>
+          </div>
 
           <div className="mt-8">
             <div className="relative">
