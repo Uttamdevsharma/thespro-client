@@ -3,14 +3,18 @@ import Skeleton from './Skeleton';
 
 const ProposalSkeleton = () => {
   return (
-    <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm p-5 space-y-4">
-      <div className="flex justify-between items-center">
-        <div className="space-y-2 w-3/4">
-          <Skeleton className="h-6 w-full" />
-          <Skeleton className="h-4 w-1/2" />
-          <Skeleton className="h-3 w-1/3" />
-        </div>
-        <Skeleton className="h-6 w-6 rounded-full" />
+    <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm space-y-3">
+      <Skeleton className="h-6 w-3/4 rounded-md" />
+      <Skeleton className="h-4 w-32 rounded-md" />
+      <Skeleton className="h-4 w-48 rounded-md" />
+      <Skeleton className="h-4 w-40 rounded-md" />
+      <div className="flex flex-wrap gap-1.5 pt-1">
+        <Skeleton className="h-6 w-36 rounded-full" />
+        <Skeleton className="h-6 w-32 rounded-full" />
+        <Skeleton className="h-6 w-40 rounded-full" />
+      </div>
+      <div className="pt-1">
+        <Skeleton className="h-5 w-28 rounded-md" />
       </div>
     </div>
   );

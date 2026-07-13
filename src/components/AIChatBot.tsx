@@ -1,15 +1,28 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useChatWithAIMutation } from '@/store/features/apiSlice';
 import { Send, X, RotateCcw, Sparkles, User } from 'lucide-react';
+
+const TIMEOUT_MS = 25000;
 
 const AIChatBot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState('');
     const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
+    const [timedOut, setTimedOut] = useState(false);
     const [chatWithAI, { isLoading }] = useChatWithAIMutation();
     const scrollRef = useRef<HTMLDivElement>(null);
+    const historyRef = useRef(chatHistory);
+    const loadingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const clearLoadingTimer = useCallback(() => {
+        if (loadingTimerRef.current) {
+            clearTimeout(loadingTimerRef.current);
+            loadingTimerRef.current = null;
+        }
+        setTimedOut(false);
+    }, []);
 
     const quickQuestions = [
         "How do I submit a proposal?",
@@ -19,37 +32,66 @@ const AIChatBot: React.FC = () => {
     ];
 
     useEffect(() => {
+        historyRef.current = chatHistory;
+    }, [chatHistory]);
+
+    useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [chatHistory, isLoading]);
 
+    useEffect(() => {
+        if (isLoading) {
+            loadingTimerRef.current = setTimeout(() => {
+                setTimedOut(true);
+            }, TIMEOUT_MS);
+        } else {
+            clearLoadingTimer();
+        }
+        return clearLoadingTimer;
+    }, [isLoading, clearLoadingTimer]);
+
     const handleSend = async (customMessage?: string) => {
         const textToSend = customMessage || message;
-        if (!textToSend.trim()) return;
+        if (!textToSend.trim() || isLoading) return;
 
         const userMessage = textToSend.trim();
         if (!customMessage) setMessage('');
-        
+
+        const historyAtSend = historyRef.current;
+
         setChatHistory(prev => [...prev, { role: 'user', content: userMessage }]);
 
         try {
-            const result = await chatWithAI({ 
-                message: userMessage, 
-                chatHistory 
+            const result = await chatWithAI({
+                message: userMessage,
+                chatHistory: historyAtSend,
             }).unwrap();
-            
+
             setChatHistory(prev => [...prev, { role: 'assistant', content: result.response }]);
         } catch (error: any) {
-            // Show a friendly inline message instead of a raw API error toast
-            const friendlyMsg =
-                error?.data?.message?.includes('endpoint') ||
-                error?.data?.message?.includes('model') ||
-                error?.status === 404
-                    ? "I'm temporarily unavailable. Please try again in a moment or contact support."
-                    : error?.data?.message
-                    ? `Sorry, I encountered an issue: ${error.data.message}`
-                    : "I couldn't connect right now. Please check your connection and try again.";
+            if (error?.name === 'AbortError') return;
+
+            const status = error?.status;
+            const serverMsg = error?.data?.message || '';
+
+            let friendlyMsg: string;
+
+            if (status === 'FETCH_ERROR' || !status) {
+                friendlyMsg = "I couldn't reach the server. Please check your internet connection and try again.";
+            } else if (status === 503 || status === 504) {
+                friendlyMsg = "I'm temporarily unavailable due to high demand. Please try again in a moment.";
+            } else if (status === 429) {
+                friendlyMsg = "I've reached my rate limit. Please wait a moment and try again.";
+            } else if (status === 500 && serverMsg.includes('not configured')) {
+                friendlyMsg = "The AI service hasn't been set up yet. Please contact your administrator.";
+            } else if (serverMsg) {
+                friendlyMsg = `Sorry, I encountered an issue: ${serverMsg}`;
+            } else {
+                friendlyMsg = "Something went wrong. Please try again later.";
+            }
+
             setChatHistory(prev => [...prev, { role: 'assistant', content: friendlyMsg }]);
         }
     };
@@ -113,10 +155,20 @@ const AIChatBot: React.FC = () => {
                     </div>
 
                     {/* Status Bar */}
-                    <div className="px-6 py-2 bg-blue-50/50 dark:bg-blue-900/20 border-b border-blue-100 dark:border-blue-900/50 flex items-center space-x-2">
-                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                        <span className="text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">
-                            AI Online · Powered by Gemini
+                    <div className={`px-6 py-2 border-b flex items-center space-x-2 transition-colors ${
+                        timedOut
+                            ? 'bg-amber-50/50 dark:bg-amber-900/20 border-amber-100 dark:border-amber-900/50'
+                            : 'bg-blue-50/50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-900/50'
+                    }`}>
+                        <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                            timedOut ? 'bg-amber-500' : 'bg-green-500'
+                        }`} />
+                        <span className={`text-[10px] font-black uppercase tracking-widest ${
+                            timedOut
+                                ? 'text-amber-600 dark:text-amber-400'
+                                : 'text-blue-600 dark:text-blue-400'
+                        }`}>
+                            {timedOut ? 'Taking longer than expected...' : 'AI Online · Powered by Gemini'}
                         </span>
                     </div>
 
@@ -177,12 +229,19 @@ const AIChatBot: React.FC = () => {
                         ))}
 
                         {/* Typing Indicator */}
-                        {isLoading && (
+                        {isLoading && !timedOut && (
                             <div className="flex justify-start">
                                 <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-2xl rounded-tl-none flex items-center space-x-1">
                                     <div className="w-1 h-1 bg-blue-600 dark:bg-blue-400 rounded-full animate-bounce" />
                                     <div className="w-1 h-1 bg-blue-600 dark:bg-blue-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
                                     <div className="w-1 h-1 bg-blue-600 dark:bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                                </div>
+                            </div>
+                        )}
+                        {isLoading && timedOut && (
+                            <div className="flex justify-start">
+                                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-4 rounded-2xl rounded-tl-none text-sm font-medium text-amber-700 dark:text-amber-300">
+                                    Still thinking... This is taking longer than usual.
                                 </div>
                             </div>
                         )}
