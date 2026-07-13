@@ -23,6 +23,8 @@ export default function RootLayout({
   const publicRoutes = ['/', '/about', '/contact', '/login', '/register'];
   const isFacultyRoute = pathname.startsWith('/faculty') || pathname.startsWith('/supervisors');
   const isPublicRoute = publicRoutes.includes(pathname) || isFacultyRoute;
+  const hideNavPaths = ['/login', '/register'];
+  const isPublicWithNav = isPublicRoute && !hideNavPaths.includes(pathname);
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -39,7 +41,7 @@ export default function RootLayout({
             <SocketProvider>
               <AuthProvider>
                 <UIProvider>
-                  {isPublicRoute && <MainNavbar />}
+                  {isPublicWithNav && <MainNavbar />}
                   <main className={`min-h-screen ${isPublicRoute ? "" : ""} transition-colors duration-300 dark:bg-slate-900 dark:text-white`}>
                     {children}
                   </main>
