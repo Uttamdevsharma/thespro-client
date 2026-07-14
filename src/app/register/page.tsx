@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useRegisterUserMutation } from '@/store/features/apiSlice';
+import { useRegisterUserMutation, useGetOpenCohortsForRegistrationQuery } from '@/store/features/apiSlice';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -15,16 +15,39 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [selectedCohortId, setSelectedCohortId] = useState<string>('');
   const router = useRouter();
   const [registerUser, { isLoading }] = useRegisterUserMutation();
+  const { data: openCohorts = [], isLoading: cohortsLoading } = useGetOpenCohortsForRegistrationQuery();
+
+  // When exactly one cohort is open, auto-select it for the student.
+  React.useEffect(() => {
+    if (openCohorts.length === 1 && !selectedCohortId) {
+      setSelectedCohortId(openCohorts[0]._id);
+    }
+  }, [openCohorts, selectedCohortId]);
+
+  const registrationClosed = !cohortsLoading && openCohorts.length === 0;
+  const googleHref = (() => {
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000';
+    const base = `${backendUrl}/api/auth/google`;
+    return selectedCohortId ? `${base}?cohortId=${selectedCohortId}` : base;
+  })();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (registrationClosed) {
+      return toast.error('Registration for the current cohort has ended. Please wait for the next registration period.');
+    }
+    if (openCohorts.length > 1 && !selectedCohortId) {
+      return toast.error('Please select a cohort to register for.');
+    }
     try {
       await registerUser({
         name,
         email,
         password,
+        cohortId: selectedCohortId || undefined,
       }).unwrap();
       toast.success('Registration successful!', {
         style: { borderRadius: '10px', fontWeight: 600, fontSize: '13px' },
@@ -80,6 +103,37 @@ const RegisterPage = () => {
               <p className="text-sm text-gray-400 dark:text-gray-500 mt-1 mb-6">
                 Start your thesis journey today.
               </p>
+
+              {registrationClosed && (
+                <div className="mb-4 px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 text-amber-700 dark:text-amber-300 text-sm font-semibold">
+                  Registration for the current cohort has ended. Please wait for the next registration period.
+                </div>
+              )}
+
+              {openCohorts.length > 1 && (
+                <div className="mb-4">
+                  <label className="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1.5">
+                    Select Cohort
+                  </label>
+                  <select
+                    value={selectedCohortId}
+                    onChange={(e) => setSelectedCohortId(e.target.value)}
+                    className="w-full px-3.5 py-2.5 bg-gray-50/60 dark:bg-gray-950/60 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:border-violet-500 focus:ring-3 focus:ring-violet-500/10 text-sm font-semibold text-gray-900 dark:text-gray-100"
+                    required
+                  >
+                    <option value="">Choose a cohort...</option>
+                    {openCohorts.map((c: any) => (
+                      <option key={c._id} value={c._id}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {openCohorts.length === 1 && (
+                <div className="mb-4 px-4 py-3 rounded-xl bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 text-violet-700 dark:text-violet-300 text-sm font-semibold">
+                  Registering for: {openCohorts[0].name}
+                </div>
+              )}
 
               {/* Form */}
               <form onSubmit={handleRegister} className="space-y-4">
@@ -147,7 +201,7 @@ const RegisterPage = () => {
 
                 <button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isLoading || registrationClosed || (openCohorts.length > 1 && !selectedCohortId)}
                   className="w-full py-2.5 bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600 text-white font-bold rounded-xl shadow-sm transition-all duration-150 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isLoading ? (
@@ -177,15 +231,15 @@ const RegisterPage = () => {
               </div>
 
               {/* Google Button */}
-              <button
-                onClick={() => {
-                  const backendUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000';
-                  window.location.href = `${backendUrl}/api/auth/google`;
-                }}
-                type="button"
-                className="w-full flex items-center justify-center gap-2.5 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 font-semibold text-sm hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-150 active:scale-[0.98] cursor-pointer"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                <button
+                  onClick={() => {
+                    window.location.href = googleHref;
+                  }}
+                  type="button"
+                  className="w-full flex items-center justify-center gap-2.5 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 font-semibold text-sm hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-150 active:scale-[0.98] cursor-pointer disabled:opacity-60"
+                  disabled={registrationClosed}
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
                   <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
@@ -238,10 +292,41 @@ const RegisterPage = () => {
                   </div>
                 </div>
 
-                <h1 className="text-xl font-extrabold text-gray-900 dark:text-white mb-1">Create an account</h1>
-                <p className="text-sm text-gray-400 dark:text-gray-500 mb-5">Start your thesis journey today.</p>
+          <h1 className="text-xl font-extrabold text-gray-900 dark:text-white mb-1">Create an account</h1>
+          <p className="text-sm text-gray-400 dark:text-gray-500 mb-5">Start your thesis journey today.</p>
 
-                <form onSubmit={handleRegister} className="space-y-3.5">
+          {registrationClosed && (
+            <div className="mb-4 px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 text-amber-700 dark:text-amber-300 text-sm font-semibold">
+              Registration for the current cohort has ended. Please wait for the next registration period.
+            </div>
+          )}
+
+          {openCohorts.length > 1 && (
+            <div className="mb-4">
+              <label className="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1.5">
+                Select Cohort
+              </label>
+              <select
+                value={selectedCohortId}
+                onChange={(e) => setSelectedCohortId(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-gray-50/60 dark:bg-gray-950/60 border border-gray-200 dark:border-gray-700 rounded-xl outline-none focus:border-violet-500 focus:ring-3 focus:ring-violet-500/10 text-sm font-semibold text-gray-900 dark:text-gray-100"
+                required
+              >
+                <option value="">Choose a cohort...</option>
+                {openCohorts.map((c: any) => (
+                  <option key={c._id} value={c._id}>{c.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {openCohorts.length === 1 && (
+            <div className="mb-4 px-4 py-3 rounded-xl bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 text-violet-700 dark:text-violet-300 text-sm font-semibold">
+              Registering for: {openCohorts[0].name}
+            </div>
+          )}
+
+          <form onSubmit={handleRegister} className="space-y-3.5">
                   <div>
                     <label className="block text-[11px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1.5" htmlFor="mob-name">
                       Full Name
@@ -304,11 +389,11 @@ const RegisterPage = () => {
                     </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full py-2.5 bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600 text-white font-bold rounded-xl shadow-sm transition-all duration-150 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
-                  >
+                <button
+                  type="submit"
+                  disabled={isLoading || registrationClosed || (openCohorts.length > 1 && !selectedCohortId)}
+                  className="w-full py-2.5 bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600 text-white font-bold rounded-xl shadow-sm transition-all duration-150 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+                >
                     {isLoading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -336,11 +421,11 @@ const RegisterPage = () => {
 
                 <button
                   onClick={() => {
-                    const backendUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000';
-                    window.location.href = `${backendUrl}/api/auth/google`;
+                    window.location.href = googleHref;
                   }}
                   type="button"
-                  className="w-full flex items-center justify-center gap-2.5 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 font-semibold text-sm hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-150 active:scale-[0.98] cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2.5 py-2.5 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 font-semibold text-sm hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-150 active:scale-[0.98] cursor-pointer disabled:opacity-60"
+                  disabled={registrationClosed}
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />

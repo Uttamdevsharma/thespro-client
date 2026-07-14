@@ -193,7 +193,7 @@ export const apiSlice = createApi({
       query: (id) => `/thesis-cycles/${id}`,
       providesTags: (result, error, id) => [{ type: 'ThesisCycles' as const, id }],
     }),
-    createThesisCycle: builder.mutation<any, { name: string; startSemester: string; endSemester: string }>({
+    createThesisCycle: builder.mutation<any, { name: string; startSemester?: string; endSemester?: string; registrationStartDate?: string; registrationEndDate?: string; status?: string }>({
       query: (data) => ({
         url: '/thesis-cycles',
         method: 'POST',
@@ -213,6 +213,46 @@ export const apiSlice = createApi({
       query: (id) => ({
         url: `/thesis-cycles/${id}/archive`,
         method: 'PATCH',
+      }),
+      invalidatesTags: ['ThesisCycles'],
+    }),
+    getActiveCohort: builder.query<any, void>({
+      query: () => '/thesis-cycles/active',
+      providesTags: ['ThesisCycles'],
+    }),
+    setActiveCohort: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `/thesis-cycles/${id}/activate`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['ThesisCycles'],
+    }),
+
+    // Cohorts whose registration window is currently open (public, used by registration)
+    getOpenCohortsForRegistration: builder.query<any, void>({
+      query: () => '/thesis-cycles/open-for-registration',
+      providesTags: ['ThesisCycles'],
+    }),
+    // The current user's assigned cohort
+    getMyCohort: builder.query<any, void>({
+      query: () => '/thesis-cycles/me',
+      providesTags: ['ThesisCycles', 'User'],
+    }),
+    // Committee opens/closes proposal submission + sets deadline for a cohort
+    setProposalSubmission: builder.mutation<any, { id: string; open: boolean; proposalSubmissionDeadline?: string }>({
+      query: ({ id, ...data }) => ({
+        url: `/thesis-cycles/${id}/proposal-submission`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['ThesisCycles'],
+    }),
+    // Admin manages a cohort's registration window
+    setRegistrationWindow: builder.mutation<any, { id: string; registrationStartDate?: string; registrationEndDate?: string }>({
+      query: ({ id, ...data }) => ({
+        url: `/thesis-cycles/${id}/registration`,
+        method: 'PUT',
+        body: data,
       }),
       invalidatesTags: ['ThesisCycles'],
     }),
@@ -324,12 +364,14 @@ export const apiSlice = createApi({
       query: (id) => `/proposals/${id}`,
       providesTags: (result, error, id) => [{ type: 'Proposals' as const, id }],
     }),
-    getProposalsBySupervisor: builder.query<any, { supervisorId: string; filter?: string }>({
-      query: ({ supervisorId, filter }) => {
+    getProposalsBySupervisor: builder.query<any, { supervisorId: string; filter?: string; thesisCycleId?: string }>({
+      query: ({ supervisorId, filter, thesisCycleId }) => {
         let url = `/proposals/supervisor-proposals`;
-        if (filter) {
-          url += `?filter=${filter}`;
-        }
+        const params = new URLSearchParams();
+        if (filter) params.set('filter', filter);
+        if (thesisCycleId) params.set('thesisCycleId', thesisCycleId);
+        const qs = params.toString();
+        if (qs) url += `?${qs}`;
         return url;
       },
       providesTags: ['Proposals'],
@@ -796,9 +838,16 @@ export const {
    useUpdateSupervisorProfileMutation,
    useChatWithAIMutation,
    useGenerateProposalDescriptionMutation,
-   useGetThesisCyclesQuery,
-   useGetThesisCycleByIdQuery,
-   useCreateThesisCycleMutation,
-   useUpdateThesisCycleMutation,
-   useArchiveThesisCycleMutation,
-} = apiSlice;
+    useGetThesisCyclesQuery,
+    useGetPublicThesisCyclesQuery,
+    useGetThesisCycleByIdQuery,
+    useCreateThesisCycleMutation,
+    useUpdateThesisCycleMutation,
+     useArchiveThesisCycleMutation,
+     useGetActiveCohortQuery,
+     useSetActiveCohortMutation,
+     useGetOpenCohortsForRegistrationQuery,
+     useGetMyCohortQuery,
+     useSetProposalSubmissionMutation,
+     useSetRegistrationWindowMutation,
+    } = apiSlice;

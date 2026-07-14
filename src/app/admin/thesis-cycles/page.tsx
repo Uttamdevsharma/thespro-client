@@ -6,6 +6,7 @@ import {
   useCreateThesisCycleMutation,
   useUpdateThesisCycleMutation,
   useArchiveThesisCycleMutation,
+  useSetActiveCohortMutation,
 } from '@/store/features/apiSlice';
 import toast from 'react-hot-toast';
 import TableSkeleton from '@/components/TableSkeleton';
@@ -13,7 +14,8 @@ import TableSkeleton from '@/components/TableSkeleton';
 const statusBadge: Record<string, string> = {
   Upcoming: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
   Active: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-  Completed: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
+  Closed: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+  Archived: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
 };
 
 const ThesisCyclesPage = () => {
@@ -21,28 +23,43 @@ const ThesisCyclesPage = () => {
   const [createCycle] = useCreateThesisCycleMutation();
   const [updateCycle] = useUpdateThesisCycleMutation();
   const [archiveCycle] = useArchiveThesisCycleMutation();
+  const [setActiveCohort] = useSetActiveCohortMutation();
 
   const [showCreate, setShowCreate] = useState(false);
   const [newName, setNewName] = useState('');
   const [newStart, setNewStart] = useState('');
   const [newEnd, setNewEnd] = useState('');
+  const [newRegStart, setNewRegStart] = useState('');
+  const [newRegEnd, setNewRegEnd] = useState('');
 
   const [editing, setEditing] = useState<any>(null);
   const [editName, setEditName] = useState('');
   const [editStart, setEditStart] = useState('');
   const [editEnd, setEditEnd] = useState('');
+  const [editRegStart, setEditRegStart] = useState('');
+  const [editRegEnd, setEditRegEnd] = useState('');
   const [editStatus, setEditStatus] = useState('');
   const [editProposalOpen, setEditProposalOpen] = useState(false);
+  const [editDeadline, setEditDeadline] = useState('');
   const [editDefensePhase, setEditDefensePhase] = useState('');
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await createCycle({ name: newName, startSemester: newStart, endSemester: newEnd }).unwrap();
-      toast.success('Thesis cycle created');
+      await createCycle({
+        name: newName,
+        startSemester: newStart,
+        endSemester: newEnd,
+        registrationStartDate: newRegStart || undefined,
+        registrationEndDate: newRegEnd || undefined,
+        status: 'Upcoming',
+      }).unwrap();
+      toast.success('Cohort created');
       setNewName('');
       setNewStart('');
       setNewEnd('');
+      setNewRegStart('');
+      setNewRegEnd('');
       setShowCreate(false);
     } catch (err: any) {
       toast.error(err.data?.message || 'Failed to create');
@@ -57,11 +74,14 @@ const ThesisCyclesPage = () => {
         name: editName,
         startSemester: editStart,
         endSemester: editEnd,
+        registrationStartDate: editRegStart || undefined,
+        registrationEndDate: editRegEnd || undefined,
         status: editStatus,
         proposalSubmissionOpen: editProposalOpen,
+        proposalSubmissionDeadline: editDeadline || undefined,
         defensePhase: editDefensePhase || null,
       }).unwrap();
-      toast.success('Thesis cycle updated');
+      toast.success('Cohort updated');
       setEditing(null);
     } catch (err: any) {
       toast.error(err.data?.message || 'Failed to update');
@@ -77,13 +97,25 @@ const ThesisCyclesPage = () => {
     }
   };
 
+  const handleActivate = async (id: string) => {
+    try {
+      await setActiveCohort(id).unwrap();
+      toast.success('Cohort activated');
+    } catch (err: any) {
+      toast.error(err.data?.message || 'Failed to activate');
+    }
+  };
+
   const startEditing = (cycle: any) => {
     setEditing(cycle);
     setEditName(cycle.name);
     setEditStart(cycle.startSemester);
     setEditEnd(cycle.endSemester);
+    setEditRegStart(cycle.registrationStartDate ? cycle.registrationStartDate.slice(0, 10) : '');
+    setEditRegEnd(cycle.registrationEndDate ? cycle.registrationEndDate.slice(0, 10) : '');
     setEditStatus(cycle.status);
     setEditProposalOpen(cycle.proposalSubmissionOpen);
+    setEditDeadline(cycle.proposalSubmissionDeadline ? cycle.proposalSubmissionDeadline.slice(0, 10) : '');
     setEditDefensePhase(cycle.defensePhase || '');
   };
 
@@ -128,8 +160,20 @@ const ThesisCyclesPage = () => {
               className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900"
               required
             />
+            <input
+              type="date"
+              value={newRegStart}
+              onChange={(e) => setNewRegStart(e.target.value)}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900"
+            />
+            <input
+              type="date"
+              value={newRegEnd}
+              onChange={(e) => setNewRegEnd(e.target.value)}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-400 text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900"
+            />
             <button type="submit" className="bg-[#50C878] text-white px-6 py-2 rounded-lg font-medium hover:bg-green-600 transition-colors">
-              Create Cycle
+              Create Cohort
             </button>
           </form>
         </div>
@@ -168,19 +212,25 @@ const ThesisCyclesPage = () => {
                             <input type="text" value={editStart} onChange={(e) => setEditStart(e.target.value)} className="w-28 px-2 py-1 border rounded text-sm" placeholder="Start" />
                             <input type="text" value={editEnd} onChange={(e) => setEditEnd(e.target.value)} className="w-28 px-2 py-1 border rounded text-sm" placeholder="End" />
                           </div>
+                          <div className="flex gap-2 mt-2">
+                            <input type="date" value={editRegStart} onChange={(e) => setEditRegStart(e.target.value)} className="w-32 px-2 py-1 border rounded text-sm" title="Registration start" />
+                            <input type="date" value={editRegEnd} onChange={(e) => setEditRegEnd(e.target.value)} className="w-32 px-2 py-1 border rounded text-sm" title="Registration end" />
+                          </div>
                         </td>
                         <td className="px-6 py-4">
                           <select value={editStatus} onChange={(e) => setEditStatus(e.target.value)} className="px-2 py-1 border rounded text-sm">
                             <option value="Upcoming">Upcoming</option>
                             <option value="Active">Active</option>
-                            <option value="Completed">Completed</option>
+                            <option value="Closed">Closed</option>
+                            <option value="Archived">Archived</option>
                           </select>
                         </td>
                         <td className="px-6 py-4">
-                          <label className="flex items-center gap-2 text-sm cursor-pointer">
+                          <label className="flex items-center gap-2 text-sm cursor-pointer mb-2">
                             <input type="checkbox" checked={editProposalOpen} onChange={(e) => setEditProposalOpen(e.target.checked)} className="w-4 h-4" />
                             {editProposalOpen ? 'Open' : 'Closed'}
                           </label>
+                          <input type="date" value={editDeadline} onChange={(e) => setEditDeadline(e.target.value)} className="w-full px-2 py-1 border rounded text-sm" title="Proposal submission deadline" />
                         </td>
                         <td className="px-6 py-4">
                           <select value={editDefensePhase} onChange={(e) => setEditDefensePhase(e.target.value)} className="px-2 py-1 border rounded text-sm">
@@ -217,6 +267,9 @@ const ThesisCyclesPage = () => {
                           <span className="text-sm text-gray-500 dark:text-gray-400">{cycle.defensePhase || '—'}</span>
                         </td>
                         <td className="px-6 py-4 text-right space-x-3">
+                          {cycle.status !== 'Active' && !cycle.archived && (
+                            <button onClick={() => handleActivate(cycle._id)} className="text-green-600 font-medium text-sm">Set Active</button>
+                          )}
                           <button onClick={() => startEditing(cycle)} className="text-blue-600 font-medium text-sm">Edit</button>
                           <button onClick={() => handleArchive(cycle._id)} className="text-orange-600 font-medium text-sm">
                             {cycle.archived ? 'Unarchive' : 'Archive'}

@@ -3,7 +3,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import { useGetStudentProposalsQuery, useGetNoticesQuery } from '@/store/features/apiSlice';
+import { useGetStudentProposalsQuery, useGetNoticesQuery, useGetMyCohortQuery } from '@/store/features/apiSlice';
 import ProgressBar from '@/components/ProgressBar';
 import NoticeItem from '@/components/NoticeItem';
 import Skeleton from '@/components/Skeleton';
@@ -13,6 +13,7 @@ const StudentDashboard = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const { data: proposals, isLoading: proposalsLoading } = useGetStudentProposalsQuery((user as any)?._id, { skip: !user });
   const { data: notices, isLoading: noticesLoading } = useGetNoticesQuery((user as any)?._id, { skip: !user });
+  const { data: myCohort } = useGetMyCohortQuery(undefined, { skip: !user });
 
   const studentName = user?.name || user?.email || 'Student';
 
@@ -24,12 +25,22 @@ const StudentDashboard = () => {
   return (
     <div className="p-6 bg-gray-50 dark:bg-gray-950 min-h-screen">
       <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md mb-6">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-          Hi {studentName}, welcome back to ThesPro!
-        </h1>
-        <p className="text-lg text-gray-500 dark:text-gray-400">
-          Here is an overview of your current proposal and recent notices.
-        </p>
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+              Hi {studentName}, welcome back to ThesPro!
+            </h1>
+            <p className="text-lg text-gray-500 dark:text-gray-400">
+              Here is an overview of your current proposal and recent notices.
+            </p>
+          </div>
+          {myCohort && (
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-sm font-bold">
+              <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
+              {myCohort.name}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md mb-6">

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useGetNoticesQuery, useGetProposalsBySupervisorQuery, useGetProfileQuery } from '@/store/features/apiSlice';
+import { useCycle } from '@/contexts/CycleContext';
 import NoticeItem from '@/components/NoticeItem';
 import toast from 'react-hot-toast';
 import Skeleton from '@/components/Skeleton';
@@ -12,12 +13,13 @@ import { NoticeListSkeleton } from '@/components/NoticeSkeleton';
 
 const SupervisorDashboard = () => {
   const user = useSelector((state: RootState) => state.user.user);
+  const { cycleId } = useCycle();
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState<{ title: string; items: any[] }>({ title: '', items: [] });
 
   const { data: notices, isLoading: noticesLoading } = useGetNoticesQuery((user as any)?._id, { skip: !user });
   const { data: proposals = [], isLoading: proposalsLoading } = useGetProposalsBySupervisorQuery(
-    { supervisorId: (user as any)?._id },
+    { supervisorId: (user as any)?._id, thesisCycleId: cycleId || undefined },
     { skip: !user }
   );
   const { data: profileData, isLoading: profileLoading } = useGetProfileQuery(undefined, {
