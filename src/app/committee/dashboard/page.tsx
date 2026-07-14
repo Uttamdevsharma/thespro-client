@@ -13,7 +13,7 @@ const CommitteeDashboard = () => {
   const { cycleId } = useCycle();
   const { data: researchCells, isLoading: loadingCells, error: cellsError } = useGetResearchCellsQuery();
   const { data: proposals, isLoading: loadingProposals, error: proposalsError } = useGetProposalsQuery({ thesisCycleId: cycleId || undefined });
-  const { data: students, isLoading: loadingStudents, error: studentsError } = useGetStudentsQuery();
+  const { data: students, isLoading: loadingStudents, error: studentsError } = useGetStudentsQuery({ thesisCycleId: cycleId || undefined });
   const { data: teachers, isLoading: loadingTeachers, error: teachersError } = useGetTeachersQuery();
 
   const totalStudents = students?.length || 0;

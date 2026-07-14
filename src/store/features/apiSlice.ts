@@ -257,8 +257,14 @@ export const apiSlice = createApi({
       invalidatesTags: ['ThesisCycles'],
     }),
 
-    getStudents: builder.query<any, void>({
-      query: () => '/users/students',
+    getStudents: builder.query<any, { thesisCycleId?: string } | void>({
+      query: (params) => {
+        let url = '/users/students';
+        if (params?.thesisCycleId) {
+          url += `?thesisCycleId=${params.thesisCycleId}`;
+        }
+        return url;
+      },
       providesTags: ['Students'],
     }),
     updateStudent: builder.mutation<any, { id: string; [key: string]: any }>({

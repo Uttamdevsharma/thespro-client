@@ -3,11 +3,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import { useCycle } from '@/contexts/CycleContext';
 import { useGetStudentsQuery } from '@/store/features/apiSlice';
 
 const AllStudentsPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
-  const { data: students = [], isLoading: loading } = useGetStudentsQuery(undefined, {
+  const { cycleId } = useCycle();
+  const { data: students = [], isLoading: loading } = useGetStudentsQuery({ thesisCycleId: cycleId || undefined }, {
     skip: !user
   });
 
