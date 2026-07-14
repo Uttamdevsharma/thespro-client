@@ -7,10 +7,12 @@ import { RootState } from "@/store";
 import { useSocket } from "@/contexts/SocketContext";
 import toast from "react-hot-toast";
 import { useGetProposalsBySupervisorQuery } from "@/store/features/apiSlice";
+import { useCycle } from '@/contexts/CycleContext';
 import PageSkeleton from '@/components/PageSkeleton';
 
 const SupervisorChatPage = () => {
   const user = useSelector((state: RootState) => state.user.user);
+  const { cycleId } = useCycle();
   const socket = useSocket();
   const [selectedProposalId, setSelectedProposalId] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
@@ -20,7 +22,7 @@ const SupervisorChatPage = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { data: proposals, isLoading: loading } = useGetProposalsBySupervisorQuery(
-    { supervisorId: (user as any)?._id, filter: currentFilter },
+    { supervisorId: (user as any)?._id, filter: currentFilter, thesisCycleId: cycleId || undefined },
     { skip: !user }
   );
 

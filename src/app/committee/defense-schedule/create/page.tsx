@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useGetRoomsQuery, useGetScheduleSlotsQuery, useCreateDefenseBoardMutation } from '@/store/features/apiSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store';
+import { useCycle } from '@/contexts/CycleContext';
 import { setBoardDraft, clearBoardDraft } from '@/store/features/boardDraftSlice';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
@@ -13,6 +14,7 @@ import { ArrowLeft, Save, Users, Layers, MapPin, Clock } from 'lucide-react';
 const CommitteeCreateDefenseBoardPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { cycleId } = useCycle();
   const { data: rooms } = useGetRoomsQuery();
   const { data: scheduleSlots } = useGetScheduleSlotsQuery();
   const [createDefenseBoard, { isLoading: isCreating }] = useCreateDefenseBoardMutation();
@@ -30,7 +32,7 @@ const CommitteeCreateDefenseBoardPage = () => {
         toast.error('Please select a valid schedule.');
         return;
       }
-      const dataToSubmit = { ...boardDraft, date: selectedSchedule.date };
+      const dataToSubmit = { ...boardDraft, date: selectedSchedule.date, thesisCycleId: cycleId || undefined };
       await createDefenseBoard(dataToSubmit).unwrap();
       toast.success('Defense board created successfully.');
       dispatch(clearBoardDraft());

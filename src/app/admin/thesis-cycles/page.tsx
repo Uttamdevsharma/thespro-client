@@ -12,9 +12,10 @@ import toast from 'react-hot-toast';
 import TableSkeleton from '@/components/TableSkeleton';
 
 const statusBadge: Record<string, string> = {
-  Upcoming: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-  Active: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-  Closed: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+  'Registration Open': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+  'Registration Closed': 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
+  Running: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+  Completed: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
   Archived: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
 };
 
@@ -52,7 +53,7 @@ const ThesisCyclesPage = () => {
         endSemester: newEnd,
         registrationStartDate: newRegStart || undefined,
         registrationEndDate: newRegEnd || undefined,
-        status: 'Upcoming',
+        status: 'Registration Open',
       }).unwrap();
       toast.success('Cohort created');
       setNewName('');
@@ -219,9 +220,10 @@ const ThesisCyclesPage = () => {
                         </td>
                         <td className="px-6 py-4">
                           <select value={editStatus} onChange={(e) => setEditStatus(e.target.value)} className="px-2 py-1 border rounded text-sm">
-                            <option value="Upcoming">Upcoming</option>
-                            <option value="Active">Active</option>
-                            <option value="Closed">Closed</option>
+                            <option value="Registration Open">Registration Open</option>
+                            <option value="Registration Closed">Registration Closed</option>
+                            <option value="Running">Running</option>
+                            <option value="Completed">Completed</option>
                             <option value="Archived">Archived</option>
                           </select>
                         </td>
@@ -267,8 +269,8 @@ const ThesisCyclesPage = () => {
                           <span className="text-sm text-gray-500 dark:text-gray-400">{cycle.defensePhase || '—'}</span>
                         </td>
                         <td className="px-6 py-4 text-right space-x-3">
-                          {cycle.status !== 'Active' && !cycle.archived && (
-                            <button onClick={() => handleActivate(cycle._id)} className="text-green-600 font-medium text-sm">Set Active</button>
+                          {cycle.status !== 'Running' && cycle.status !== 'Completed' && !cycle.archived && (
+                            <button onClick={() => handleActivate(cycle._id)} className="text-green-600 font-medium text-sm">Move to Running</button>
                           )}
                           <button onClick={() => startEditing(cycle)} className="text-blue-600 font-medium text-sm">Edit</button>
                           <button onClick={() => handleArchive(cycle._id)} className="text-orange-600 font-medium text-sm">

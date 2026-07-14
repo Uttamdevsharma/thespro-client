@@ -9,19 +9,21 @@ import {
   useSendNoticeToGroupMutation,
   useGetProposalsBySupervisorQuery
 } from '@/store/features/apiSlice';
+import { useCycle } from '@/contexts/CycleContext';
 import Skeleton from '@/components/Skeleton';
 import FormSkeleton from '@/components/FormSkeleton';
 import { NoticeListSkeleton } from '@/components/NoticeSkeleton';
 
 const SupervisorNoticePage = () => {
   const user = useSelector((state: RootState) => state.user.user);
+  const { cycleId } = useCycle();
   const [selectedProposalId, setSelectedProposalId] = useState('');
   const [noticeTitle, setNoticeTitle] = useState('');
   const [noticeDescription, setNoticeDescription] = useState('');
   const [currentFilter, setCurrentFilter] = useState('my_supervision');
 
   const { data: proposals, isLoading: proposalsLoading, isError: proposalsError } = useGetProposalsBySupervisorQuery(
-    { supervisorId: (user as any)?._id, filter: currentFilter }, 
+    { supervisorId: (user as any)?._id, filter: currentFilter, thesisCycleId: cycleId || undefined }, 
     { skip: !user }
   );
   const { data: sentNotices, isLoading: noticesLoading, isError: noticesError, refetch } = useGetSupervisorSentNoticesQuery();
